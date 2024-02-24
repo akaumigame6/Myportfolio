@@ -150,3 +150,56 @@ ul li::before {
   margin: auto;
   text-align: center;
 }
+
+/* カルーセルの外枠 */
+.carousel_1 {
+  width: 364px;
+  height: 200px;
+  display: flex;    /* 子要素を横に並べる */
+  overflow: hidden; /* はみ出た部分は表示しない */
+  margin: 0 auto;   /* 水平方向中央寄せ */
+}
+/* カルーセル内の画像 */
+.carousel_1 img {
+  margin: 0;
+  padding: 0;
+  display: block; /* imgタグの改行のすき間を消すため */
+}
+
+/* カルーセルの外枠 */
+.carousel_2 {
+  width: 801px;
+  height: 216px;
+  display: flex;
+  overflow: hidden;
+  margin: 0 auto;
+}
+/* カルーセル内の画像 */
+.carousel_2 img {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+/* スクロールアニメーションのキーフレーム */
+@keyframes scroll {
+  0% { margin-left: 0; }      
+  25% { margin-left: -100%; }
+  35% { margin-left: -100%; }
+  60% { margin-left: -200%; }
+  70% { margin-left: -200%; }
+  95% { margin-left: -300%; }
+  100% { margin-left: -300%; }
+}
+/* カルーセルの子要素にスクロールアニメーションを設定 */
+.carousel_1 > :first-child {
+  animation-name: scroll;    /* キーフレーム名 */
+  animation-duration: 20s;  /* 再生時間全体は20秒 */
+  animation-delay: 0s;      /* 読込直後から遅延無しで開始 */
+  animation-iteration-count: infinite;  /* 無限に繰り返す */
+}
+.carousel_2 > :first-child {
+  animation-name: scroll;    
+  animation-duration: 20s;  
+  animation-delay: 0s;     
+  animation-iteration-count: infinite;
+}
