@@ -7,6 +7,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
     />
+    <style>
+      canvas {
+        background: #eee;
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -30,67 +37,92 @@
     <p>C++,Python</p>
 
     <h2>高専中に行ったことリスト</h2>
-    <p>
-      <strong>１年生</strong>
-    </p>
-
-    <ul>
-      <li>プログラム研究会に所属…2022年6月(C++を<a href="https://algo-method.com/">アルゴ式</a>で学び始める。)</li>
-      <li>パソコン甲子園2022競技部門に参加…2022年10月</li>
-      <li>自分用のパソコンを手に入れた…2023年2月(UnityとBrenderを触り始めたがBrenderは挫折中...(2年時点))</li>
-    </ul>
-    <p>
-      <strong>2年生</strong>
-    </p>
-    <ul>
-      <li>知能情報コースに所属が決まる…2023年4月(授業でPythonをGoogleColabで触り始める。)</li>
-      <li>自由課題としてPythonで<a href="https://github.com/akaumigame6/HomeWork05">テキストのみの簡単なRPG</a>
-        を作った…2023年8月</li>
-      <li>総合課題実習として班を組んで先輩方が組み立てた地震体験シミュレーターのブラッシュアップ開始（リンク用意中…）</li>
-      <li>高専祭でクラス内で班を組んで、<a href="https://unityroom.com/games/sennmetsu_survive">ゲーム</a>
-        を作った。主にプログラミングを担当した。また、VRシミュレーターのフィードバックを同時に集めた。…2023年11月</li>
-      <li><a href="https://github.com/akaumigame6/growtree">クッキークリッカー風のゲーム</a>の作成 …2023年12-2024年1月</li>
-      <li><a href="https://github.com/akaumigame6/web-appopen.git">ウェブとアプリを開くアプリケーション</a>の作成 …2024年2月</li>
-      <li>高専テクノゼミの教育実践プログラムのWEBアプリ製作に参加。チームモジャモDjangoで配達通知サービスを作りました。(ソーシャルイノベーション賞受賞！！)…2024年2月</li>
-    </ul>
+      <div class="block">
+        <p>
+          <strong>１年生</strong>
+        </p>
+        <ul>
+          <li>プログラム研究会に所属…2022年6月(C++を<a href="https://algo-method.com/">アルゴ式</a>で学び始める。)</li>
+          <li>パソコン甲子園2022競技部門に参加…2022年10月</li>
+          <li>自分用のパソコンを手に入れた…2023年2月(UnityとBrenderを触り始めたがBrenderは挫折中...(2年時点))</li>
+        </ul>
+        </div>
+      <div class="block">
+        <p>
+          <strong>2年生</strong>
+        </p>
+        <ul>
+          <li>知能情報コースに所属が決まる…2023年4月(授業でPythonをGoogleColabで触り始める。)</li>
+          <li>自由課題としてPythonで<a href="https://github.com/akaumigame6/HomeWork05">テキストのみの簡単なRPG</a>
+            を作った…2023年8月</li>
+          <li>総合課題実習として班を組んで先輩方が組み立てた地震体験シミュレーターのブラッシュアップ開始（リンク用意中…）</li>
+          <li>高専祭でクラス内で班を組んで、<a href="https://unityroom.com/games/sennmetsu_survive">ゲーム</a>
+            を作った。主にプログラミングを担当した。また、VRシミュレーターのフィードバックを同時に集めた。…2023年11月</li>
+          <li><a href="https://github.com/akaumigame6/growtree">クッキークリッカー風のゲーム</a>の作成 …2023年12-2024年1月</li>
+          <li><a href="https://github.com/akaumigame6/web-appopen.git">ウェブとアプリを開くアプリケーション</a>の作成 …2024年2月</li>
+          <li>高専テクノゼミの教育実践プログラムのWEBアプリ製作に参加。チームモジャモDjangoで配達通知サービスを作りました。(ソーシャルイノベーション賞受賞！！)…2024年2月</li>
+        </ul>
+      </div>
+      <div class="block">
+        <p>
+          <strong>3年生</strong>
+        </p>
+        <ul>
+          <li>総合課題実習2デジタルアーカイブに参加…2024年5月</li>
+          <li>パソコン甲子園モバイル部門に防災知識アプリの企画書を作成して提出…2024年7月予選敗退</li>
+          <li>授業の課題として<a href="js_game/js_game.html">JavaScriptに関連する技術解説</a>を作成…2024年7月</li>
+        </ul>
 
     <h2>作ったもの</h2>
-    <p><strong>クリックすると木が育つクッキークリッカー風のゲーム</strong></p>
-    <p>ポイントはクリックするたびにたまっていき、木が育つ。木の成長段階は５段階あり、最大まで育つとまた種になる。
-      また、100pたまるとLvが上がって1秒ごとに1p増えるようになる。そして、ゲームが終了すると、テキストファイルに進行状況がセーブされる。</p>
-    <p>セーブデータはDataファイル内にあるgame_data.txtを削除することでリセットできる。Dataファイル内にある画像を名前をそのままにして置き換えると
-      自分好みのクッキークリッカー風のゲームにもなる。  製作時間20時間
-    </p>
-    <div class="carousel_1"><img src="img/kame/img1.png"><img src="img/kame/img2.png"><img src="img/kame/img3.png"><img src="img/kame/img1.png"></div>
+      <p><strong>クリックすると木が育つクッキークリッカー風のゲーム</strong></p>
+      <p>ポイントはクリックするたびにたまっていき、木が育つ。木の成長段階は５段階あり、最大まで育つとまた種になる。
+        また、100pたまるとLvが上がって1秒ごとに1p増えるようになる。そして、ゲームが終了すると、テキストファイルに進行状況がセーブされる。</p>
+      <p>セーブデータはDataファイル内にあるgame_data.txtを削除することでリセットできる。Dataファイル内にある画像を名前をそのままにして置き換えると
+        自分好みのクッキークリッカー風のゲームにもなる。  製作時間20時間
+      </p>
+      <div class="carousel_1"><img src="img/kame/img1.png"><img src="img/kame/img2.png"><img src="img/kame/img3.png"><img src="img/kame/img1.png"></div>
     
-    <p><strong>URLとアプリケーションを開くアプリケーション</strong></p>
-    <p>.txtにかかれたURLもしくはアプリケーションをまとめて開けるアプリケーションです。添付されている'setweb'もしくは'setapp'にそれぞれ
-      URLとアプリケーションのフルパスを書いた.txtを入れ、アプリ内で選択することで起動できます。レポートの参考文献を書いているときに一気にURLを開ければいいなぁ
-      と思ったので作りました。
-    </p>
-    <p>なお、アプリケーションを開いた場合、このアプリを終了させると連鎖的に開いたアプリも終了してしまいます。  製作時間12時間
-    </p>
-    <div class="carousel_2"><img src="img/web&app/img1.png"><img src="img/web&app/img2.png"><img src="img/web&app/img3.png"><img src="img/web&app/img1.png"></div>
+      <p><strong>URLとアプリケーションを開くアプリケーション</strong></p>
+      <p>.txtにかかれたURLもしくはアプリケーションをまとめて開けるアプリケーションです。添付されている'setweb'もしくは'setapp'にそれぞれ
+        URLとアプリケーションのフルパスを書いた.txtを入れ、アプリ内で選択することで起動できます。レポートの参考文献を書いているときに一気にURLを開ければいいなぁ
+        と思ったので作りました。
+      </p>
+      <p>
+        なお、アプリケーションを開いた場合、このアプリを終了させると連鎖的に開いたアプリも終了してしまいます。  製作時間12時間
+      </p>
+      <div class="carousel_2"><img src="img/web&app/img1.png"><img src="img/web&app/img2.png"><img src="img/web&app/img3.png"><img src="img/web&app/img1.png"></div>
+
+      <p><strong>JavaScriptとHTMLで作成したクリッカー</strong></p>
+      <p>
+        作り方は<a href="js_game/js_game.html">こちら</a>から。    製作時間30時間
+      </p>
+      <canvas id="canvas" width="480" height="320"></canvas>
+          <table><tr><td>
+          <button id="button1">クリック</button>
+          <button id="button2">レベルアップ</button>
+          </td></tr></table>
+        <br>
 
     <h2>使ったことのある言語・ソフトウェア</h2>
-    <p><strong>授業以外でも使っている言語・ソフトウェア</strong></p>
-    <ul>
-      <li>C++/C#</li>
-      <li>Python</li>
-      <li>Unity</li>
-      <li>Brender</li>
-    </ul>
-    <p><strong>授業で使ったことのある言語・ソフトウェア</strong></p>
-    <ul>
-      <li>Arduino</li>
-      <li>Scratch</li>
-      <li>HTML/CSS</li>
-      <li>ArduinoIDE</li>
-      <li>Deeds-DCS</li>
-      <li>MakeCode for micro:bit</li>
-      <li>Tinkercad</li>
-      <li>WSL (Windows Subsystem for Linux)</li>
-    </ul>
+      <p><strong>授業以外でも使っている言語・ソフトウェア</strong></p>
+      <ul>
+        <li>C++/C#</li>
+        <li>Python</li>
+        <li>Unity</li>
+        <li>Brender</li>
+      </ul>
+      <p><strong>授業で使ったことのある言語・ソフトウェア</strong></p>
+      <ul>
+        <li>Arduino</li>
+        <li>Scratch</li>
+        <li>HTML/CSS</li>
+        <li>ArduinoIDE</li>
+        <li>Deeds-DCS</li>
+        <li>MakeCode for micro:bit</li>
+        <li>Tinkercad</li>
+        <li>WSL (Windows Subsystem for Linux)</li>
+      </ul>
+      <script src="js_game/js_game.js"></script>
   </body>
   <!-- ここまで本文終了 -->
 </html>

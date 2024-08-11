@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Java Scriptでゲームを作ってみよう!</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Noto+Sans+JP:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="js_game.css" />
+  </head>
+
+  <body>
+    <!-- ここから本文開始 -->
+    <div id="page_top"><a href="#"></a></div>
+
+    <h1>Java Scriptでゲームを作ってみよう!</h1>
+
+    <h2>やっていく内容</h2>
+    <ul class="list-design">
+        <li><a href="#chapter1">Java Scriptとは</a></li>
+        <li><a href="#chapter2">ゲームのデモ</a></li>
+        <li><a href="#chapter3">ゲームを作ってみよう</a></li>
+        <li><a href="#chapter4">参考にしたサイト</a></li>
+    </ul>
+
+    <h2><a name="chapter1">Java Scriptとは</a></h2>
+        <h3>Java Scriptって何？</h3>
+        <p>
+          　JavaScriptとはブラウザを「動かす」ためのプログラム言語のことで、主にブラウザ内で実行します。たとえば、ボタンをクリックしたり、フォームに情報を入力したりする際に、ページが自動的に更新されたり、フィードバックが提供されたりすることが出来ます。
+          特徴としてはイベント駆動型であることです。ユーザーのアクション（例えばクリックやキーボード入力）に対して、プログラムが反応し、指定された処理を実行します。また、非同期処理の機能もあり、データをサーバーから取得する際などにページの読み込みを妨げることなく処理を行うことができます。
+          JavaScriptはHTMLやCSSなどと他のプログラミング言語と組み合わせて使うことで、ブラウザ上でアニメーションなどを稼働させることが出来ますが、近年では、Node.js（ノードジェイエス）という、ブラウザ側だけでなくサーバー側でも動くJavaScriptも普及してきています。
+        </p>
+
+    <h2><a name="chapter2">ゲームのデモ</a></h2>
+        <h3>どんなゲームが作れるの?</h3>
+        <p>
+          　JavaScriptで作れるのはWEBゲームが主流です。有名なものを挙げると<a class="url" href="http://slither.com/io">slither.io</a>
+        、<a class="url" href="https://plays.org/game/sokomath/">SOKOMATH</a>などが挙げられます。<rb>
+            ここでは<a class="url" href="https://orteil.dashnet.org/cookieclicker/beta/">クッキークリッカー</a>を簡略化した簡単なクリッカーゲームを作っていきます。
+        </p>
+        <h3>実際に作って行くゲーム</h3>
+        <p>
+          　見てもらえばわかる通りキャンバス（背景が灰色の所）の真ん中には円と数字が描写されています。
+          キャンバスの下にあるクリックと書かれたボタンを押すと、真ん中にある現在所持するポイント数が増えて円も大きくなります。
+          その右にあるレベルアップというボタンを押すとポイントを10減らして一回のクリックで増えるポイントを増やします。
+          また、左上の数字は合計の数を表示しています。
+        </p>
+        <canvas id="canvas" width="480" height="320"></canvas>
+          <table><tr><td>
+          <button id="button1">クリック</button>
+          <button id="button2">レベルアップ</button>
+          </td></tr></table>
+        <br>
+
+    <h2><a name="chapter3">ゲームを作ってみよう</a></h2>
+        <h3>ファイルを作成しよう</h3>
+        <p>
+          　まずはHTML、css、JavaScriptのファイルを作成しましょう。それぞれの拡張子は.html、.css、. jsです。<br>
+          ここでは<str>main.html</str>、<str>main.css</str>、<str>main. js</str>を作成したとします。
+        </p>
+        <h3>キャンバスの真ん中に円を表示させよう</h3>
+        <p>
+          　&lt;canvas&gt;はHTMLの要素でスクリプトを使ってグラフを描いたり、写真を合成したり、簡単なアニメーションなどを作成することが出来ます。今回はこのキャンバスを使用してJavaScriptでゲームを描写したいと思います。
+          次のコードを<str>main.html</str>、<str>main.css</str>、<str>main. js</str>に記述してください。</p>
+          <div class="box3"><p class="inline"><strong>main.html</strong></p><button class ="inline right_top" onclick="copyButton('html1')">コピー実行</button>
+            <pre class="code" id="html1">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="main.css" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;canvas id="canvas" width="480" height="320"&gt;&lt;/canvas&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+
+          <div class="box3"><p class="inline"><strong>main.css</strong></p><button class ="inline right_top" onclick="copyButton('css1')">コピー実行</button>
+            <pre class="code" id="css1">
+canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+}</pre>
+          </div>
+
+          <div class="box3"><p class="inline"><strong>main.js</strong></p><button class ="inline right_top" onclick="copyButton('js1')">コピー実行</button>
+            <pre class="code" id="js1">
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+ctx.beginPath();
+ctx.arc(x, y, 100, 0, Math.PI * 2, false);
+ctx.fillStyle = "green";
+ctx.fill();
+ctx.closePath();</pre>
+          </div>
+        <p>　main.htmlではmain.cssとスクリプトとしてmain.jsを使用すると宣言し、canvasタグでキャンバスを描写しています。
+        main.cssではキャンバスの背景色を宣言しています。<br>
+        main.jsでは最初にcanvas要素への参照をcanvasに保存しています。それから描画を担当するオブジェクト（描画コンテキスト）のctx定数を作成しています。
+        描写のための命令はctx定数に繋いで記述します。
+        その後キャンバス上に緑の円を描写するためのコードを記述しています。<br>
+        canvasはパスと呼ばれるもので線や曲線、図形の外形を定義しています。
+        そのためbeginPath()でパスの定義を開始し、定義を書き、closePath()でパスの定義を終了しパスを閉じるのが一連の流れになります。
+        このコードではarc()で円を定義した後にfillStyleで円をどの色で塗りつぶすのか定義して、fill()で塗りつぶしています。円のほかに長方形や線などがあるため気になる人は調べてみてください。</p>
+        <h3>ゲームに使う関数を用意しよう</h3>
+        <p>
+          　ゲームに使う関数を用意したいと思います。JavaScriptにはvar、const、letと三種類のローカル関数があります。それぞれの特徴は<br>
+          <strong>const</strong>…再宣言、再代入ともに不可能。ブロックごとに作られるスコープごとに仕様できるブロックスコープ<br>
+          <strong>let</strong>…再宣言は不可能だが再代入可能。constと同じくブロックスコープ<br>
+          <strong>ver</strong>…再宣言、再代入可能。全てのスコープからアクセスできるグローバルスコープ<br>
+          となっています。簡単にまとめるとconstは再代入不可能なローカル定数。letは再代入可能なローカル変数。そしてvarは再宣言、再代入どちらも可能なグローバル変数です。
+          現在では再宣言することが出来るという性質などよりverの使用は推奨されておらず、constとletの使用が推奨されています。<br>
+          main.jsのコードを次のコードに書き換えてください。</p>
+
+        <div class="box3"><p class="inline"><strong>main.jsのコード</strong></p><button class ="inline right_top" onclick="copyButton('js2')">コピー実行</button>
+          <pre class="code" id="js2">
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const button1 = document.getElementById("button1");
+const button2 = document.getElementById("button2");
+
+const x=canvas.width/2;
+const y=canvas.height/2;
+const radius=10;
+let number=0;
+let allnumber=0;
+let Lv=1;</pre>
+        </div>
+        <p>
+        　getElementById()は指定したidにマッチするドキュメント要素を取得するメゾットなのでbutton1とbutton2はそれぞれのidに一致するドキュメント要素を格納しています。<br>
+        xとyはキャンバスの真ん中を指定するためにそれぞれキャンバスの幅と高さを取得してから割った数を格納しています。radiusは描写する円の最初の直径です。
+        これらの数はゲーム中に変更されると困るのでconstで宣言します。
+        numberは現在のポイント数、allnumberは消費した分も含めてのポイント数、Lvは現在のレベルを格納します。
+        これらの数はゲーム中に変更されないと困るのでletで宣言します。
+        </p>
+        <h3>ゲームに使うボタンを作成する</h3>
+        <p>
+          　クリックするボタンをHTMLで作成します。次のコードをmain.htmlのbodyタグ内に記述してください。</p>
+        <div class="box3"><p class="inline"><strong>bodyタグ内のコード</strong></p><button class ="inline right_top" onclick="copyButton('html2')">コピー実行</button>
+          <pre class="code" id="html2">
+&lt;body&gt;
+  &lt;canvas id="canvas" width="480" height="320"&gt;&lt;/canvas&gt;
+  &lt;button id="button1"&gt;クリック&lt;/button&gt;
+  &lt;button id="button2"&gt;レベルアップ&lt;/button&gt;
+&lt;/body&gt;</pre>
+        </div>
+        <p>　HTMLではbottonタグやinputタグでボタンを作成することが出来ます。ボタンタグ内に書かれている文字列がウェブ上で描写されるボタン内に表示されます。
+        今回はクリックするたびにポイントを増やすボタンとポイントを消費してレベルをあげるボタンの二つのボタンが必要なのでbuttonタグが二回記述されています。
+        buttonタグ内にあるidはJavaScriptでどのボタンが押されたのか検出するため記述しています。(ボタンの位置はそれぞれで調節してください)
+        </p>
+        <!-- <h3>buttonとinputの違い</h3>
+        <p>
+          　HTMLにはボタンを作るときにbuttonで作る方法とinputで作る方法があります。これら二つの方法の違いは～
+        </p> -->
+        <h3>ボタンを押すと円が大きくなるようにしよう</h3>
+        <p>
+          　ボタンクリックしたら円が大きくなる関数を作成していきます。次のコードをmain.jsの先ほど定義した関数の下に記述してください。
+        </p>
+        <div class="box3"><p class="inline"><strong>main.jsのコード</strong></p><button class ="inline right_top" onclick="copyButton('js3')">コピー実行</button>
+          <pre class="code" id="js3">
+button1.addEventListener('click', buttonClick1);
+button2.addEventListener('click', buttonClick2);
+
+function buttonClick1() {
+  number +=1;
+  allnumber +=1;
+}
+
+function buttonClick2() {
+}
+
+ctx.fillStyle = "white";
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, radius+(0.1*number), 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBall();
+}
+
+setInterval(draw, 10);</pre>
+        </div>
+        <p>
+          　.addEventListener()はマウスによるクリックやキーボードからの入力といった様々なイベント処理を実行するメソッドです。button1.addEventListener('click', buttonClick1);はidがbutton1のボタンが押されたときにbuttpnClick1という関数を動かすと命令していることになります。
+          buttonClick1()はnumberとallnumberの値を1ずつ増やします。buttonClick2()の中身は後で記述します。<br>
+          drawBall()では(x,y)を中心に直径が(radius+現在のポイント*0.1)の円を描写するように命令しています。draw()はキャンバスの描写を纏める関数です。最初に.clearRect()でキャンバスの描写をリセットしてdrawBall()で円を描写しています。
+          <br>その後setInterval()でdrawを10ミリ秒ごとに繰り返しています。これでちゃんと円が拡大していくように見えます。
+        </p>
+        <h3>クリックした回数を表示しよう</h3>
+        <p>
+          　クリックした回数を表示する関数を作成します。次の関数をmain.jsに記述してdraw関数内に書き加えてください。
+        </p>
+        <div class="box3"><p class="inline"><strong>main.jsの関数</strong></p><button class ="inline right_top" onclick="copyButton('js4')">コピー実行</button>
+          <pre class="code" id="js4">
+function drawnumber() {
+    ctx.fontSize = "240px";
+    ctx.textAlign = "center";
+    ctx.strokeText(number, x, y);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBall();
+  drawnumber();
+}</pre>
+        </div>
+        <p>
+          drawnumber()の中身は.fontSizeでフォントのサイズを変更し、textAlignで位置を調節しています。center以外にもstartやleftなど指定することが出来ます。<br>
+          strokeText()では(x,y)にnumberを内側を塗りつぶさずに表示するように命令しています。
+        </p>
+        <h3>レベルアップを実装しよう</h3>
+        <p>
+          クリックするたびに1だけ増えるのはしんどいのでレベルアップすることでクリック時に増えるポイント数を増やせるようにします。buttonClick1()とbuttonClick2()を次のように書き換えてください。
+        </p>
+        <div class="box3"><p class="inline"><strong>main.jsの関数</strong></p><button class ="inline right_top" onclick="copyButton('js5')">コピー実行</button>
+          <pre class="code" id="js5">
+function buttonClick1() {
+    number +=Lv;
+    allnumber +=Lv;
+}
+
+function buttonClick2() {
+    if(number>=10){
+        Lv+=1;
+        number -=10;
+    }
+}</pre></div>
+        <p>
+          buttonClick1()で増えるポイントの数をLvの数にしました。こうすることでLvが上がるたびにポイントが増えます。<br>
+          buttonClick2()では無条件にLvをあげることが出来ないようにif文を使って現在のポイントが10以上の時にポイントを10消費してレベルを1上げるよう指示しています。<br>
+          これによって現在のポイントが10以上の時レベルアップのボタンを押すとレベルアップすることが出来るようになりました。
+        </p>
+
+        <h3>左上に今までの合計ポイントと現在のレベルを表示しよう</h3>
+        <p>
+          　このままでは合計ポイントと現在のレベルを確認することが出来ないため、次の関数をmain.jsに記述してdraw関数内に書き加えてください。
+        </p>
+        <div class="box3"><p class="inline"><strong>main.jsの関数</strong></p><button class ="inline right_top" onclick="copyButton('js6')">コピー実行</button>
+          <pre class="code" id="js6">
+function drawallnumber() {
+    ctx.textAlign = "start";
+    ctx.font = "bold 20px serif";;
+    ctx.strokeText(allnumber, 0, 20);
+    ctx.strokeText("Lv:"+Lv, 0, 40);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBall();
+  drawnumber();
+  drawallnumber();
+}</pre>
+        </div>
+        <p>
+          drawallnumber()の中身は.fontSizeでフォントのサイズや表示を変更し、textAlignで位置を調節しています。startはテキストをその行の標準的な先頭位置に配置することが出来ます。<br>
+          strokeText()では(0,20)にallnumberを,(0,40)に"Lv:"とLvを合体した文字列を内側を塗りつぶさずに表示するように命令しています。
+        </p>
+        <h3>最終的なコード</h3>
+        <div class="box3"><p class="inline"><strong>htmlのコード</strong></p><button class ="inline right_top" onclick="copyButton('copyhtml')">コピー実行</button>
+        <pre class="code" id="copyhtml">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="main.css" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;canvas id="canvas" width="480" height="320"&gt;&lt;/canvas&gt;
+    &lt;button id="button1"&gt;クリック&lt;/button&gt;
+    &lt;button id="button2"&gt;レベルアップ&lt;/button&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="box3"><p class="inline"><strong>cssのコード</strong></p><button class ="inline right_top" onclick="copyButton('copycss')">コピー実行</button>
+          <pre class="code"  id="copycss">
+canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+}</pre>
+        </div>
+
+        <div class="box3"><p class="inline"><strong>JavaScriptのコード</strong></p><button class ="inline right_top" onclick="copyButton('copyjavascript')">コピー実行</button>
+          <pre class="code" id="copyjavascript">
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const button1 = document.getElementById("button1");
+const button2 = document.getElementById("button2");
+
+const x=canvas.width/2;
+const y=canvas.height/2;
+const radius=10;
+let number=0;
+let allnumber=0;
+let Lv=1;
+
+button1.addEventListener('click', buttonClick1);
+button2.addEventListener('click', buttonClick2);
+
+function buttonClick1() {
+    number +=Lv;
+    allnumber +=Lv;
+}
+
+function buttonClick2() {
+    if(number>=10){
+        Lv+=1;
+        number -=10;
+    }
+}
+
+ctx.fillStyle = "white";
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, radius+(0.1*number), 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawnumber() {
+    ctx.fontSize = "240px";
+    ctx.textAlign = "center";
+    ctx.strokeText(number, x, y);
+}
+
+function drawallnumber() {
+    ctx.textAlign = "start";
+    ctx.font = "bold 20px serif";;
+    ctx.strokeText(allnumber, 0, 20);
+    ctx.strokeText("Lv:"+Lv, 0, 40);
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBall();
+    drawnumber();
+    drawallnumber();
+  }
+
+setInterval(draw, 10);</pre>
+      </div>
+      <p>
+        　これにてJavaScriptで作る簡単にしたクリッカーゲームはこれにて完成です!ここから図形の形を変えてみたりレベルアップの条件を変えてみたりなど
+        アレンジなどをして自分だけのクリッカーゲームを作ってみてください。お疲れさまでした！
+      </p>
+
+    <h2><a name="chapter4">参考にしたサイト</a></h2>
+    <a class ="url"href="https://cc.musabi.ac.jp/kenkyu/cf/renew/program/canvas/canvas03.html#:~:text=Canvas%E3%81%AF%E3%80%8C%E3%83%91%E3%82%B9%E3%80%8D%E3%81%A8%E5%91%BC%E3%81%B0%E3%82%8C%E3%82%8B,%E3%83%91%E3%82%B9%E3%81%AB%E4%BC%BC%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%EF%BC%89%E3%80%82&text=%E6%8F%8F%E7%94%BB%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E5%91%BD%E4%BB%A4,%E3%81%A4%E3%81%AA%E3%81%84%E3%81%A7%E5%85%A5%E5%8A%9B%E3%81%97%E3%81%BE%E3%81%99%E3%80%82">
+      不明."JavaScript3. 直線の描画".コンピュータ基礎II　プログラムでヴィジュアルを作ろう.不明.(参照2024-07-26)
+    </a><br>
+    <a class ="url"href="https://hamatakeblog.hatenablog.com/entry/2021/10/07/231101#google_vignette">
+      hamatakeBlog."".hamatakeBlog.2021-10-07.(参照2024-07-26)
+    </a><br>
+    <a class ="url"href="https://developer.mozilla.org/ja/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript">
+      MDN Web Docsコミュニティー."純粋なJavaScriptを使ったブロック崩しゲーム".不明.(参照2024-07-26)
+    </a><br>
+    <a class ="url"href="https://techplay.jp/column/1619">
+      TECH PLAY.【JavaScript】let、const、varの違いと使い分け方法を徹底解説.2024-03-08.(参照2024-07-26)
+    </a>
+    <br>
+    <p>
+      本コンテンツの作成時間（HTML/CSS/JavaScriptの設計・実装を含む）：約30時間
+    </p>
+    <script src="js_game.js"></script>
+  </body>
+</html>
