@@ -151,6 +151,15 @@ ul li::before {
   text-align: center;
 }
 
+.holizon {
+  display: flex;
+}
+
+.block {
+  margin-left: auto; /* 左のマージンを自動に設定 */
+  margin-right: auto; /* 右のマージンを自動に設定 */
+}
+
 /* カルーセルの外枠 */
 .carousel_1 {
   width: 364px;
