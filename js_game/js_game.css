@@ -44,10 +44,21 @@ h1::before {
 h1::after {
   right: 0;
 }
+
+@media screen and (max-width: 750px) {
+  h1{
+    font-size: 135%;
+  }
+}
+@media screen and (max-width: 540px) {
+  h1{
+    font-size: 100%;
+  }
+}
   
   h2 {
     position: relative;
-    font-size: 150%;
+    font-size: 135%;
     letter-spacing: 0.05em;
     font-weight: normal;
     padding: 0 0 0 1.5em;
@@ -218,6 +229,10 @@ h1::after {
     padding: 0;
   }
 
+  pre{
+    overflow-x: scroll;
+  }
+
   .kaisetu{
     font-family: "Kiwi Maru", serif;
   }
@@ -260,5 +275,12 @@ h1::after {
     background: #eee;
     display: block;
     margin: 0 auto;
+  }
+  @media screen and (max-width: 610px) {
+    /* 480px以下に適用されるCSS（スマホ用） */
+    canvas{
+      width: 100%;
+      height: 100%;
+    }
   }
 
