@@ -193,6 +193,21 @@ table{
   padding: 0;
   display: block;
 }
+
+/* カルーセルの外枠 */
+.carousel_3 {
+  width: 1005px;
+  height: 500%;
+  display: flex;
+  overflow: hidden;
+  margin: 0 auto;
+}
+/* カルーセル内の画像 */
+.carousel_3 img {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
 /* スクロールアニメーションのキーフレーム */
 @keyframes scroll {
   0% { margin-left: 0; }      
@@ -203,6 +218,20 @@ table{
   95% { margin-left: -300%; }
   100% { margin-left: -300%; }
 }
+
+/* スクロールアニメーションのキーフレーム */
+@keyframes scroll2 {
+  0% { margin-left: 0; }      
+  12% { margin-left: -100%; }
+  25% { margin-left: -100%; }
+  37% { margin-left: -200%; }
+  50% { margin-left: -200%; }
+  62% { margin-left: -300%; }
+  75% { margin-left: -300%; }
+  87% { margin-left: -400%; }
+  100% { margin-left: -400%; }
+}
+
 /* カルーセルの子要素にスクロールアニメーションを設定 */
 .carousel_1 > :first-child {
   animation-name: scroll;    /* キーフレーム名 */
@@ -212,6 +241,12 @@ table{
 }
 .carousel_2 > :first-child {
   animation-name: scroll;    
+  animation-duration: 20s;  
+  animation-delay: 0s;     
+  animation-iteration-count: infinite;
+}
+.carousel_3 > :first-child {
+  animation-name: scroll2;    
   animation-duration: 20s;  
   animation-delay: 0s;     
   animation-iteration-count: infinite;
