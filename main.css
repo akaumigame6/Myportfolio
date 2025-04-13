@@ -164,6 +164,8 @@ table{
   margin:auto;
 }
 
+/*画像のループ表示*/
+
 /* カルーセルの外枠 */
 .carousel_1 {
   width: 364px;
