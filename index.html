@@ -1,151 +1,657 @@
 <!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <title>Iwaguchi's Portfolio</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes"
-    />
-    <style>
-      canvas {
-        background: #eee;
-        display: block;
-        margin: 0 auto;
-      }
-    </style>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap"
-    />
-    <link rel="stylesheet" href="main.css" />
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iwaguchi|Portfolio</title>
+  <link rel="stylesheet" href="main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Kaisei+Opti&family=Kiwi+Maru&family=Murecho:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Iwaguchi's Portforio</h1>
+      <nav>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#history">History</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section style="margin-top: 80px" class="intro">
+      <h2>こんにちわ！！</h2>
+      <p>
+        岩口と申します。大阪公立大学工業高等専門学校の4年生で、知能情報コースに在籍しています。
+      </p>
+    </section>
 
-  <body>
-    <!-- ここから本文開始 -->
-    <div id="page_top"><a href="#"></a></div>
-
-    <h1>Iwaguchi's Portfolio</h1>
-
-    <h2>プロフィール</h2>
-    <p>大阪公立大学工業高等専門学校所属 知能情報コース 4年生</p>
-    <p><strong>得意な言語</strong></p>
-    <p>C++,Python</p>
-
-    <h2>History</h2>
-      <div class="block">
-        <p>
-          <strong>高専1年生</strong>
-        </p>
-        <ul>
-          <li>プログラム研究会に所属…2022年6月(C++を<a href="https://algo-method.com/">アルゴ式</a>で学び始める。)</li>
-          <li>パソコン甲子園2022競技部門に参加…2022年10月</li>
-          <li>自分用のパソコンを手に入れた…2023年2月(UnityとBrenderを触り始めたがBrenderは挫折中...(2年時点))</li>
-        </ul>
-        </div>
-      <div class="block">
-        <p>
-          <strong>高専2年生</strong>
-        </p>
-        <ul>
-          <li>知能情報コースに所属が決まる…2023年4月(授業でPythonをGoogleColabで触り始める。)</li>
-          <li>自由課題としてPythonで<a href="https://github.com/akaumigame6/HomeWork05">テキストのみの簡単なRPG</a>
-            を作った…2023年8月</li>
-          <li>総合課題実習として班を組んで先輩方が組み立てた地震体験シミュレーターのブラッシュアップ開始（リンク用意中…）</li>
-          <li>パソコン甲子園2023競技部門に参加…2023年10月</li>
-          <li>高専祭でクラス内で班を組んで、<a href="https://unityroom.com/games/sennmetsu_survive">ゲーム</a>
-            を作った。主にプログラミングを担当した。また、VRシミュレーターのフィードバックを同時に集めた。…2023年11月</li>
-          <li><a href="https://github.com/akaumigame6/growtree">クッキークリッカー風のゲーム</a>の作成 …2023年12月-2024年1月</li>
-          <li><a href="https://github.com/akaumigame6/web-appopen.git">ウェブとアプリを開くアプリケーション</a>の作成 …2024年2月</li>
-          <li>高専テクノゼミの教育実践プログラムのWEBアプリ製作に参加。チームモジャモDjangoで配達通知サービスを作りました。(ソーシャルイノベーション賞受賞！！)…2024年2月</li>
-        </ul>
+    <section class="skills" id="skills">
+      <h2>Skills</h2>
+      <div class="tags">
+        <div class="skills-container">
+            <div class="skill-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C++ Icon" class="skill-icon">
+                <h3>C</h3>
+                <p>経験年数: 2年</p>
+                <p>習熟度: ★★★☆☆</p>
+              </div>
+            <div class="skill-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++ Icon" class="skill-icon">
+              <h3>C++</h3>
+              <p>経験年数: 3年</p>
+              <p>習熟度: ★★★★☆</p>
+            </div>
+            <div class="skill-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="C++ Icon" class="skill-icon">
+                <h3>C#</h3>
+                <p>経験年数: 2年</p>
+                <p>習熟度: ★★★☆☆</p>
+              </div>
+            <div class="skill-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python Icon" class="skill-icon">
+              <h3>Python</h3>
+              <p>経験年数: 2年</p>
+              <p>習熟度: ★★★☆☆</p>
+            </div>
+            <div class="skill-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="React Icon" class="skill-icon">
+                <h3>JavaScript</h3>
+                <p>経験年数: 2年</p>
+                <p>習熟度: ★★☆☆☆</p>
+            </div>
+            <div class="skill-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="React Icon" class="skill-icon">
+                <h3>TypeScript</h3>
+                <p>経験年数: 1年</p>
+                <p>習熟度: ★★☆☆☆</p>
+            </div>
+            <div class="skill-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original-wordmark.svg" alt="React Icon" class="skill-icon">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original-wordmark.svg" alt="React Icon" class="skill-icon">
+                <h3>HTML&CSS</h3>
+                <p>経験年数: 3年</p>
+                <p>習熟度: ★★★☆☆</p>
+            </div>
+            <div class="skill-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React Icon" class="skill-icon">
+              <h3>React / Next.js</h3>
+              <p>経験年数: 1年</p>
+              <p>習熟度: ★★☆☆☆</p>
+            </div>
+            <div class="skill-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="Unity Icon" class="skill-icon">
+              <h3>Unity</h3>
+              <p>経験年数: 2年</p>
+              <p>習熟度: ★★★★☆</p>
+            </div>
+            <!-- 他のスキルも同様に追加 -->
+          </div>
       </div>
-      <div class="block">
-        <p>
-          <strong>高専3年生</strong>
-        </p>
-        <ul>
-          <li>総合課題実習2デジタルアーカイブに参加…2024年5月</li>
-          <li>パソコン甲子園2024モバイル部門に防災知識アプリの企画書を作成して提出…2024年7月予選敗退</li>
-          <li>授業の課題として<a href="js_game/js_game.html">JavaScriptに関連する技術解説</a>を作成…2024年7月</li>
-          <li>パソコン甲子園2024競技部門に参加…2024年10月</li>
-          <li>高専祭にて、クラス内でシューティングゲームを開発し、展示した。（Unityroomで公開できるように書き換え中）主に、プログラミングを担当した。…2024年11月</li>
-          <li>総合課題実習2の成果として学校をグーグルアースのように散策できるアプリをUnityで作成した。主に、基礎の部分を作成した。</li>
-          <li>授業の課題として<a href="https://unity-study.vercel.app/">Unityについて学べるサイト</a>(内容は誠意製作中)をReact+Next.jsで作成した。</li>
+    </section>
+
+    <section class="projects" id="projects">
+    <h2>Projects</h2>
+        <h3>Individual Projects</h3>
+        <div class="project-grid">
+             <!-- Python RPG -->
+             <div class="card">
+                <h4 class="card-title">Python RPG</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/python_rpg/RPG_1.png" alt=""></div>
+                    <div class="slide"><img src="../img/python_rpg/RPG_2.png" alt=""></div>
+                    <div class="slide"><img src="../img/python_rpg/RPG_3.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">PythonのJupyter Notebook上で動くコマンドで選択していくスタイルのRPGを作成しました。</br>(製作時間25時間)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Python</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        様々な処理を関数にして使いまわすことを覚えた。防具や武器、アイテムや敵のデータは辞書型で管理して、データの追加や変更を簡単に行えるようにした。敵の行動はランダムで決まるようにした。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://github.com/akaumigame6/HomeWork05" target="_blank"><i class="fa-brands fa-square-github"></i>GitHub</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tree Clicker -->
+            <div class="card">
+                <h4 class="card-title">Tree Clicker</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/kame/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/kame/img2.png" alt=""></div>
+                    <div class="slide"><img src="../img/kame/img3.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">Pygameを使用して簡単なクリッカーを作成しました。</br>(製作時間20時間)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Python</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        実際にゲームを作る難しさを体感した。画像の差し替えを簡潔にしてカスタム要素を増やした。プレイ内容のセーブ機能の実装。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://github.com/akaumigame6/growtree" target="_blank"><i class="fa-brands fa-square-github"></i>GitHub</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+      
+            <!-- Web&App -->
+            <div class="card">
+                <h4 class="card-title">Web&App</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/web&app/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/web&app/img2.png" alt=""></div>
+                    <div class="slide"><img src="../img/web&app/img3.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">作業に使うツールを一括で起動するユーティリティを作成。</br>(製作時間12時間)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Python</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        比較的簡単な挙動でまとめて起動できるようにした。また、起動するアプリケーションの選択肢を増やすことで、より多くの人に使ってもらえるようにした。作ってみて、自分の作業を効率化でき、アプリを作成するにおいての自信がついた。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://github.com/akaumigame6/web-appopen" target="_blank"><i class="fa-brands fa-square-github"></i>GitHub</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript Game -->
+            <div class="card">
+                <h4 class="card-title">JavaScriptに関連する技術解説</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/JavaScript_game.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text"></br>初心者に向けたJavaScriptに関連する技術解説</br>(製作時間:30時間)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>JavaScript</span>
+                            <span>HTML/CSS</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        初心者でもわかりやすいように、簡潔なコードを心がけた。JavaScriptの基本的な文法を学ぶことができた。実際にゲームを動かせるようにした。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://akaumigame6.github.io/Myportfolio/js_game/js_game.html" target="_blank">公開URL</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公大高専クイズ -->
+            <div class="card">
+                <h4 class="card-title">公大高専クイズ</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Unity_Quiz/Quiz_1.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity_Quiz/Quiz_2.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity_Quiz/Quiz_3.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity_Quiz/Quiz_4.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity_Quiz/Quiz_5.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text"></br>夏休みの保護者の説明用に、知能情報コースについてのクイズを作成した。</br>(製作期間:三日)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        クイズの難易度は、知能情報コースについて知っているなら解けるもの、知っておくといいものを選んだ。加重シーンロードを駆使して、SE/BGMの音量設定や、制限時間を自分で設定できるようにした。クイズの正解数によって、エンディングが変わるようにした。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://unityroom.com/games/kodaikosenquiz" target="_blank">公開URL</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unity Study -->
+            <div class="card">
+                <h4 class="card-title">Unity-Study</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Next.js/welcomepage_gest.png" alt=""></div>
+                    <div class="slide"><img src="../img/Next.js/login.png" alt=""></div>
+                    <div class="slide"><img src="../img/Next.js/posts.png" alt=""></div>
+                    <div class="slide"><img src="../img/Next.js/studypage.png" alt=""></div>
+                    <div class="slide"><img src="../img/Next.js/DEMO1.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">Unityの基本機能を学べるインタラクティブなWebアプリケーションを開発しました。ボタン操作で機能を追加しながら、ゲーム制作の流れを体験できます。</br>(製作時間60時間)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>React</span>
+                            <span>Next.js</span>
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                            <span>HTML/CSS</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        実際にゲームを作りながら学ぶことで、Unityの基本機能を深く理解できるようにしました。また、ユーザーインターフェースの設計にも力を入れ、直感的な操作が可能なデザインを心掛けました。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://github.com/akaumigame6/Unity-Study" target="_blank"><i class="fa-brands fa-square-github"></i>GitHub</a>
+                            <a href="https://unity-study.vercel.app/" target="_blank">公開URL</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <h3>Team Projects</h3>
+        <div class="project-grid"><!--Team Project-->
+            <!-- 殲滅サバイブ -->
+            <div class="card">
+                <h4 class="card-title">殲滅サバイブ</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Kosensai/2023/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/Kosensai/2023/img2.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">2023年高専祭の展示用にチームで作成した。</br>敵を倒して強くなり、五分間生き残るというシンプルなヴァンパイアサバイバーライクゲームです。</br>(製作期間:二ヶ月)</p>
+                    </div>
+                    <div class="content-block">
+                    <h5 class="content-heading">担当範囲</h5>
+                    <p class="content-text">プレイヤーの弾発射・当たり判定、ダメージ時の処理、BGM・SEの制御、シーン遷移、タイマーの設定など、ゲームの根幹となるシステム全般を実装しました。</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        初めてのチームでのゲーム開発だったので、データをどう共有するかが悩んだ。ゲームはランダム性も持たせつつ、高専祭に来てくださった人々に楽しんでもらえるように配慮しました。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://unityroom.com/games/sennmetsu_survive" target="_blank">公開URL</a>
+                        </p>
+                    </div>
+                </div>
+                </div>
+
+            <!-- モジャモDjango -->
+            <div class="card">
+                <h4 class="card-title">モジャモDjango</h4>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">再配達を減らそうという目標から作られた、運送トラックが二軒前の配達時にユーザーに通知することで荷物の到着時間を自分で予測できるようにするWebアプリです。</br>(製作期間:一ヶ月)</p>
+                    </div>
+                    <div class="content-block">
+                    <h5 class="content-heading">担当範囲</h5>
+                    <p class="content-text">バックエンドのデータベース。FigmaによるUI設計(ユーザー画面のみ)</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>React</span>
+                            <span>Django</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        チーム開発をするうえでのGitの運用方法や、Figmaを使用したUI設計の重要性を学びました。特に、Figmaを使ったUI設計は、チーム全体のデザインコンセプトを統一するのに役立ちました。また、それ以外にもデータベースの設計や、APIとの連携についても学びました。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            (載せていいか確認中)
+                        </p>
+                    </div>
+                </div>
+                </div>
+
+                <!-- シューティングゲーム -->
+            <div class="card">
+                <h4 class="card-title">シューティングゲーム</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Kosensai/2024/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/Kosensai/2024/img2.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">2024年高専祭の展示用にチームで作成した。高専祭当日はJoy-conを搭載した銃でスクリーンを撃ち、プレイすることが出来た。</br>(製作期間:二ヶ月)</p>
+                    </div>
+                    <div class="content-block">
+                    <h5 class="content-heading">担当範囲</h5>
+                    <p class="content-text">プレイヤーの弾発射・当たり判定、敵キャラクターの移動・攻撃ロジック、ダメージ時のスタン処理、BGM・SEの制御、シーン遷移、タイマーの設定など、ゲームの根幹となるシステム全般を実装しました。ユーザー体験を意識し、演出やテンポ感の調整も行いました。</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        自分がどれぐらいまで作業を掛け持ちできるのかを知ることができた。高専祭当日は多くの人にプレイしてもらい、楽しんでもらえた。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <p>リンク用意中</p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学校アーカイブ -->
+            <div class="card">
+                <h4 class="card-title">学校アーカイブス</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Kadaijiyu/2024/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/Kadaijiyu/2024/img2.png" alt=""></div>
+                    <div class="slide"><img src="../img/Kadaijiyu/2024/img3.png" alt=""></div>
+                    <div class="slide"><img src="../img/Kadaijiyu/2024/img4.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text">総合課題実習2の移転して取り壊されてしまう現校舎を、取り壊したのちでも思い出せるようにデジタルアーカイブにしよう。というテーマでチームで作成した。寝屋川市にある校舎をグーグルアースのように散策できるアプリ。</br>(製作期間:約半年)</p>
+                    </div>
+                    <div class="content-block">
+                    <h5 class="content-heading">担当範囲</h5>
+                    <p class="content-text">デジタルアーカイブの基礎部分と全体のプログラムの管理を行った。</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        自分がどれぐらいまで作業を掛け持ちできるのかを知ることができた。また、UnityでのTool開発や、シーンの特性についてよく学ぶことが出来た。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <p>リンク用意中</p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ice Hopper -->
+            <div class="card">
+                <h4 class="card-title">Ice Hopper</h4>
+                <div class="slideshow" data-slideshow-id="2">
+                    <div class="slide"><img src="../img/Unity1Week/[あい]/img1.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity1Week/[あい]/img2.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity1Week/[あい]/img3.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity1Week/[あい]/img4.png" alt=""></div>
+                    <div class="slide"><img src="../img/Unity1Week/[あい]/img5.png" alt=""></div>
+                    <div class="controller">
+                        <a class="prev">&#10094;</a>
+                        <div class="dots"></div>
+                        <a class="next">&#10095;</a>
+                    </div>
+                    </div>
+                <div class="card-content">
+                    <div class="content-block">
+                        <h5 class="content-heading">概要</h5>
+                        <p class="content-text"></br>(製作期間:一週間)</p>
+                    </div>
+                    <div class="content-block">
+                    <h5 class="content-heading">担当範囲</h5>
+                    <p class="content-text">シーンの移動やBGM・SEの管理、ステージセレクト、タイトル、UI、ブロックの作画などを担当しました。</p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">使用技術</h5>
+                        <p class="content-text"><span class="tags">
+                            <span>Unity WebGL</span>
+                            <span>C#</span>
+                        </span></p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">成果・工夫点</h5>
+                        <p class="content-text">
+                        少人数でのUnityの開発を通じて、チームでの開発の難しさを学びました。特に、シーンの管理やGitHubを用いたデータの共有については、今後のプロジェクトに活かせる貴重な経験となりました。また、UIデザインにも力を入れ、ユーザーが直感的に操作できるように工夫しました。
+                        </p>
+                    </div>
+                    <div class="content-block">
+                        <h5 class="content-heading">リンク</h5>
+                        <p class="content-text">
+                            <a href="https://unityroom.com/games/icehopper" target="_blank">公開URL</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="history" id="history">
+        <h2>History</h2>
+        <ul class="history-list">
+          <li>
+            <span class="history-date">2022年4月</span>
+            <span class="history-title">大阪公立大学工業高等専門学校に入学</span>
+            <span class="history-desc">総合工学システム学科に入学する。</span>
+          </li>
+          <li>
+            <span class="history-date">2022年6月</span>
+            <span class="history-title">プログラミング研究会に所属</span>
+            <span class="history-desc">C++をアルゴ式で学び始める。</span>
+          </li>
+          <li>
+            <span class="history-date">2022年10月</span>
+            <span class="history-title">パソコン甲子園2022に参加</span>
+            <span class="history-desc">競技部門の予選に参加。</span>
+          </li>
+          <li>
+            <span class="history-date">2023年4月</span>
+            <span class="history-title">知能情報コースに進学</span>
+            <span class="history-desc">本格的にプログラミングについて学び始める。</span>
+          </li>
+          <li>
+            <span class="history-date">2023年5月</span>
+            <span class="history-title">総合課題実験実習1に参加</span>
+            <span class="history-desc">Yahoo!が運営する<a href="https://hacku.yahoo.co.jp/">Hack U</a>プロジェクトに参加。VRゴーグルを活用して学生たちに実際の避難体験を提供する先輩の卒研をブラッシュアップする活動を行った。</span>
+          </li>
+          <li>
+            <span class="history-date">2023年10月</span>
+            <span class="history-title">パソコン甲子園2023に参加</span>
+            <span class="history-desc">競技部門の予選に参加。</span>
+          </li>
+          <li>
+            <span class="history-date">2023年11月</span>
+            <span class="history-title">高専祭2023に参加</span>
+            <span class="history-desc">高専祭2023にて、チームで製作した殲滅サバイブと総合課題実験実習1の成果物を展示した。</span>
+        </li>
+          <li>
+            <span class="history-date">2024年2月</span>
+            <span class="history-title">実践教育プログラムに参加</span>
+            <span class="history-desc">高専テクノゼミの<a href="https://portal.techno-semi.com/practice">実践教育プログラム</a>のWEBアプリ製作に参加。チームモジャモDjangoで配達通知サービスを作り、ソーシャルイノベーション賞を受賞した。</span>
+          </li>
+          <li>
+            <span class="history-date">2024年4月</span>
+            <span class="history-title">プログラミング研究会副部長に就任</span>
+            <span class="history-desc">プログラミング研究会の副部長に就任した。</span>
+          </li>
+          <li>
+                <span class="history-date">2024年5月</span>
+                <span class="history-title">総合課題実験実習2に参加</span>
+                <span class="history-desc">高専祭2024に向けて、学校アーカイブスの製作を開始した。</span>
+          </li>
+          <li>
+            <span class="history-date">2024年7月</span>
+            <span class="history-title">パソコン甲子園2024モバイル部門に参加</span>
+            <span class="history-desc">モバイル部門に防災知識アプリの企画書を作成して提出。予選敗退の結果に終わる。</span>
+          </li>
+          <li>
+            <span class="history-date">2024年10月</span>
+            <span class="history-title">パソコン甲子園2024に参加</span>
+            <span class="history-desc">競技部門の予選に参加。</span>
+          </li>
+          <li>
+            <span class="history-date">2024年11月</span>
+            <span class="history-title">高専祭2024に参加</span>
+            <span class="history-desc">高専祭2024にて、チームで製作したシューティングゲームと総合課題実習2の学校アーカイブスを展示した。</span>
+          </li>
+          <li>
+            <span class="history-date">2025年4月</span>
+            <span class="history-title">Unity1Week(お題「あい」)に参加</span>
+            <span class="history-desc">Unity1Week(お題「あい」)に「Ice Hopper」を作成し、参加。</span>
+          </li>
         </ul>
+      </section>
+
+      <section class="contact" id="contact">
+        <h2>Contact</h2>
+        <div class="contact-container">
+          <div class="contact-item">
+            <a href="https://github.com/akaumigame6" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Icon">
+            GitHub</a>
+          </div>
+          <div class="contact-item">
+            <a href="https://unityroom.com/users/zlajsk1woe20mq54bx6g" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="Unity Icon">
+            UnityRoom</a>
+          </div>
         </div>
-
-        <div class="block">
-          <p>
-            <strong>高専4年生</strong>
-          </p>
-          <ul>
-            <li>Unity1weekに参加!!作品はUnityRoomにあります。…2025月4月</li>
-          </ul>
-        </div>
-
-    <h2>作ったもの</h2>
-      <p><strong>クリックすると木が育つクッキークリッカー風のゲーム</strong></p>
-      <p>ポイントはクリックするたびにたまっていき、木が育つ。木の成長段階は５段階あり、最大まで育つとまた種になる。
-        また、100pたまるとLvが上がって1秒ごとに1p増えるようになる。そして、ゲームが終了すると、テキストファイルに進行状況がセーブされる。</p>
-      <p>セーブデータはDataファイル内にあるgame_data.txtを削除することでリセットできる。Dataファイル内にある画像を名前をそのままにして置き換えると
-        自分好みのクッキークリッカー風のゲームにもなる。  製作時間20時間
-      </p>
-      <div class="carousel_1"><img src="img/kame/img1.png"><img src="img/kame/img2.png"><img src="img/kame/img3.png"><img src="img/kame/img1.png"></div>
-    
-      <p><strong>URLとアプリケーションを開くアプリケーション</strong></p>
-      <p>.txtにかかれたURLもしくはアプリケーションをまとめて開けるアプリケーションです。添付されている'setweb'もしくは'setapp'にそれぞれ
-        URLとアプリケーションのフルパスを書いた.txtを入れ、アプリ内で選択することで起動できます。レポートの参考文献を書いているときに一気にURLを開ければいいなぁ
-        と思ったので作りました。
-      </p>
-      <p>
-        なお、アプリケーションを開いた場合、このアプリを終了させると連鎖的に開いたアプリも終了してしまいます。  製作時間12時間
-      </p>
-      <div class="carousel_2"><img src="img/web&app/img1.png"><img src="img/web&app/img2.png"><img src="img/web&app/img3.png"><img src="img/web&app/img1.png"></div>
-
-      <p><strong>JavaScriptとHTMLで作成したクリッカー</strong></p>
-      <p>
-        作り方は<a href="js_game/js_game.html">こちら</a>から。    製作時間30時間
-      </p>
-      <canvas id="canvas" width="480" height="320"></canvas>
-          <table><tr><td>
-          <button id="button1">クリック</button>
-          <button id="button2">レベルアップ</button>
-          </td></tr></table>
-        <br>
-
-        <p><strong>Unity-Study</strong></p>
-        <div class="carousel_3"><img src="img/Next.js/welcomepage_gest.png"><img src="img/Next.js/login.png"><img src="img/Next.js/posts.png"><img src="img/Next.js/studypage.png"><img src="img/Next.js/DEMO1.png"><img src="img/Next.js/welcomepage_gest.png">
-        </div>
-        <p>GitHubリポジトリ:https://github.com/akaumigame6/unity-study/<br>公開URL:https://unity-study.vercel.app/<br>製作時間60時間
-          <br>Unityについて実際にゲームを作りながら学べるサイトです。サイト内にあるボタンを押すことで実際に機能を追加するとどうなるのか確認しつつ学ぶことが出来ます（中の記事は誠意製作中）。GitHubのREADME.mdに使い方が書いています。
-        </p>
-
-    <h2>使ったことのある言語・ソフトウェア</h2>
-      <p><strong>授業以外でも使っている言語・ソフトウェア</strong></p>
-      <ul>
-        <li>C、C++/C#</li>
-        <li>Python</li>
-        <li>Unity</li>
-        <li>Brender</li>
-        <li>HTML/CSS</li>
-        <li>JavaScript</li>
-      </ul>
-      <p><strong>授業で使ったことのある言語・ソフトウェア</strong></p>
-      <ul>
-        <li>Arduino</li>
-        <li>Scratch</li>
-        <li>ArduinoIDE</li>
-        <li>Deeds-DCS</li>
-        <li>MakeCode for micro:bit</li>
-        <li>Tinkercad</li>
-        <li>WSL (Windows Subsystem for Linux)</li>
-      </ul>
-      <script src="js_game/js_game.js"></script>
-  </body>
-  <!-- ここまで本文終了 -->
+      </section>
+  </main>
+  <script src="https://kit.fontawesome.com/ec5e6c2c62.js" crossorigin="anonymous"></script>
+  <script src="main.js"></script>
+</body>
 </html>
