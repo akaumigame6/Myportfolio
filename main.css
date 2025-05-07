@@ -1,272 +1,283 @@
 body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    /* background-color: #ffffff; */
-    background: linear-gradient(#cde5e9, #c3e6d0);
-    color: #111;
-  }
-  
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #1e1e1e;
-    color: #fff;
-    padding: 1rem 0;
-    z-index: 10;
-  }
-  
-  .container {
-    width: 90%;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-  
-  header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    display: inline-block;
-  }
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  /* background-color: #ffffff; */
+  background: linear-gradient(#cde5e9, #c3e6d0);
+  color: #111;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1e1e1e;
+  color: #fff;
+  padding: 1rem 0;
+  z-index: 10;
+}
+
+.container {
+  width: 90%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  display: inline-block;
+}
 
 /* 
 Fonts
 */
-  .kiwi-maru-regular {
-    font-family: "Kiwi Maru", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-  .dotgothic16-regular {
-    font-family: "DotGothic16", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-  .kaisei-opti-regular {
-    font-family: "Kaisei Opti", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-  .murecho-regular {
-    font-family: "Murecho", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-  }
+.kiwi-maru-regular {
+  font-family: "Kiwi Maru", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.dotgothic16-regular {
+  font-family: "DotGothic16", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.kaisei-opti-regular {
+  font-family: "Kaisei Opti", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.murecho-regular {
+  font-family: "Murecho", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
 
-  
-  nav {
-    float: right;
-  }
-  
-  nav a {
-    margin-left: 1rem;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .intro {
-    margin: 2rem 0;
-  }
-  
-  .skills, .projects, .history, .skills, .contact{
-    margin: 2rem 0;
-  }
-  
-  .tags span {
-    background-color: #eee;
-    color: #333;
-    padding: 0.3rem 0.6rem;
-    margin: 0.2rem;
-    display: inline-block;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-style: normal;
-  }
-  
-  .project-grid {
-    display: grid;
-    gap: 1rem;
-    /* grid-template-columns: repeat(2, minmax(250px, 1fr)); */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-  
-  .card {
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .card h4 {
-    margin-top: 0;
-  }
-  
-  .card p {
-    margin: 0.4rem 0;
-    line-height: 1.4;
-  }
-  
-  .card a {
-    display: inline-block;
-    margin-top: 0.5rem;
-    background-color: #333;
-    color: #fff;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
+
+nav {
+  float: right;
+}
+
+nav a {
+  margin-left: 1rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.intro {
+  margin: 2rem 0;
+}
+
+.skills, .works, .history, .skills, .contact{
+  margin: 2rem 0;
+}
+
+.tags span {
+  background-color: #eee;
+  color: #333;
+  padding: 0.3rem 0.6rem;
+  margin: 0.2rem;
+  display: inline-block;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-style: normal;
+}
+
+.project-grid {
+  display: grid;
+  gap: 1rem;
+  /* grid-template-columns: repeat(2, minmax(250px, 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.card h4 {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 0.4rem 0;
+  line-height: 1.4;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  background-color: #333;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
 
 .card-content {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+margin-top: 1rem;
+display: flex;
+flex-direction: column;
+gap: 1rem;
 }
 
 .content-block {
-  border-left: 4px solid #ddd;
-  padding-left: 0.5rem;
+border-left: 4px solid #ddd;
+padding-left: 0.5rem;
 }
 
 .content-heading {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
-  margin-top: 0; 
-  margin-bottom: 0.3rem;
+font-size: 1rem;
+font-weight: 600;
+color: #333;
+margin-top: 0; 
+margin-bottom: 0.3rem;
 }
 
 .content-text {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #555;
-  margin: 0;
-  font-family: "Murecho", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
+font-size: 0.95rem;
+line-height: 1.5;
+color: #555;
+margin: 0;
+font-family: "Murecho", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
 }
 
 
 /* 活動履歴セクションのスタイル */
 #history {
-  /* max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px; */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* max-width: 800px;
+margin: 0 auto;
+padding: 40px 20px; */
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h2 {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: #2c3e50;
-  border-bottom: 2px solid #484848;
-  padding-bottom: 10px;
+font-size: 2em;
+margin-bottom: 20px;
+color: #2c3e50;
+border-bottom: 2px solid #484848;
+padding-bottom: 10px;
 }
 
 /* 活動履歴リストのスタイル */
 .history-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+list-style: none;
+padding: 0;
+margin: 0;
 }
 
 .history-list li {
-  margin-bottom: 15px;
-  padding: 10px 15px;
-  border-left: 4px solid #2b2e30;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  position: relative;
+margin-bottom: 15px;
+padding: 10px 15px;
+border-left: 4px solid #2b2e30;
+background-color: #f9f9f9;
+border-radius: 4px;
+position: relative;
 }
 
 /* 日付のスタイル */
 .history-date {
-  display: block;
-  font-weight: bold;
-  color: #2b2e30;
-  margin-bottom: 5px;
+display: block;
+font-weight: bold;
+color: #2b2e30;
+margin-bottom: 5px;
 }
 
 /* タイトルのスタイル */
 .history-title {
-  display: block;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 5px;
+display: block;
+font-weight: bold;
+color: #2c3e50;
+margin-bottom: 5px;
 }
 
 /* 概要のスタイル */
 .history-desc {
-  display: block;
-  color: #34495e;
+display: block;
+color: #34495e;
 }
 
 /* スキルカードのコンテナ */
 .skills-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
 }
 
 /* 各スキルカードのスタイル */
 .skill-card {
-  flex: 1 1 calc(50% - 20px);
-  background-color: #f9f9f9;
-  padding: 15px;
-  box-sizing: border-box;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+flex: 1 1 calc(50% - 20px);
+background-color: #f9f9f9;
+padding: 15px;
+box-sizing: border-box;
+text-align: center;
+border: 1px solid #ddd;
+border-radius: 8px;
 }
 
 .skill-icon {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
+width: 60px;
+height: 60px;
+margin-bottom: 10px;
 }
 
 .skill-card h3 {
-  margin: 10px 0;
-  color: #3498db;
+margin: 10px 0;
+color: #3498db;
 }
 
 .skill-card p {
-  margin: 5px 0;
+margin: 5px 0;
 }
 
 /* 連絡先情報のコンテナ */
 .contact-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
 }
 
 /* 各連絡先項目のスタイル */
 .contact-item {
-  flex: 1 1 30%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+flex: 1 1 30%;
+display: flex;
+align-items: center;
+gap: 10px;
 }
 
 .contact-item img {
-  width: 32px;
-  height: 32px;
+width: 32px;
+height: 32px;
 }
 
 .contact-item a {
-  color: #3498db;
-  text-decoration: none;
-  font-size: 1.1em;
+color: #3498db;
+text-decoration: none;
+font-size: 1.1em;
 }
 
 .contact-item a:hover {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
+
+.fade-in-on-scroll {
+opacity: 0;
+transform: translateY(100px) scale(0.9);
+transition: opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in-on-scroll.visible {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
 
 /*
 testここまで
@@ -276,85 +287,85 @@ testここまで
 スライドショーのスタイル
 ////////////////////////////////////////*/
 .slideshow {
-    width: 100%;
-    position: relative;
-    max-width: 85%;
-    margin: 20px auto;
-    overflow: hidden;
-  }
-  
-  .slide {
-    display: none;
-    width: 100%;
-  }
-  
-  .slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
+  width: 100%;
+  position: relative;
+  max-width: 85%;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  z-index: 1;
+}
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.dots {
+  text-align: center;
+  margin-top: 10px;
+  scrollbar-width: none;
+}
+
+.dots::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.dot {
+  flex: 0 0 auto;
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 4px 3px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: #717171;
+}
+
+.controller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
   .prev, .next {
-    cursor: pointer;
-    position: absolute;
-    bottom: 0px;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 6px;
-    z-index: 1;
+    font-size: 18px;
+    padding: 10px;
   }
-  .prev {
-    left: 10px;
-  }
-  
-  .next {
-    right: 10px;
-  }
-  
-  .dots {
-    text-align: center;
-    margin-top: 10px;
-    scrollbar-width: none;
-  }
-
-  .dots::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
-  }
-  
-  .dot {
-    flex: 0 0 auto;
-    cursor: pointer;
-    height: 12px;
-    width: 12px;
-    margin: 4px 3px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dot.active {
-    background-color: #717171;
-  }
-
-  .controller {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  @media (max-width: 600px) {
-    .prev, .next {
-      font-size: 18px;
-      padding: 10px;
-    }
-  }
+}
