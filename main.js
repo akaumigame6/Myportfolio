@@ -93,4 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // .fade-in-on-scroll 単独要素も観察
   document.querySelectorAll('.fade-in-on-scroll:not(.fade-in-group *)').forEach(el => observer.observe(el));
+
+  const icon = document.querySelector('.intro-icon');
+
+  icon.addEventListener('click', () => {
+    icon.classList.add('animate-hue');
+
+    // 3秒後にクラスを削除して元に戻す
+    setTimeout(() => {
+      icon.classList.remove('animate-hue');
+    }, 3000);
+  });
+
 });

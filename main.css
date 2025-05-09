@@ -144,6 +144,43 @@ nav a {
   width: 300px;
   height: 300px;
   object-fit: cover;
+  transition: filter 0.3s;
+  cursor: pointer;
+}
+
+/* アニメーション中 */
+.intro-icon.animate-hue {
+  animation: hueCycle 3s linear;
+}
+
+/* 色相をくるくる回すアニメーション */
+@keyframes hueCycle {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(2160deg); }
+}
+
+.intro-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.click-label {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #d80c0c;
+  font-weight: bold;
+  animation: bounce 1.5s infinite;
+}
+
+/* 遊び心あるアニメーション（上下にゆらゆら） */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 /* テキスト部分 */
