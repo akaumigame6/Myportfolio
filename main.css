@@ -66,12 +66,97 @@ nav a {
   font-weight: bold;
 }
 
-.intro {
+.intro ,.skills, .works, .history, .skills, .contact{
   margin: 2rem 0;
 }
 
-.skills, .works, .history, .skills, .contact{
-  margin: 2rem 0;
+.hero {
+  position: relative;
+  width: 100%;
+  height: 50vh; /* 高さを画面の50%に抑える */
+  min-height: 300px;
+  overflow: hidden;
+}
+
+/* 背景画像 */
+.hero-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* filter: brightness(70%); 少し暗くして文字が読みやすく */
+}
+
+/* オーバーレイテキスト */
+.hero-overlay {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4); /* 半透明な黒背景でおしゃれに */
+  border-radius: 3px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.hero-overlay h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.hero-overlay p {
+  font-size: 1.1rem;
+}
+
+/* モバイル向け調整 */
+@media (max-width: 768px) {
+  .hero {
+    height: 40vh;
+  }
+
+  .hero-overlay h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-overlay p {
+    font-size: 1rem;
+  }
+}
+
+/* 横並び or 縦並びを切り替えるコンテナ */
+.intro-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-direction: column; /* ← 初期は縦並び（スマホ用） */
+  text-align: center;
+}
+
+/* アイコン画像 */
+.intro-icon {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* テキスト部分 */
+.intro-text {
+  max-width: 600px;
+}
+
+/* 横長画面では横並びに変更 */
+@media (min-width: 850px) {
+  .intro-container {
+    flex-direction: row;
+    text-align: left;
+  }
 }
 
 .tags span {
@@ -149,15 +234,6 @@ font-family: "Murecho", sans-serif;
   font-weight: 400;
 }
 
-
-/* 活動履歴セクションのスタイル */
-#history {
-/* max-width: 800px;
-margin: 0 auto;
-padding: 40px 20px; */
-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
 h2 {
 font-size: 2em;
 margin-bottom: 20px;
@@ -166,42 +242,58 @@ border-bottom: 2px solid #484848;
 padding-bottom: 10px;
 }
 
+/* 活動履歴セクションのスタイル */
+#history {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 /* 活動履歴リストのスタイル */
 .history-list {
-list-style: none;
-padding: 0;
-margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
 }
 
 .history-list li {
-margin-bottom: 15px;
-padding: 10px 15px;
-border-left: 4px solid #2b2e30;
-background-color: #f9f9f9;
-border-radius: 4px;
-position: relative;
+  margin-bottom: 20px;
+  padding: 15px 15px 15px 15px;
+  margin-left: 60px; /* 丸と余白の分 */
+  border-left: 4px solid #2b2e30;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  position: relative;
 }
 
-/* 日付のスタイル */
 .history-date {
-display: block;
-font-weight: bold;
-color: #2b2e30;
-margin-bottom: 5px;
+  position: absolute;
+  left: -85px; /* 60px幅 + 余白 */
+  top: 5px;
+  width: 70px;
+  height: 70px;
+  background-color: #2b2e30;
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 70px;
+  font-weight: bold;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 /* タイトルのスタイル */
 .history-title {
-display: block;
-font-weight: bold;
-color: #2c3e50;
-margin-bottom: 5px;
+  display: block;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
 }
 
 /* 概要のスタイル */
 .history-desc {
-display: block;
-color: #34495e;
+  display: block;
+  color: #34495e;
 }
 
 /* スキルカードのコンテナ */
