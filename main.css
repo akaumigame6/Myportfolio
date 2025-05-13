@@ -509,3 +509,40 @@ testここまで
     padding: 10px;
   }
 }
+
+
+/* Parrot関係 */
+/* 🦜 全体レイアウト */
+#parrot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* 🦜 インコ画像：デフォルト設定（PC） */
+#parrot {
+  width: 200px;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+  transform: translateY(30px); /* 少し下にずらす */
+  transition: transform 0.2s;
+}
+
+/* 📱 スマホ用サイズ調整 */
+@media (max-width: 767px) {
+  #parrot {
+    width: 128px;
+    transform: translateY(30px);
+  }
+}
+
+/* 📱 タブレット用サイズ調整 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  #parrot {
+    width: 175px;
+    transform: translateY(30px);
+  }
+}

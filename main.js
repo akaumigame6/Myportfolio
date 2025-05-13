@@ -66,6 +66,55 @@ class Slideshow {
   }
 }
 
+//Parrot
+const parrot = document.getElementById('parrot');
+let tapCount = 0;
+let isBusy = false;
+
+const animations = [
+  'images/Parrot/まばたき.gif',
+  'images/Parrot/首回し.gif',
+  'images/Parrot/横揺れ.gif',
+  'images/Parrot/縦揺れ.gif',
+];
+
+function playAction(gifPath) {
+  if (isBusy) return;
+  isBusy = true;
+
+  parrot.src = gifPath;
+
+  setTimeout(() => {
+    parrot.src = 'images/Parrot/縦揺れ通常.gif'; // 元に戻す
+    isBusy = false;
+  }, 3000); // アニメ時間に応じて調整
+}
+
+function playAngry() {
+  if (isBusy) return;
+  isBusy = true;
+  parrot.src = 'images/Parrot/いかり.gif';
+
+  setTimeout(() => {
+    parrot.src = 'images/Parrot/縦揺れ通常.gif';
+    tapCount = 0;
+    isBusy = false;
+  }, 3000);
+}
+
+parrot.addEventListener('click', () => {
+  if (isBusy) return;
+
+  tapCount++;
+  if (tapCount >= 5) {
+    playAngry();
+    return;
+  }
+
+  const anim = animations[Math.floor(Math.random() * animations.length)];
+  playAction(anim);
+});
+
 // ページ内のすべてのスライドショーを初期化
 document.addEventListener('DOMContentLoaded', () => {
   const slideshows = document.querySelectorAll('.slideshow');
