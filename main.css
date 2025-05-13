@@ -529,6 +529,7 @@ testここまで
   cursor: pointer;
   transform: translateY(30px); /* 少し下にずらす */
   transition: transform 0.2s;
+  filter: saturate(20%);
 }
 
 /* 📱 スマホ用サイズ調整 */
