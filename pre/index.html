@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>〇〇〇's ADVENTURE PORTFOLIO</title>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="initial-loader">
+        <div class="loader-message">
+            <p>SYSTEM BOOTING...</p>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+    
+    <nav id="global-menu">
+        <a href="#intro" class="menu-item">INTRO</a>
+        <a href="#works" class="menu-item">WORKS</a>
+        <a href="#history" class="menu-item">HISTORY</a>
+        <a href="#skills" class="menu-item">SKILLS</a>
+        <a href="#contact" class="menu-item">CONTACT</a>
+    </nav>
+
+    <main class="game-world" id="main-content">
+
+        <section id="intro" class="game-window start-screen">
+            <h1 class="rpg-title">〇〇〇の冒険の記録</h1>
+            
+            <div class="intro-flex-container">
+                <div class="character-area">
+                    <div class="avatar-frame">
+                        <img src="avatar.png" alt="アバター画像" class="avatar-img">
+                    </div>
+                </div>
+                
+                <div class="message-box">
+                    <p class="rpg-message">▶︎ 〇〇〇は新たな冒険（開発）を始めた！</p>
+                    <p>Welcome to my Portfolio Site. 私はWeb開発を中心に活動している〇〇〇です。このサイトは、私のスキルとプロジェクトを紹介する冒険の記録です。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="game-window">
+            <h2 class="section-title">WORKS <span class="subtitle">| 冒険の記録 - QUESTS</span></h2>
+            <div class="work-list">
+                
+                <div class="work-item" onclick="showWorkDetail('A')"> 
+                    <div data-work-id="A" 
+                         data-link="project-a.html" 
+                         data-tech="React,Firebase,Tailwind CSS"
+                         data-skills="javascript,database"
+                         data-period="2024年4月 - 2024年6月 (3ヶ月)"
+                         data-role="フロントエンド設計、一部バックエンドAPI開発"
+                         data-media-types="iframe,img,img" 
+                         data-media-srcs="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0,work_a_ss1.jpg,work_a_ss2.jpg">
+                        
+                        <div class="work-thumbnail">
+                            <div class="media-container">
+                                </div>
+                        </div>
+                        <div class="work-content">
+                            <h3 class="item-title">プロジェクトA</h3>
+                            <div class="tech-badges"></div> 
+                            <p class="project-summary">このアプリは〇〇を実現するために開発されました。ユーザーがリアルタイムでデータを共有できるのが特徴です。</p>
+                        </div>
+                        <div class="command-btn">CHECK <span class="arrow">▶︎</span></div>
+                    </div>
+                </div>
+                
+                <div class="work-item" onclick="showWorkDetail('B')">
+                    <div data-work-id="B" 
+                         data-link="project-b.html" 
+                         data-tech="HTML/CSS,Vanilla JS,SASS"
+                         data-skills="htmlcss,javascript"
+                         data-period="2023年11月 (単月)"
+                         data-role="LPデザイン、レスポンシブ実装の全般"
+                         data-media-types="img,img" 
+                         data-media-srcs="../img/JavaScript_game.png,../img/kame/img1.png">
+                        
+                        <div class="work-thumbnail">
+                            <div class="media-container">
+                                </div>
+                        </div>
+                        <div class="work-content">
+                            <h3 class="item-title">WebサイトB</h3>
+                            <div class="tech-badges"></div>
+                            <p class="project-summary">シンプルで高速なLP制作を担当。マーケティング効果を最大化するためのデザインと実装を行いました。</p>
+                        </div>
+                        <div class="command-btn">CHECK <span class="arrow">▶︎</span></div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section id="history" class="game-window">
+            <h2 class="section-title">HISTORY <span class="subtitle">| 旅の軌跡 - MEMORY LOG</span></h2>
+            <div class="timeline-container">
+                <div class="timeline-node">
+                    <div class="year-label">20XX</div>
+                    <div class="log-content">Web開発の学習を開始し、基礎魔法を習得しました。</div>
+                </div>
+                <div class="timeline-node">
+                    <div class="year-label">20YY</div>
+                    <div class="log-content">初のオリジナル作品「プロジェクトA」を完成！レベルが上がりました。</div>
+                </div>
+                <div class="timeline-node">
+                    <div class="year-label">20ZZ</div>
+                    <div class="log-content">実務経験を積み、専門職「上級エンジニア」にクラスチェンジしました。</div>
+                </div>
+                <div class="timeline-node">
+                    <div class="year-label">20AA</div>
+                    <div class="log-content">新しいクラウド技術（AWS）の探索を始めました。</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="game-window">
+            <h2 class="section-title">SKILLS <span class="subtitle">| ステータス - ABILITIES</span></h2>
+            
+            <div class="skill-list">
+                <div class="skill-card" onclick="showSkillDetail('htmlcss')"> 
+                    <div data-skill-id="htmlcss"
+                         data-level="90%"
+                         data-years="3年"
+                         data-description="最新のCSS技術（Flexbox, Grid）やSASSを用いた高速なレスポンシブデザイン構築が得意です。"
+                         data-related-works="A,B">
+                        <div class="skill-icon">🖥️</div>
+                        <p>HTML/CSS</p>
+                    </div>
+                </div>
+                <div class="skill-card" onclick="showSkillDetail('javascript')">
+                    <div data-skill-id="javascript"
+                         data-level="75%"
+                         data-years="2年"
+                         data-description="Reactなどのライブラリを活用したSPA開発経験があり、DOM操作や非同期処理にも精通しています。"
+                         data-related-works="A,B">
+                        <div class="skill-icon">⚡️</div>
+                        <p>JavaScript</p>
+                    </div>
+                </div>
+                <div class="skill-card" onclick="showSkillDetail('database')">
+                    <div data-skill-id="database"
+                         data-level="60%"
+                         data-years="1年"
+                         data-description="Firebase/Firestoreを使ったNoSQLデータベースの設計と運用経験があります。"
+                         data-related-works="A">
+                        <div class="skill-icon">🗃️</div>
+                        <p>Database</p>
+                    </div>
+                </div>
+                <div class="skill-card" onclick="showSkillDetail('cloud')">
+                    <div data-skill-id="cloud"
+                         data-level="40%"
+                         data-years="0.5年"
+                         data-description="AWSの基本的なサービス（S3, EC2など）を勉強中です。"
+                         data-related-works="">
+                        <div class="skill-icon">☁️</div>
+                        <p>Cloud</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="section-title" style="font-size: 1.5rem; margin-top: 40px; border-bottom: none;">熟練度ゲージ</h3>
+            
+            <div class="skill-item">
+                <p>HTML/CSS</p>
+                <div class="skill-bar"><div class="skill-level" data-level="90%"></div></div>
+            </div>
+            <div class="skill-item">
+                <p>JavaScript</p>
+                <div class="skill-bar"><div class="skill-level" data-level="75%"></div></div>
+            </div>
+            <div class="skill-item">
+                <p>Database</p>
+                <div class="skill-bar"><div class="skill-level" data-level="60%"></div></div>
+            </div>
+        </section>
+
+        <section id="contact" class="game-window">
+            <h2 class="section-title">CONTACT <span class="subtitle">| 仲間を呼ぶ - MESSAGE</span></h2>
+            <div class="contact-form-area">
+                <p class="contact-message">ご依頼・ご質問など、お気軽にお話しかけください。</p>
+                <form action="#" method="POST" class="contact-form">
+                    <input type="text" placeholder="名前 (NAME)">
+                    <input type="email" placeholder="メールアドレス (E-MAIL)">
+                    <textarea placeholder="メッセージ (MESSAGE)"></textarea>
+                    <button type="submit" class="command-btn send-btn">話しかける <span class="arrow">▶︎</span></button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
