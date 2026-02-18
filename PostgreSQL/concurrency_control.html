@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データベースの迷宮と消えた証拠</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* --- CYBERPUNK NEON THEME SETTINGS --- */
+        :root {
+            --bg-color: #050505; /* より深い黒 */
+            --text-main: #e0ffff; /* 青みがかった発光する白 */
+            --text-muted: #8a9ba8;
+            
+            /* ネオンカラー定義 */
+            --neon-blue: #00ffff;
+            --neon-pink: #ff00ff;
+            --neon-yellow: #ffff00;
+            
+            /* 発光エフェクト定義 */
+            --glow-blue: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+            --glow-pink: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            --text-glow: 0 0 2px rgba(224, 255, 255, 0.5);
+
+            /* フォント */
+            --font-title: 'Orbitron', sans-serif; /* SFチックな見出し */
+            --font-mono: 'Share Tech Mono', monospace; /* ターミナル文字 */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            /* 背景にサイバーなグリッドを描画 */
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            position: relative;
+        }
+
+        /* CRTモニターのような走査線エフェクトを全体にかける（凝った感） */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none; /* クリックを邪魔しないように */
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 1; /* 走査線より下に配置 */
+        }
+
+        /* --- タイトルエリア --- */
+        header {
+            text-align: center;
+            padding: 5rem 0 3rem;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 2px 15px rgba(0, 255, 255, 0.3);
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-family: var(--font-title);
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            /* 強烈なネオン発光 */
+            text-shadow: var(--glow-blue);
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            color: var(--neon-yellow);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 5px var(--neon-yellow);
+        }
+
+        /* --- 見出し --- */
+        h2 {
+            font-family: var(--font-title);
+            color: var(--neon-yellow);
+            border-left: 6px solid var(--neon-yellow);
+            padding-left: 1rem;
+            margin-top: 5rem;
+            font-size: 2rem;
+            text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+            background: linear-gradient(90deg, rgba(255, 255, 0, 0.1), transparent);
+            display: inline-block;
+            width: 100%;
+        }
+
+        h3 {
+            font-family: var(--font-title);
+            color: var(--neon-blue);
+            border-bottom: 1px dashed var(--neon-blue);
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+            font-size: 1.4rem;
+        }
+
+        /* --- ストーリーボックス（デジタルパネル風） --- */
+        .story-box {
+            background-color: rgba(10, 10, 20, 0.8);
+            border: 1px solid var(--neon-blue);
+            padding: 2rem;
+            margin: 3rem 0;
+            position: relative;
+            /* 角を少し削ってデジタル感を出す */
+            clip-path: polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%);
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .story-box::before {
+            content: "[ CASE_FILE_LOADED ]";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-color);
+            color: var(--neon-yellow);
+            font-family: var(--font-mono);
+            padding: 0 10px;
+            font-size: 0.9rem;
+            border: 1px solid var(--neon-yellow);
+            text-shadow: 0 0 5px var(--neon-yellow);
+        }
+
+        /* --- 2画面分割ターミナル（ネオン強化版） --- */
+        .dual-terminal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 3rem -1rem; /* 少し横に広げる */
+            padding: 15px;
+            background: #000;
+            /* 外枠をサイバーピンクで発光させる */
+            border: 2px solid var(--neon-pink);
+            box-shadow: var(--glow-pink), inset 0 0 20px rgba(255, 0, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .terminal-window {
+            flex: 1;
+            min-width: 320px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 0 0 4px 4px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .terminal-header {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 0.05em;
+        }
+
+        /* 探偵（A）：青ネオン */
+        .term-a { border-color: var(--neon-blue); }
+        .term-a .terminal-header {
+            background: rgba(0, 255, 255, 0.2);
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            border-bottom: 1px solid var(--neon-blue);
+        }
+        
+        /* 怪盗（B）：ピンクネオン */
+        .term-b { border-color: var(--neon-pink); }
+        .term-b .terminal-header {
+            background: rgba(255, 0, 255, 0.2);
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+            border-bottom: 1px solid var(--neon-pink);
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            color: var(--text-main);
+            text-shadow: var(--text-glow); /* 文字自体も少し発光 */
+        }
+
+        /* SQLコマンドのハイライト */
+        .sql-cmd { color: var(--neon-yellow); font-weight: bold; }
+        .sql-comment { color: #666; font-style: italic; }
+        
+        /* カーソル点滅アニメーション（おまけ） */
+        .cursor-blink::after {
+            content: "_";
+            animation: blink 1s step-end infinite;
+            color: var(--neon-blue);
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- 挑戦状セクション（危険な雰囲気） --- */
+        .challenge-section {
+            /* 危険を示す斜めストライプの背景 */
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(255, 0, 255, 0.05),
+                    rgba(255, 0, 255, 0.05) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+            border: 2px solid var(--neon-pink);
+            box-shadow: var(--glow-pink);
+            padding: 3rem;
+            margin-top: 5rem;
+        }
+
+        .challenge-title {
+            color: var(--neon-pink);
+            font-family: var(--font-title);
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: var(--glow-pink);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="subtitle">// SYSTEM: PostgreSQL Isolation Levels & Locking //</div>
+        <h1>データベースの迷宮と消えた証拠</h1>
+        <p style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue);">PostgreSQLで挑む同時実行制御のサイバー・ミステリー</p>
+    </header>
+
+    <section>
+        <h2>【第1章】SFミステリー編：名探偵と「書き換わる密室」</h2>
+        
+        <div class="story-box">
+            <p><strong>>> SCENARIO:</strong><br>
+            電脳屋敷のデータセクタ（evidenceテーブル）に、「犯人はヤス」というデジタル・ダイイングメッセージが残されていた。<br>
+            ネットランナー探偵（A）がアクセスしたその背後で、ステルス怪盗（B）が侵入し、データを書き換えてしまう……。</p>
+        </div>
+
+        <h3>実験シナリオ：Read Committedの恐怖</h3>
+        <p>デフォルトの隔離レベルでは、接続中（トランザクション中）であっても、現実は歪められてしまう。</p>
+
+        <div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Detective Netrunner)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-cmd">BEGIN;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
+
+<span class="sql-comment">-- 結果: "犯人はヤス"</span>
+<span class="sql-comment">-- (ここでBが動く)</span>
+
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
+<span class="sql-comment">-- WARNING: データ不整合を検知! "犯人は犯人" に変化!</span>
+                </div>
+            </div>
+
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B (Phantom Hacker)</span>
+                    <span>[STATUS: INTRUDING]</span>
+                </div>
+                <div class="terminal-body">
+<span class="sql-comment">-- Aの背後で実行</span>
+
+<span class="sql-cmd">UPDATE</span> evidence 
+<span class="sql-cmd">SET</span> message = '犯人は犯人' 
+<span class="sql-cmd">WHERE</span> id = 1;
+
+<span class="sql-cmd">COMMIT;</span>
+<span class="sql-comment">-- 書き換え完了。ログアウト。</span>
+                </div>
+            </div>
+        </div>
+        
+        <p>これが <strong>Non-Repeatable Read（読み取り不整合）</strong> 現象だ。</p>
+    </section>
+
+    <section>
+         <h2>【第2章】現実編：人気アイドルのチケットと「幻の座席」</h2>
+         <p style="color: var(--text-muted);">(中略... 第1章と同じdual-terminal構成を使ってレースコンディションを解説)</p>
+    </section>
+
+    <section class="challenge-section">
+        <div class="challenge-title">⚠️ WARNING: 読者への挑戦状 ⚠️</div>
+        <p style="text-align: center;">ここまでインストールした知識を駆使し、以下の高難度ミッションをクリアせよ。</p>
+
+        <h3>問題1：【解決編】「排他ロック」で時を止めろ</h3>
+        <p><strong>MISSION:</strong> 第2章のチケット予約システムを修正し、Aがアクセスしている間、Bが検索すらできず「待機（フリーズ）」するようにコードを改変せよ。</p>
+        <p style="background:rgba(0,255,255,0.1); padding:1rem; border:1px solid var(--neon-blue); font-family:var(--font-mono); color:var(--neon-blue);">
+            > HINT_SYSTEM: SELECT ... FOR UPDATE; コマンドの使用を推奨する。
+        </p>
+    </section>
+
+</div>
+
+</body>
+</html>
