@@ -5,245 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>データベースの迷宮と消えた証拠</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <style>
-        /* --- CYBERPUNK NEON THEME SETTINGS --- */
-        :root {
-            --bg-color: #050505; /* より深い黒 */
-            --text-main: #e0ffff; /* 青みがかった発光する白 */
-            --text-muted: #8a9ba8;
-            
-            /* ネオンカラー定義 */
-            --neon-blue: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-yellow: #ffff00;
-            
-            /* 発光エフェクト定義 */
-            --glow-blue: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
-            --glow-pink: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
-            --text-glow: 0 0 2px rgba(224, 255, 255, 0.5);
-
-            /* フォント */
-            --font-title: 'Orbitron', sans-serif; /* SFチックな見出し */
-            --font-mono: 'Share Tech Mono', monospace; /* ターミナル文字 */
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 0;
-            /* 背景にサイバーなグリッドを描画 */
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            position: relative;
-        }
-
-        /* CRTモニターのような走査線エフェクトを全体にかける（凝った感） */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none; /* クリックを邪魔しないように */
-            z-index: 10;
-        }
-
-        .container {
-            max-width: 840px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            position: relative;
-            z-index: 1; /* 走査線より下に配置 */
-        }
-
-        /* --- タイトルエリア --- */
-        header {
-            text-align: center;
-            padding: 5rem 0 3rem;
-            border-bottom: 2px solid var(--neon-blue);
-            box-shadow: 0 2px 15px rgba(0, 255, 255, 0.3);
-            margin-bottom: 4rem;
-        }
-
-        h1 {
-            font-family: var(--font-title);
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            /* 強烈なネオン発光 */
-            text-shadow: var(--glow-blue);
-        }
-
-        .subtitle {
-            font-family: var(--font-mono);
-            color: var(--neon-yellow);
-            font-size: 1.1rem;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 5px var(--neon-yellow);
-        }
-
-        /* --- 見出し --- */
-        h2 {
-            font-family: var(--font-title);
-            color: var(--neon-yellow);
-            border-left: 6px solid var(--neon-yellow);
-            padding-left: 1rem;
-            margin-top: 5rem;
-            font-size: 2rem;
-            text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
-            background: linear-gradient(90deg, rgba(255, 255, 0, 0.1), transparent);
-            display: inline-block;
-            width: 100%;
-        }
-
-        h3 {
-            font-family: var(--font-title);
-            color: var(--neon-blue);
-            border-bottom: 1px dashed var(--neon-blue);
-            padding-bottom: 0.5rem;
-            margin-top: 3rem;
-            font-size: 1.4rem;
-        }
-
-        /* --- ストーリーボックス（デジタルパネル風） --- */
-        .story-box {
-            background-color: rgba(10, 10, 20, 0.8);
-            border: 1px solid var(--neon-blue);
-            padding: 2rem;
-            margin: 3rem 0;
-            position: relative;
-            /* 角を少し削ってデジタル感を出す */
-            clip-path: polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%);
-            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
-        }
-        
-        .story-box::before {
-            content: "[ CASE_FILE_LOADED ]";
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: var(--bg-color);
-            color: var(--neon-yellow);
-            font-family: var(--font-mono);
-            padding: 0 10px;
-            font-size: 0.9rem;
-            border: 1px solid var(--neon-yellow);
-            text-shadow: 0 0 5px var(--neon-yellow);
-        }
-
-        /* --- 2画面分割ターミナル（ネオン強化版） --- */
-        .dual-terminal {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 3rem -1rem; /* 少し横に広げる */
-            padding: 15px;
-            background: #000;
-            /* 外枠をサイバーピンクで発光させる */
-            border: 2px solid var(--neon-pink);
-            box-shadow: var(--glow-pink), inset 0 0 20px rgba(255, 0, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        .terminal-window {
-            flex: 1;
-            min-width: 320px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 0 0 4px 4px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-
-        .terminal-header {
-            padding: 8px 15px;
-            font-size: 0.85rem;
-            font-family: var(--font-mono);
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            letter-spacing: 0.05em;
-        }
-
-        /* 探偵（A）：青ネオン */
-        .term-a { border-color: var(--neon-blue); }
-        .term-a .terminal-header {
-            background: rgba(0, 255, 255, 0.2);
-            color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
-            border-bottom: 1px solid var(--neon-blue);
-        }
-        
-        /* 怪盗（B）：ピンクネオン */
-        .term-b { border-color: var(--neon-pink); }
-        .term-b .terminal-header {
-            background: rgba(255, 0, 255, 0.2);
-            color: var(--neon-pink);
-            text-shadow: 0 0 5px var(--neon-pink);
-            border-bottom: 1px solid var(--neon-pink);
-        }
-
-        .terminal-body {
-            padding: 1.5rem;
-            font-family: var(--font-mono);
-            font-size: 0.95rem;
-            white-space: pre-wrap;
-            color: var(--text-main);
-            text-shadow: var(--text-glow); /* 文字自体も少し発光 */
-        }
-
-        /* SQLコマンドのハイライト */
-        .sql-cmd { color: var(--neon-yellow); font-weight: bold; }
-        .sql-comment { color: #666; font-style: italic; }
-        
-        /* カーソル点滅アニメーション（おまけ） */
-        .cursor-blink::after {
-            content: "_";
-            animation: blink 1s step-end infinite;
-            color: var(--neon-blue);
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* --- 挑戦状セクション（危険な雰囲気） --- */
-        .challenge-section {
-            /* 危険を示す斜めストライプの背景 */
-            background: 
-                repeating-linear-gradient(
-                    45deg,
-                    rgba(255, 0, 255, 0.05),
-                    rgba(255, 0, 255, 0.05) 10px,
-                    transparent 10px,
-                    transparent 20px
-                );
-            border: 2px solid var(--neon-pink);
-            box-shadow: var(--glow-pink);
-            padding: 3rem;
-            margin-top: 5rem;
-        }
-
-        .challenge-title {
-            color: var(--neon-pink);
-            font-family: var(--font-title);
-            font-weight: bold;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-transform: uppercase;
-            text-shadow: var(--glow-pink);
-        }
-
-    </style>
+    <link rel="stylesheet" href="concurrency_control.css">
 </head>
 <body>
 
@@ -256,45 +18,86 @@
     </header>
 
     <section>
+        <h2>【第0章】はじめに</h2>
+        <p>　このwebページは、PostgreSQLの同時実行制御（Concurrency Control）をテーマにしたストーリー形式の解説コンテンツです。データベースの世界で起こりうる不思議な現象を、SFミステリーや現実のシナリオを通じて体験しながら学んでいきましょう。</p>
+        <p>　演習環境は<a href="https://takeshiwada1980.github.io/DB-2025" target="_blank">講義資料</a>を参考に、PostgreSQLがインストールされた環境を用意してください。ターミナルを複数開いて、同時に操作することで、同時実行制御の問題をリアルに体験できます。</p>
+        <p>　また、二つのターミナルで同時に操作を行う都合上<code>npm run Test.sql</code>とnpm runでSQLファイルを実行してください。</p>
+    </section>
+    <section>
         <h2>【第1章】SFミステリー編：名探偵と「書き換わる密室」</h2>
-        
+        <p>　データベースの世界には、SFのような現実世界ではあり得ない不思議な現象が存在します。それは、同時に複数のユーザーがデータにアクセスする際の「同時実行制御」の問題です。</br>
+            　PostgreSQLは、複数のユーザー（トランザクション）が同時にアクセスしてもデータが壊れないように制御していますが、その制御の強さ（隔離レベル）によっては、まるで「さっき見たはずの証拠が、目を離した隙に書き換わっている」というミステリー小説のような現象が発生します。
+ここでは、探偵 アリスと怪盗 ボブのやり取りからこの奇妙な世界を体験してみましょう。</p>
         <div class="story-box">
             <p><strong>>> SCENARIO:</strong><br>
-            電脳屋敷のデータセクタ（evidenceテーブル）に、「犯人はヤス」というデジタル・ダイイングメッセージが残されていた。<br>
-            ネットランナー探偵（A）がアクセスしたその背後で、ステルス怪盗（B）が侵入し、データを書き換えてしまう……。</p>
+            電脳屋敷のデータセクタ（evidenceテーブル）に、被害者 チャーリーが書いた「犯人はボブ」というデジタル・ダイイングメッセージが残されていた。<br>
+            しかし、探偵 アリスがアクセスしたその背後で、怪盗 ボブ がデータセクタに侵入し、データを書き換えてしまう……。</p>
         </div>
 
-        <h3>実験シナリオ：Read Committedの恐怖</h3>
-        <p>デフォルトの隔離レベルでは、接続中（トランザクション中）であっても、現実は歪められてしまう。</p>
+        <h3>File0: 事件の舞台の準備</h3>
+        <p>まずは、事件の舞台となるデータベースとテーブルを準備しましょう。</p>
+        <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal (Database Setup)</span>
+                <span>[STATUS: PREPARING]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- evidence(証拠)テーブルの作成</span>
+<span class="sql-cmd">CREATE TABLE </span>evidence (
+    id <span class="sql-cmd">SERIAL PRIMARY KEY</span>,
+    message <span class="sql-cmd">TEXT</span>
+);
+<span class="sql-comment">-- 最初の証拠(データ)を登録</span>
+<span class="sql-cmd">INSERT INTO</span> evidence (message) <span class="sql-cmd">VALUES</span> ('犯人はボブ');
+            </div>
+        </div>
+        <p>これで、事件の舞台が整いました。次にターミナルを二つ開いてください。</p>
+        <ul>
+            <li>Terminal A: 探偵 アリスが操作するターミナル…犯人捜索を行います。</li>
+            <li>Terminal B: 怪盗 ボブが操作するターミナル…犯人がばれないように証拠隠滅を図ります。</li>
+        </ul>
+
+        <h3>File1: 不安定な世界(Read Committed)</h3>
+        <p>まずは、PostgreSQLのデフォルト設定である<strong>Read Committed（コミット済み読み取り）</strong>の世界で捜査を開始します。</p>
+        <ol>
+            <li>探偵 アリスはTerminal Aで調査を開始し、ダイイングメッセージを確認した。</li>
+            <li>その直後、怪盗 ボブはTerminal Bでevidenceテーブルに侵入し、ダイイングメッセージをこっそり<strong>「犯人はイヴ」</strong>に書き換えた。</li>
+            <li>探偵 アリスが念のため、再びTerminal Aに戻り調査すると...?</li>
+        </ol>
 
         <div class="dual-terminal">
             <div class="terminal-window term-a">
                 <div class="terminal-header">
-                    <span>> Terminal A (Detective Netrunner)</span>
+                    <span>> Terminal A (Alice)</span>
                     <span>[STATUS: CONNECTED]</span>
                 </div>
                 <div class="terminal-body cursor-blink">
-<span class="sql-cmd">BEGIN;</span>
+<span class="sql-comment">-- 調査の開始</span>
+<span class="sql-cmd">START TRANSACTION;</span>
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
 
-<span class="sql-comment">-- 結果: "犯人はヤス"</span>
-<span class="sql-comment">-- (ここでBが動く)</span>
+<span class="sql-comment">-- 結果: "犯人はボブ"</span>
+<span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5); pg_sleep(5);
+
 
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
-<span class="sql-comment">-- WARNING: データ不整合を検知! "犯人は犯人" に変化!</span>
+<span class="sql-comment">-- WARNING: データ不整合を検知! "犯人はイヴ" に変化!</span>
                 </div>
             </div>
 
             <div class="terminal-window term-b">
                 <div class="terminal-header">
-                    <span>> Terminal B (Phantom Hacker)</span>
+                    <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: INTRUDING]</span>
                 </div>
                 <div class="terminal-body">
-<span class="sql-comment">-- Aの背後で実行</span>
+<span class="sql-comment">-- データセクタに侵入</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+
 
 <span class="sql-cmd">UPDATE</span> evidence 
-<span class="sql-cmd">SET</span> message = '犯人は犯人' 
+<span class="sql-cmd">SET</span> message = '犯人はイヴ' 
 <span class="sql-cmd">WHERE</span> id = 1;
 
 <span class="sql-cmd">COMMIT;</span>
@@ -303,12 +106,441 @@
             </div>
         </div>
         
-        <p>これが <strong>Non-Repeatable Read（読み取り不整合）</strong> 現象だ。</p>
+        <p>この現象を <strong>Non-Repeatable Read（読み取り不整合）</strong> といいます。</p>
+        <div class="explanation">
+        <p><ti>解説：Non-Repeatable Read（読み取り不整合）</ti></p>
+        <p>　二回目の調査の結果は「犯人はイヴ」に変化しましたね?同じデータを二度読んでも結果が変わってしまう、これが<strong>Non-Repeatable Readです。</strong><p>
+        <p>　<strong>Read Committed</strong> では、他人がコミットした最新の事実を常に読み取ります。つまり、探偵 アリスが調査している最中でも、怪盗 ボブがデータを書き換えてコミットしてしまうと、アリスの次の読み取りで「犯人はイヴ」と変わってしまうのです。</p>
+        <p>　この挙動は、データの一貫性を保つために必要な仕組みですが、アプリケーション側で意図しない不整合を引き起こす可能性があります。</p>
+        </div>
+
+        <h3>file2: 観測者だけの「静止した世界」 (Repeatable Read)</h3>
+        <p>　探偵 アリスは捜査手法を切り替えることにしました。<strong>Repeatable Read(繰り返し読み取り可能)</strong>の世界で捜査を行うことにしたのです。</br>
+        　この世界では、探偵 アリスが最初に読み取ったデータは、その後どんなに怪盗 ボブが書き換えを行っても、アリスの目には変わらない「静止した世界」となります。</p>
+        <p>　実験の前に、怪盗 ボブが変更した内容を元に戻しておきましょう。</p>
+        <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal A (Database Setup)</span>
+                <span>[STATUS: PREPARING]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 書き換えを元に戻す</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">UPDATE</span> evidence
+<span class="sql-cmd">SET</span> message = '犯人はボブ'
+<span class="sql-cmd">WHERE</span> id = 1;  
+<span class="sql-cmd">COMMIT;</span>
+<span class="sql-comment">-- 元に戻した。ログアウト。</span>
+            </div>
+        </div>
+        <p>　データを元に戻せました。では、再び同じ手順で実験を行いましょう。</p>
+        <ol>
+            <li>探偵 アリスはTerminal Aで<strong>Repeatable Readモード</strong>に切り替え、再び調査を開始した。</li>
+            <li>怪盗 ボブはTerminal Bで同様に侵入し、ダイイングメッセージを<strong>「犯人はイヴ」</strong>に書き換えた。</li>
+            <li>探偵 アリスがTerminal Aで再び調査すると...?</li>
+        </ol>
+
+        <div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 隔離レベルを指定して調査開始</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
+
+<span class="sql-comment">-- 結果: "犯人はボブ"</span>
+<span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5); pg_sleep(5);
+
+
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
+<span class="sql-comment">-- 結果: "犯人はボブ" (Repeatable Readでは変化しない)</span>
+                </div>
+            </div>
+
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B　　(Bob)</span>
+                    <span>[STATUS: INTRUDING]</span>
+                </div>
+                <div class="terminal-body">
+<span class="sql-comment">-- データセクタに侵入</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+
+
+
+
+<span class="sql-cmd">UPDATE</span> evidence 
+<span class="sql-cmd">SET</span> message = '犯人はイヴ' 
+<span class="sql-cmd">WHERE</span> id = 1;
+
+<span class="sql-cmd">COMMIT;</span>
+<span class="sql-comment">-- 書き換え完了。ログアウト。</span>
+                </div>
+            </div>
+        </div>
+        <p>今度は、探偵 アリスの目には、怪盗 ボブがどんなに書き換えを行っても、最初に見た「犯人はボブ」のままですね?これが<strong>Repeatable Read</strong>の世界です。</p>
+        <div class="explanation">
+        <p><ti>解説：Repeatable Read（繰り返し読み取り可能）</ti></p>
+        <p>　<strong>Repeatable Read</strong> では、トランザクションが開始された時点で見えていたデータのスナップショットを、そのトランザクションが終了するまで一貫して見せ続けます。つまり、探偵 アリスが最初に読み取った「犯人はボブ」の状態が、その後どんなに怪盗 ボブが書き換えを行っても、アリスの目には変わらないのです。</p>
+        <p>　このおかげで、探偵 アリスはデータの不整合に悩まされることなく、安心して捜査を続けることができます。しかし、この隔離レベルは、同時に発生するトランザクションの数が増えると、データベースのパフォーマンスに影響を与える可能性があります。</p>
+        </div>
+        <p>　探偵 アリスは証拠を元に、怪盗 ボブが犯人であると突き止め、事件を解決することができました。</br>
+        　次の章では、現実世界のシナリオを通じて、同時実行制御の問題をさらに深掘りしていきましょう。</p>
+    <div class="quiz">
+        <div class="quiz-question">
+            <h4>Q1. パラレルワールドの法則</h4>
+            <p>　探偵 アリスは、さらに不思議な世界に迷い込んでしまいました。そこは、同時実行制御の隔離レベルが「READ UNCOMMITTED（非コミット読み取り）」の世界です。</br>
+            　この世界では、他のトランザクションがコミットしていないデータも読み取ることができます。つまり、探偵 アリスが最初に読み取った「犯人はボブ」の状態が、怪盗 ボブが書き換えを行ってコミットする前の段階でも、アリスの目には変わってしまうのです。</p>
+            <p>　この世界で、探偵 アリスが最初に読み取った「犯人はボブ」の状態が、怪盗 ボブが書き換えを行ってコミットする前の段階でも、アリスの目には変わってしまう現象を何と呼ぶでしょうか?</p>
+        </div>
+        <details>
+            <summary>正解と解説を表示</summary>
+            <div class="quiz-answer">
+                <h5>正解</h5>
+                <p>Dirty Read</p>
+            </div>
+            <div class="quiz-explanation">
+                <h5>解説</h5>
+                <p>　この現象は、<strong>Dirty Read（ダーティリード）</strong>と呼ばれます。READ UNCOMMITTEDの世界では、他のトランザクションがコミットしていないデータも読み取ることができるため、探偵 アリスが最初に読み取った「犯人はボブ」の状態が、怪盗 ボブが書き換えを行ってコミットする前の段階でも、アリスの目には変わってしまうのです。</p>
+                <p>　この現象は、データの一貫性を保つためには避けるべきですが、READ UNCOMMITTEDは最もパフォーマンスが高い隔離レベルであるため、特定の状況では使用されることがあります。</p>
+            </div>
+        </details>
+        <div class="quiz-question">
+            <h4>Q2. データの真実はどこに？</h4>
+            <p>　トランザクションAとトランザクションBがあります。現在、テーブルには Message = 'Hello' というデータが入っています。</p>
+            <ol>
+                <li>Aが BEGIN し、SELECT で 'Hello' を読む。</li>
+                <li>Bが UPDATE で 'Goodbye' に書き換え、COMMIT する。</li>
+                <li>>Aがもう一度 SELECT を実行して、COMMIT する。</li>
+            </ol>
+            <p>　この時、Aの画面に表示される結果として正しい組み合わせはどれ？</p>
+            <ul>
+                <li>(a) デフォルト(Read Committed)なら 'Hello'、Repeatable Readなら 'Goodbye'</li>
+                <li>(b) デフォルト(Read Committed)なら 'Goodbye'、Repeatable Readなら 'Hello'</li>
+                <li>(c) どちらの設定でも 'Goodbye' になる（新しい事実は常に正しいから）</li>
+                <li>(d) どちらの設定でも 'Hello' のまま（最初に見た事実が真実だから）</li>
+            </ul>
+        </div>
+        <details>
+            <summary>正解と解説を表示</summary>
+            <div class="quiz-answer">
+                <h5>正解</h5>
+                <p>(b) デフォルト(Read Committed)なら 'Goodbye'、Repeatable Readなら 'Hello'</p>
+            </div>
+            <div class="quiz-explanation">
+                <h5>解説</h5>
+                <p>　デフォルトのRead Committedでは、トランザクションAが最初に読み取った'Hello'は、その後トランザクションBが'Goodbye'に書き換えてコミットしたため、Aの次のSELECTでは'Goodbye'が表示されます。</p>
+                <p>　一方、Repeatable Readでは、トランザクションAが最初に読み取った'Hello'のスナップショットが、そのトランザクションが終了するまで一貫して見せ続けられるため、Aの次のSELECTでも'Hello'のままになります。</p>
+            </div>
+        </details>
+    </div>
     </section>
 
     <section>
-         <h2>【第2章】現実編：人気アイドルのチケットと「幻の座席」</h2>
-         <p style="color: var(--text-muted);">(中略... 第1章と同じdual-terminal構成を使ってレースコンディションを解説)</p>
+        <h2>【第2章】現実編：人気アイドルのチケットと「幻の座席」</h2>
+        <p>　次の舞台は、人気アイドルグループのコンサートチケット予約システムです。ここでは、同時に複数のユーザーがアクセスすることで発生する、より現実的な同時実行制御の問題を体験してみましょう。</p>
+        <div class="story-box">
+            <p><strong>>> SCENARIO:</strong><br>
+            あなたはチケット販売サイトの開発者であり、運営です。</br>
+            　現在、大人気アイドル キャロルのライブにて残り1席のプラチナチケットを巡り、キャロルの大ファンであるアリスとボブが争奪戦を繰り広げています。</p>
+        </div>
+        <p>　このシナリオでは、アリスとボブが同時にチケット予約システムにアクセスし、最後の1席を争う様子を体験します。どちらがチケットを手に入れることができるのか、そしてその背後でどんな同時実行制御の問題が発生するのかを見ていきましょう。</p>
+        <h3>File0: 予約システムの準備</h3>
+        <p>　まずは、チケット販売システムの簡易版を作成します。</br>
+        「座席（seats）」テーブルと、予約結果を記録する「予約台帳（reservations）」テーブルを用意します。</p>
+        <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal (Database Setup)</span>
+                <span>[STATUS: PREPARING]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 既に テーブル が存在する場合は削除</span>
+<span class="sql-comment">DROP TABLE IF</span> EXISTS seats;
+<span class="sql-comment">DROP TABLE IF</span> EXISTS reservations;
+<span class="sql-comment">-- 座席(seats)テーブルの作成</span>
+<span class="sql-cmd">CREATE TABLE </span>seats (
+    seat_id <span class="sql-cmd">SERIAL PRIMARY KEY</span>,
+    status <span class="sql-cmd">TEXT</span>,<span class="sql-comment"> -- 'OPEN' か 'RESERVED'</span>
+);
+<span class="sql-comment">-- 予約台帳(reservations)テーブルの作成</span>
+<span class="sql-cmd">CREATE TABLE </span>reservations (
+    seat_id <span class="sql-cmd">INTEGER REFERENCES seats(seat_id)</span>,
+    user_name <span class="sql-cmd">TEXT</span>,
+    reserved_at <span class="sql-cmd">TIMESTAMP DEFAULT</span> NOW()
+); 
+<span class="sql-comment">-- 残り1席を用意</span>
+<span class="sql-cmd">INSERT INTO</span> seats <span class="sql-cmd">VALUES</span> (1,'OPEN');
+            </div>
+
+        </div>
+        <p>これで、最後の1席を巡る争奪戦の舞台が整いました。第一章の時と同様に、ターミナルを二つ開いてください。</p>
+        <ul>
+            <li>Terminal A: アリスが操作するターミナル…チケット予約を試みます。</li>
+            <li>Terminal B: ボブが操作するターミナル…同時にチケット予約を試みます。</li>
+        </ul>
+        <h3>File1: ダブルブッキング(重複予約)の発生</h3>
+        <p>　先ほどのシステムには、一般的なWebアプリによくある「脆弱な設計」が残っています。</p>
+        <ol>
+            <li>確認：席が空いているか確認する</li>
+            <li>判断：空いていれば予約する</li>
+            <li>実行：予約書き込みを行う
+        </ol>
+        <p>　この「確認」から「実行」までの間に、同時にもう一人のユーザーが同じ席を予約してしまうと、どうなるのでしょうか?<></br>
+        　今回の実験はデフォルトの<strong>Read Committed</strong>の世界で行います。</p>
+        </p>
+            <div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-comment">-- 結果: "OPEN"</span>
+
+<span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
+
+<span class="sql-comment">-- 2. 予約実行</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
+
+<span class="sql-cmd">COMMIT</span>;
+                </div>
+            </div>
+
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B　　(Bob)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-comment">-- 結果: "OPEN"</span>
+
+<span class="sql-comment">-- 2. 予約実行</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
+
+<span class="sql-cmd">COMMIT</span>;
+                </div>
+            </div>
+        </div>
+        <p>ここで、それぞれの実行結果を確認してみましょう。どちらも、OPENであることを確認したのちに予約しています。では、予約結果はどうなったのでしょうか?確認してみましょう。</p>
+        <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal A (Alice)</span>
+                <span>[STATUS: CHECKING]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 座席の状態を確認</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-comment">-- 結果: "RESERVED" (予約は成功している)</span>
+
+<span class="sql-comment">-- 予約台帳を確認</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> reservations;
+<span class="sql-comment">-- 結果: ダブルブッキング発生! "Fan_A" "Fan_B" 両方とも予約されている!</span>
+            </div>
+        </div>
+        <p>　このように、同時に複数のユーザーがアクセスすることで、最後の1席がダブルブッキングしてしまいました。これも、同時実行制御の問題の一つです。</p>
+        　次の章では、この問題を解決するための方法を考えていきましょう。
+        <div class="quiz">
+        <div class="quiz-question">
+            <h4>Q1. 「空白の1ミリ秒」を探せ</h4>
+            <p>　第2章の実験でダブルブッキングが起きた原因は、プログラムのどの隙間にボブの処理が入り込んだからでしょうか？ 以下の擬似コードを見て、「ここに入り込まれると死ぬ」 という危険な箇所を指差してください。</p>
+            <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal A (Test)</span>
+                <span>[STATUS: CONNECTED]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-cmd">BEGIN</span>;
+<span class="sql-comment">-- [ A ]</span>
+<span class="sql-cmd">SELECT</span> status <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-comment">-- [ B ]</span>
+<span class="sql-comment">-- アプリで「空席だ！」と判断する処理</span>
+<span class="sql-comment">-- [ C ]</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-comment">-- [ D ]</span>
+<span class="sql-cmd">COMMIT</span>;
+            </div>
+        </div>
+        <ol>
+            <li>[A] の直後</li>
+            <li>[B] または [C] の間</li>
+            <li>[C] と [D] の間</li>
+            <li>どこでもない。どこに入り込まれても問題ない。</li>
+        </div>
+        <details>
+            <summary>正解と解説を表示</summary>
+            <div class="quiz-answer">
+                <h5>正解</h5>
+                <p>2. [B] または [C] の間</p>
+            </div>
+            <div class="quiz-explanation">
+                <h5>解説</h5>
+                <p>　SELECT で「空席(OPEN)」という結果を受け取ってから、UPDATE で「予約済(RESERVED)」に書き換えるまでの間に、Bさんが UPDATE を完了させてしまうと、Aさんの UPDATE がBさんの予約を上書きしてしまいます。</br>
+                　この「読んでから書く（Read-Modify-Write）」の隙間がセキュリティホールです。</p>
+            </div>
+        </details>
+        <div class="quiz-question">
+            <h4>Q2. 銀行強盗の計算（応用問題）</h4>
+            <p>　残高1000円の口座に対し、2つのATMからほぼ同時に「100円引き落とす」処理を行いました。ロック制御を適切に行わなかった場合（ロストアップデート発生時）、最終的な残高はいくらになってしまう可能性がありますか？</p>
+            <ul>
+                <li>(a) 1000円（変化なし）</li>
+                <li>(b) 900円（異常）</li>
+                <li>(c) 1100円（増える）</li>
+                <li>(d) 800円（正常）</li>
+            </ul>
+        </div>
+        <details>
+            <summary>正解と解説を表示</summary>
+            <div class="quiz-answer">
+                <h5>正解</h5>
+                <p>(b) 900円（異常）</p>
+            </div>
+            <div class="quiz-explanation">
+                <h5>解説</h5>
+                <p>　2つのATMがほぼ同時に「100円引き落とす」処理を実行した場合、それぞれの処理は最初に残高1000円を読み取り、その後に残高を900円に更新します。
+                　</br>しかし、ロック制御が適切に行われていなければ、両方の処理が同じ初期値（1000円）を基準として更新してしまうため、最終的な残高は900円になります。これは「ロストアップデート」と呼ばれる問題です。</p>
+            </div>
+        </details>
+    </div>
+    </section>
+
+    <section>
+        <h2>第3章：読者への挑戦状 — 世界線を制御し、デッドロックの迷宮を抜けろ</h2>
+        <p>　第2章では、「たった1つの座席を2人に売る」という失敗をしてしまいました。その原因は、<strong>見てから（SELECT）書く（UPDATE）までの間に、世界が変わってしまうこと</strong>でした。</br>
+        　第3章では、この問題を解決する2つのアプローチ（悲観的ロックと楽観的制御）を実験し、最後に待ち受ける「デッドロック」の罠に挑みます。</p>
+        <h3>File1: 悲観的ロックで世界を止める</h3>
+        <p>　最も確実な方法は、「私が見ている間は、誰もこの座席に指一本触れさせない」と宣言することです。これを<strong>悲観的ロック（Pessimistic Locking）</strong>または<strong>排他ロック（Exclusive Lock）</strong>と呼びます。</p>
+        <p>　PostgreSQLでは、SELECT文に<code>FOR UPDATE</code>を付けることで、読み取った行に対して排他ロックをかけることができます。これにより、他のトランザクションはその行にアクセスできなくなります。</p>
+        <p>　では、先ほどのチケット予約システムを修正して、アリスが座席を確認している間、ボブがその座席にアクセスできないようにしてみましょう。</p>
+        <ol>
+            <li>初期化: 座席を「OPEN」に戻し、予約台帳を空にします。</li>
+            <li>Aさん: SELECT ... FOR UPDATE で座席を確認。…この瞬間、Aさんは座席データに「鍵」をかけます。</li>
+            <li>Bさん: 同じく SELECT ... FOR UPDATE で座席を確認しようとします。</li>
+            <li>結果: Bさんの画面はフリーズします（待たされます）。Aさんが鍵を返してくれるまで、見ることも許されません。</li>
+            <li>Aさん: ：</li>
+            <li>Bさん: Aさんが去った後、ようやくロックが解除され、Bさんのクエリが動きます。しかし、見えたデータは「RESERVED（予約済み）」です。「残念、売り切れか……」と諦めることができます。</li>
+        </ol>
+        <p>　最初に、先ほどのチケット予約システムを初期化しておきましょう。その後以下のようなSQLを実行してください。</p>
+        <div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 <span class="sql-cmd">FOR UPDATE</span>;
+<span class="sql-comment">-- 結果: "OPEN"</span>
+
+<span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
+
+<span class="sql-comment">-- 2. 予約実行</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
+
+<span class="sql-cmd">COMMIT</span>;
+                </div>
+            </div>
+
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B　　(Bob)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-comment">-- AさんがCOMMITするまで、このクエリは返ってこない！</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 <span class="sql-cmd">FOR UPDATE</span>;
+<span class="sql-comment">-- Aさんの処理が終わるとここが動き出す。</span>
+<span class="sql-comment">-- status='RESERVED' になっているので、プログラム側で「売り切れです」と表示できる。</span>
+<span class="sql-cmd">ROLLBACK</span>; <span class="sql-comment"></span>-- 何もせずに帰る</span>
+                </div>
+            </div>
+        </div>
+        <p>これにより「ダブルブッキング」は防げました。しかし、BobはAliceが終わるまで「待ちぼうけ」を食らいます。アクセスが集中するとサイト全体が重くなる原因にもなります。</p>
+        <h3>file2: パラレルポートでの拒絶</h3>
+        <p>ロックで待たせるのは確実ですが、行列ができるので遅くなります。そこで、第1章で使った「タイムパラドックス（Repeatable Read）」を利用した解決策を試します。PostgreSQLの Repeatable Read は、「計算の辻褄が合わなくなったらエラーにする」 という機能を持っています。</p>
+        <ol>
+            <li>初期化: 座席を「OPEN」に戻し、予約台帳を空にします。</li>
+            <li>AさんとBさん: ほぼ同時に REPEATABLE READ でトランザクションを開始。</li>
+            <li>結果: 互いに「空席」を確認（ここまではロックされないので速い！）。
+            <li>Aさん: 予約処理（UPDATE）をして COMMIT。
+            <li>Bさん: 予約処理（UPDATE）をしようとすると……？
+        </ol>
+<div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 ;
+<span class="sql-comment">-- 結果: "OPEN"</span>
+
+<span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
+
+<span class="sql-comment">-- 2. 予約実行</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
+
+<span class="sql-cmd">COMMIT</span>;
+                </div>
+            </div>
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B　　(Bob)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body">
+<span class="sql-comment">-- 1. 空席確認</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 ;
+<span class="sql-comment">-- 結果: "OPEN"</span>
+
+<span class="sql-comment">-- ここで5秒待機(その間にAが動く)</span>
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
+
+<span class="sql-comment">-- 2. 予約実行（）</span>
+<span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_B');
+
+<span class="sql-cmd">COMMIT</span>;
+                </div>
+            </div>
+        </div>
+<div class="error">
+    <p><strong>エラー：</strong> Dirty Read が発生しました。隔離レベルを上げてください。</p>
+    <p>詳細: <code>SERIALIZABLE</code> 以上を推奨します。</p>
+</div>
+
+<div class="warning">
+    <p><strong>注意：</strong> 複数のトランザクションが同時にアクセスしています。</p>
+</div>
+
+<div class="success">
+    <p><strong>成功：</strong> トランザクションが正常にコミットされました。</p>
+</div>
     </section>
 
     <section class="challenge-section">
@@ -321,7 +553,7 @@
             > HINT_SYSTEM: SELECT ... FOR UPDATE; コマンドの使用を推奨する。
         </p>
     </section>
-
+<p>製作時間: </p>
 </div>
 
 </body>

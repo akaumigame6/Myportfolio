@@ -1,0 +1,607 @@
+:root {
+    --bg-color: #050505; /* より深い黒 */
+    --text-main: #e0ffff; /* 青みがかった発光する白 */
+    --text-muted: #8a9ba8;
+    
+    /* ネオンカラー定義 */
+    --neon-blue: #00ffff;
+    --neon-pink: #ff00ff;
+    --neon-yellow: #ffff00;
+    
+    /* 発光エフェクト定義 */
+    --glow-blue: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+    --glow-pink: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+    --text-glow: 0 0 2px rgba(224, 255, 255, 0.5);
+
+    /* フォント */
+    --font-title: 'Orbitron', sans-serif; /* SFチックな見出し */
+    --font-mono: 'Share Tech Mono', monospace; /* ターミナル文字 */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+    /* 背景にサイバーなグリッドを描画 */
+    background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    position: relative;
+}
+
+/* CRTモニターのような走査線エフェクトを全体にかける（凝った感） */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none; /* クリックを邪魔しないように */
+    z-index: 10;
+}
+
+.container {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 1; /* 走査線より下に配置 */
+}
+
+/* --- タイトルエリア --- */
+header {
+    text-align: center;
+    padding: 5rem 0 3rem;
+    border-bottom: 2px solid var(--neon-blue);
+    box-shadow: 0 2px 15px rgba(0, 255, 255, 0.3);
+    margin-bottom: 4rem;
+}
+
+h1 {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    /* 強烈なネオン発光 */
+    text-shadow: var(--glow-blue);
+}
+
+.subtitle {
+    font-family: var(--font-mono);
+    color: var(--neon-yellow);
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 5px var(--neon-yellow);
+}
+
+/* --- 見出し --- */
+h2 {
+    font-family: var(--font-title);
+    color: var(--neon-yellow);
+    border-left: 6px solid var(--neon-yellow);
+    padding-left: 1rem;
+    margin-top: 5rem;
+    font-size: 2rem;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+    background: linear-gradient(90deg, rgba(255, 255, 0, 0.1), transparent);
+    display: inline-block;
+    width: 100%;
+}
+
+h3 {
+    font-family: var(--font-title);
+    color: var(--neon-blue);
+    border-bottom: 1px dashed var(--neon-blue);
+    padding-bottom: 0.5rem;
+    margin-top: 3rem;
+    font-size: 1.4rem;
+}
+
+/* --- ストーリーボックス（デジタルパネル風） --- */
+.story-box {
+    background-color: rgba(10, 10, 20, 0.8);
+    border: 1px solid var(--neon-blue);
+    padding: 2rem;
+    margin: 3rem 0;
+    position: relative;
+    /* 角を少し削ってデジタル感を出す */
+    clip-path: polygon(0 -10%, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%);
+    box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.story-box::before {
+    content: "[ CASE_FILE_LOADED ]";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--bg-color);
+    color: var(--neon-yellow);
+    font-family: var(--font-mono);
+    padding: 0 10px;
+    font-size: 0.9rem;
+    border: 1px solid var(--neon-yellow);
+    text-shadow: 0 0 5px var(--neon-yellow);
+}
+
+/* --- 2画面分割ターミナル（ネオン強化版） --- */
+.dual-terminal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 3rem -1rem; /* 少し横に広げる */
+    padding: 15px;
+    background: #000;
+    /* 外枠をサイバーピンクで発光させる */
+    border: 2px solid var(--neon-pink);
+    box-shadow: var(--glow-pink), inset 0 0 20px rgba(255, 0, 255, 0.2);
+    border-radius: 4px;
+}
+
+.terminal-window {
+    flex: 1;
+    min-width: 320px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.terminal-header {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0.05em;
+}
+
+/* 探偵（A）：青ネオン */
+.term-a { border-color: var(--neon-blue); }
+.term-a .terminal-header {
+    background: rgba(0, 255, 255, 0.2);
+    color: var(--neon-blue);
+    text-shadow: 0 0 5px var(--neon-blue);
+    border-bottom: 1px solid var(--neon-blue);
+}
+
+/* 怪盗（B）：ピンクネオン */
+.term-b { border-color: var(--neon-pink); }
+.term-b .terminal-header {
+    background: rgba(255, 0, 255, 0.2);
+    color: var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
+    border-bottom: 1px solid var(--neon-pink);
+}
+
+.terminal-body {
+    padding: 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    color: var(--text-main);
+    text-shadow: var(--text-glow); /* 文字自体も少し発光 */
+}
+
+/* SQLコマンドのハイライト */
+.sql-cmd { color: var(--neon-yellow); font-weight: bold; }
+.sql-comment { color: #666; font-style: italic; }
+
+/* カーソル点滅アニメーション（おまけ） */
+.cursor-blink::after {
+    content: "_";
+    animation: blink 1s step-end infinite;
+    color: var(--neon-blue);
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* --- 挑戦状セクション（危険な雰囲気） --- */
+.challenge-section {
+    /* 危険を示す斜めストライプの背景 */
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            rgba(255, 0, 255, 0.05),
+            rgba(255, 0, 255, 0.05) 10px,
+            transparent 10px,
+            transparent 20px
+        );
+    border: 2px solid var(--neon-pink);
+    box-shadow: var(--glow-pink);
+    padding: 3rem;
+    margin-top: 5rem;
+}
+
+.challenge-title {
+    color: var(--neon-pink);
+    font-family: var(--font-title);
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: var(--glow-pink);
+}
+
+/* --- 解説セクション（情報パネル風） --- */
+.explanation {
+    background: rgba(10, 20, 30, 0.7);
+    border-left: 4px solid var(--neon-blue);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.explanation::before {
+    content: "[ INFO ]";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--bg-color);
+    color: var(--neon-blue);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0 8px;
+    border: 1px solid var(--neon-blue);
+    text-shadow: 0 0 3px var(--neon-blue);
+}
+
+.explanation p {
+    color: var(--text-main);
+    margin: 0.5rem 0;
+}
+
+.explanation ti {
+    color: var(--neon-yellow);
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(255, 255, 0, 0.5);
+}
+
+/* --- リンク（サイバーパンク風） --- */
+a {
+    color: var(--neon-blue);
+    text-decoration: none;
+    position: relative;
+    font-weight: 500;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--neon-blue);
+}
+
+a:hover {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.6);
+    border-bottom-color: var(--neon-yellow);
+    transform: scale(1.05);
+}
+
+a:active {
+    color: var(--neon-pink);
+    text-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+    border-bottom-color: var(--neon-pink);
+}
+
+a::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -3px;
+    left: 0;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+    transition: width 0.3s ease;
+}
+
+a:hover::before {
+    width: 100%;
+}
+
+/* 外部リンク向けアイコン */
+a[target="_blank"]::after {
+    content: " ↗";
+    color: var(--neon-pink);
+    font-size: 0.8em;
+    margin-left: 3px;
+}
+
+/* コマンドの説明用 */
+code {
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--neon-cyan);
+    padding: 2px 6px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    text-shadow: 0 0 2px var(--neon-blue);
+}
+
+/* --- クイズセクション（知識確認パネル風） --- */
+.quiz {
+    background: rgba(20, 10, 30, 0.6);
+    border: 2px solid var(--neon-pink);
+    border-radius: 4px;
+    padding: 0;
+    margin: 2.5rem 0;
+    position: relative;
+}
+
+.quiz::before {
+    content: "[ QUIZ ]";
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--bg-color);
+    color: var(--neon-pink);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0 8px;
+    border: 1px solid var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
+    z-index: 1;
+}
+
+/* クイズの質問部分 */
+.quiz-question {
+    padding: 2rem;
+    padding-right: 2.5rem;
+}
+
+.quiz-question h4 {
+    color: var(--neon-pink);
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.quiz-question p {
+    color: var(--text-main);
+    margin: 0.5rem 0;
+    line-height: 1.7;
+}
+
+/* details要素のカスタマイズ */
+details {
+    cursor: pointer;
+}
+
+/* summary（展開ボタン）のスタイル */
+details > summary {
+    background: linear-gradient(90deg, rgba(255, 0, 255, 0.15), rgba(0, 255, 255, 0.05));
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--neon-pink);
+    color: var(--neon-yellow);
+    font-family: var(--font-title);
+    font-weight: bold;
+    user-select: none;
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+    text-shadow: 0 0 3px rgba(255, 255, 0, 0.4);
+    letter-spacing: 0.05em;
+    list-style: none;
+}
+
+/* 展開時のsummaryスタイル */
+details[open] > summary {
+    background: linear-gradient(90deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.1));
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+    color: var(--neon-yellow);
+}
+
+/* summaryの矢印カスタマイズ */
+details > summary::before {
+    content: "▶ ";
+    display: inline-block;
+    transition: transform 0.3s ease;
+    color: var(--neon-pink);
+    margin-right: 8px;
+}
+
+details[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+/* クイズの答え部分 */
+.quiz-answer {
+    padding: 0 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 3px solid var(--neon-blue);
+    margin: 1rem 0 0 0;
+}
+
+.quiz-answer h5 {
+    color: var(--neon-blue);
+    font-family: var(--font-title);
+    font-size: 0.95rem;
+    margin: 0 0 0.8rem 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 3px var(--neon-blue);
+}
+
+.quiz-answer p {
+    color: var(--text-main);
+    margin: 0.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* クイズの解説部分 */
+.quiz-explanation {
+    padding: 0 1.5rem;
+    background: rgba(255, 255, 0, 0.05);
+    border-left: 3px solid var(--neon-yellow);
+    margin: 1rem 0 0 0;
+}
+
+.quiz-explanation h5 {
+    color: var(--neon-yellow);
+    font-family: var(--font-title);
+    font-size: 0.95rem;
+    margin: 0 0 0.8rem 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 3px var(--neon-yellow);
+}
+
+.quiz-explanation p {
+    color: var(--text-main);
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+/* --- エラーメッセージ（警告/危険表示） --- */
+.error {
+    background: rgba(255, 0, 0, 0.08);
+    border: 2px solid #ff0040;
+    border-radius: 2px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.1), 0 0 10px rgba(255, 0, 0, 0.2);
+}
+
+.error::before {
+    content: "[ ⚠ ERROR ]";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--bg-color);
+    color: #ff0040;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0 8px;
+    border: 1px solid #ff0040;
+    text-shadow: 0 0 5px rgba(255, 0, 64, 0.6);
+    font-weight: bold;
+}
+
+.error p {
+    color: #ffb3b3;
+    font-family: var(--font-mono);
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    text-shadow: 0 0 3px rgba(255, 0, 64, 0.3);
+}
+
+.error strong {
+    color: #ff3366;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 0, 64, 0.5);
+}
+
+.error code {
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffb3b3;
+    border-color: rgba(255, 0, 64, 0.5);
+    text-shadow: 0 0 2px rgba(255, 0, 64, 0.4);
+}
+
+/* --- 警告メッセージ（注意） --- */
+.warning {
+    background: rgba(255, 200, 0, 0.08);
+    border: 2px solid #ffc800;
+    border-radius: 2px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(255, 200, 0, 0.1), 0 0 10px rgba(255, 200, 0, 0.15);
+}
+
+.warning::before {
+    content: "[ ⚡ WARNING ]";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--bg-color);
+    color: #ffc800;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0 8px;
+    border: 1px solid #ffc800;
+    text-shadow: 0 0 5px rgba(255, 200, 0, 0.6);
+    font-weight: bold;
+}
+
+.warning p {
+    color: #ffe5b3;
+    font-family: var(--font-mono);
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    text-shadow: 0 0 3px rgba(255, 200, 0, 0.3);
+}
+
+.warning strong {
+    color: #ffb300;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+}
+
+.warning code {
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffe5b3;
+    border-color: rgba(255, 200, 0, 0.5);
+    text-shadow: 0 0 2px rgba(255, 200, 0, 0.4);
+}
+
+/* --- サクセスメッセージ（成功） --- */
+.success {
+    background: rgba(0, 255, 100, 0.08);
+    border: 2px solid #00ff64;
+    border-radius: 2px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(0, 255, 100, 0.1), 0 0 10px rgba(0, 255, 100, 0.2);
+}
+
+.success::before {
+    content: "[ ✓ SUCCESS ]";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--bg-color);
+    color: #00ff64;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0 8px;
+    border: 1px solid #00ff64;
+    text-shadow: 0 0 5px rgba(0, 255, 100, 0.6);
+    font-weight: bold;
+}
+
+.success p {
+    color: #b3ffcc;
+    font-family: var(--font-mono);
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    text-shadow: 0 0 3px rgba(0, 255, 100, 0.3);
+}
+
+.success strong {
+    color: #00ff80;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 100, 0.5);
+}
+
+.success code {
+    background: rgba(0, 0, 0, 0.7);
+    color: #b3ffcc;
+    border-color: rgba(0, 255, 100, 0.5);
+    text-shadow: 0 0 2px rgba(0, 255, 100, 0.4);
+}
