@@ -516,47 +516,101 @@
                     </details>
                 </div>
             </div>
-    </div>
-    </section>
+        </section>
 
-    <!-- 第5章 -->
-    <section class="pixel-box" id="chapter5">
-        <span class="tag tag-sql">分析</span>
-        <h2>第5章：精霊の預言書「EXPLAIN」を読み解く</h2>
+        <!-- 第5章 -->
+        <section class="pixel-box" id="chapter5">
+            <span class="tag tag-sql">分析</span>
+            <h2>第5章：精霊の預言書「EXPLAIN」を読み解く</h2>
 
-        <div class="story-box">
-            <p>精霊オプティマイザは、探索を始める前に「預言書（EXPLAIN）」を提示します。そこには「この探索にはこれだけの魔力（Cost）が必要だ」と書かれています。預言書に書かれた暗号を読み解く力こそ、一流司書の証です。
-            </p>
-        </div>
-
-        <div class="learning-box">
-            <p><strong>📖 学習内容:</strong><br>
-                ・EXPLAIN コマンドの基本<br>
-                ・Cost（魔力コスト）、Rows（予想行数）、Width（データの幅）の読み方<br>
-                ・実行計画の木構造の理解
-            </p>
-        </div>
-
-        <div class="exercise-box">
-            <span class="exercise-title">⚔️ 予言：暗号を解読せよ</span>
-            <div class="terminal-window">
-                <div class="terminal-header">
-                    <span>> Terminal (Prophecy)</span>
-                    <span>[STATUS: EXPLAIN]</span>
-                </div>
-                <pre><code><span class="sql-comment">-- 預言書（実行計画）を表示</span>
-<span class="sql-cmd">EXPLAIN SELECT</span> * <span class="sql-cmd">FROM</span> grimoires <span class="sql-cmd">WHERE</span> title = '魔法書_500';</code></pre>
-
-                <div class="execution-result">
-                    QUERY PLAN
-                    ------------------------------------------------------------------------------------
-                    Index Scan using idx_grimoire_title on grimoires (cost=0.29..8.30 rows=1 width=15)
-                    Index Cond: (title = '魔法書_500'::text)
-                    -- 解読：
-                    -- cost=0.29..8.30 : 最小0.29、最大8.30の魔力コストが必要と予想。
-                    -- rows=1 : 1枚の魔法書が見つかると精霊が予想している。</div>
+            <div class="story-box">
+                <p>
+                    　精霊オプティマイザがどうやってルートを選んでいるのか、あなたは気になりました。<br>
+                    「私の頭の中を覗きたいのですか？ それなら、この<strong>『預言書（EXPLAIN）』</strong>をお見せしましょう」<br>
+                    　精霊が差し出したのは、文字が光り輝く透明な羊皮紙でした。
+                    そこには、実際に探索を始める前に精霊が計算した「作戦計画」が記されています。「どのルートを通るか」「どれくらいの魔力（コスト）がかかるか」「何冊の本を見つけるつもりか」……。<br>
+                    　この預言書が読めるようになれば、あなたは探索を始める前に、その作戦が賢いか愚かかを知ることができるのです。
+                </p>
             </div>
-        </div>
+
+            <div class="learning-box">
+                <h3>学習：預言書の暗号「Cost・Rows・Width」</h3>
+                <p>
+                    　EXPLAIN をクエリの頭につけて実行すると、次のような暗号が表示されます。<br>
+                    <strong>Seq Scan on legendary_books (cost=0.00..15406.00 rows=1000000 width=36)</strong>
+                <ul>
+                    <li><strong>Cost（コスト）：</strong><br> 精霊が計算した「作業の大変さ」です。</li>
+                    <li><strong>Rows（行数）：</strong><br> 「この条件なら、だいたいこれくらいの数の本が見つかるだろう」という精霊の予想です。</li>
+                    <li><strong>Width（幅）：</strong><br> 1行あたり何バイトくらいのデータサイズになるかの予想です。</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>演習：預言書を召喚せよ</h3>
+                <p>
+                    　実際に EXPLAIN を使って、第4章の「予想クイズ」の答え合わせをしてみましょう。
+                </p>
+                <h4>1. 伝説の書（レア）を探す計画</h4>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Prophecy)</span>
+                        <span>[STATUS: EXPLAIN]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 預言書（実行計画）を表示</span>
+<span class="sql-cmd">EXPLAIN SELECT</span> * <span class="sql-cmd">FROM</span> legendary_books <span class="sql-cmd">WHERE</span> published_year = 500;
+</code></pre>
+                    <div class="execution-result">
+                        QUERY PLAN
+                        ----------------------------------------------------------------------------------------
+                        Index Scan using idx_year_legend on legendary_books (cost=0.42..8.44 rows=1 width=60)
+                        Index Cond: (published_year = 500)
+                        (2 行)
+                    </div>
+                </div>
+                <p><strong>解読：</strong><br>
+                    → 結果に Index Scan と書かれていますか？ 非常に低い cost が表示されるはずです。
+                </p>
+                <h4>2. ポーションの本（大量）を探す計画</h4>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Prophecy)</span>
+                        <span>[STATUS: EXPLAIN]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 預言書（実行計画）を表示</span>
+<span class="sql-cmd">EXPLAIN SELECT</span> * <span class="sql-cmd">FROM</span> potion_books <span class="sql-cmd">WHERE</span> published_year = 2024;
+</code></pre>
+                    <div class="execution-result">
+                        QUERY PLAN
+                        QUERY PLAN
+                        ---------------------------------------------------------------------
+                        Seq Scan on potion_books (cost=0.00..1887.00 rows=100000 width=53)
+                        Filter: (published_year = 2024)
+                        (2 行)
+                    </div>
+                </div>
+                <p><strong>解読：</strong><br>
+                    → 索引があるはずなのに、結果が Seq Scan になっていませんか？<br>
+                    精霊が「索引を10万回引くより、最初から全部読んだほうがコストが低い」と判断した証拠です。
+                </p>
+                <h4>3. 知識の定着確認</h4>
+                <p>
+                    　EXPLAIN の結果に表示される cost の数値は、何を基準に計算されていますか？
+                <ol>
+                    <li>実際にかかった「秒数（ミリ秒）」。</li>
+                    <li>消費された「電力（ワット）」。</li>
+                    <li>ディスクからの読み込みやCPUの計算作業を点数化した「独自の単位」。</li>
+                </ol>
+                </p>
+                <details>
+                    <summary>答えを見る</summary>
+                    <div class="answer">
+                        <p><strong>A. 正解は3です。</strong></p>
+                        <p>　これは「時間」ではなく「作業量」の点数です。そのため、PCの性能によって時間は変わりますが、コストの数値自体は基本的には同じになります。</p>
+                    </div>
+                </details>
+            </div>
+    </div>
     </section>
 
     <!-- 第6章 -->
@@ -565,56 +619,92 @@
         <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
 
         <div class="story-box">
-            <p>預言書はあくまで精霊の予測。時には精霊の勘違い（古い統計情報）で、予測以上の魔力を消費することもあります。あなたは「真実の鏡（ANALYZE）」を使い、実際に探索を行って「本当にかかった時間」を突き合わせる禁術を学びます。
+            <p>
+                　精霊オプティマイザの「預言書（EXPLAIN）」は、時として嘘をつくことがあります。<br>
+                「おかしい……精霊は1秒で見つかると言ったのに、もう3分も経っているぞ！」<br>
+                　そんな時、大司書があなたに一枚の鏡を差し出します。それは<strong>「真実の鏡（ANALYZE）」</strong>。
+                この鏡を預言書にかざすと、精霊の予測だけでなく、実際に探索にかかった「本当の時間」と「実際にめくったページ数」が映し出されます。<br>
+                　<strong>「予測」と「現実」のズレ</strong>を見つけること。これこそが、書庫を支配する上級司書への道なのです。
             </p>
         </div>
 
         <div class="learning-box">
-            <p><strong>📖 学習内容:</strong><br>
-                ・EXPLAIN ANALYZE による実測値の取得<br>
-                ・予測（Estimated）と実測（Actual）の乖離の分析<br>
-                ・ANALYZE コマンドによる統計情報の更新
+            <h3>学習：EXPLAIN ANALYZE が明かす真実</h3>
+            <p>
+                　EXPLAIN に ANALYZE という言葉を付け加えると、DBは実際にクエリを実行し、詳細なレポートを作成します。
+            <ul>
+                <li><strong>Actual Time（実測時間）:</strong> <br>最初の1件を得るまでの時間と、全ての作業が終わるまでの実測値（ミリ秒）。</li>
+                <li><strong>Actual Rows（実測行数）:</strong> <br>精霊の「予想（Rows）」に対し、実際に何件の本が見つかったかの真実。</li>
+                <li><strong>Loops（ループ回数）:</strong> <br>同じ作業を何回繰り返したか。</li>
+            </ul>
+            　注意： <strong>EXPLAIN ANALYZE は「実際に実行する」</strong>ため、データの更新（UPDATE や
+            DELETE）に使うと、本当にデータが書き換わってしまいます。<strong>検証する際は、トランザクション（やり直しができる魔法）の中で使う</strong>のが司書のたしなみです。
             </p>
         </div>
 
         <div class="exercise-box">
-            <span class="exercise-title">⚔️ 真実：精霊の目を覚まさせろ</span>
+            <h3>演習：真実を暴く儀式</h3>
+            <p>　実際に、予測が大きく外れる「呪われたクエリ」を元にして検証してみましょう。</p>
+            <h4>1. 統計情報を狂わせ、影響を確認する</h4>
+            <p>　精霊（オプティマイザ）をわざと騙すために、100万件の本があるのに「10冊しかないよ」と嘘の報告（統計情報の操作）をしてみます（※実務では推奨されませんが、学習のために！）。</p>
             <div class="terminal-window">
                 <div class="terminal-header">
                     <span>> Terminal (Mirror of Truth)</span>
                     <span>[STATUS: ANALYZE]</span>
                 </div>
                 <pre><code><span class="sql-comment">-- 実際に実行して、真実の鏡で見る</span>
-<span class="sql-cmd">EXPLAIN ANALYZE SELECT</span> * <span class="sql-cmd">FROM</span> grimoires <span class="sql-cmd">WHERE</span> mana_cost > 950;
+<span class="sql-comment">-- 実際は100万件あるのに、統計情報を無理やり「10件」に書き換える（PostgreSQLの例）</span>
+<span class="sql-cmd">UPDATE</span> pg_class SET reltuples = 10 <span class="sql-cmd">WHERE</span> relname = 'legendary_books';
 
-<span class="sql-comment">-- 統計情報が古いと、精霊が間違ったルートを選ぶことがある。</span>
-<span class="sql-comment">-- 精霊に最新の書架情報を与えて目覚めさせる。</span>
-<span class="sql-cmd">ANALYZE</span> grimoires;</code></pre>
-
-                <div class="execution-result">
-                    QUERY PLAN
-                    ------------------------------------------------------------------------------
-                    Seq Scan on grimoires (cost=0.00..1876.00 rows=10000 width=14)
-                    (actual time=0.015..9.52ms rows=5120 loops=1)
-                    -- 解説:
-                    -- (rows=10000) は精霊の予測。
-                    -- (actual rows=5120) は真実。
-                    -- ズレが大きい場合は ANALYZE で精霊の知識をアップデートする必要があります！</div>
+<span class="sql-comment">-- 真実の鏡を起動！</span>
+<span class="sql-cmd">EXPLAIN ANALYZE </span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> legendary_books <span class="sql-keyword">WHERE</span> published_year > 0;</span>
+                </code></pre>
             </div>
+            <div class="execution-result">
+                UPDATE 1
+                QUERY PLAN
+                ---------------------------------------------------------------------------------------------------------------------
+                Seq Scan on legendary_books (cost=0.00..7255.12 rows=10 width=60) (actual time=0.036..91.689
+                rows=1000000 loops=1)
+                Filter: (published_year > 0)
+                Planning Time: 0.889 ms
+                Execution Time: 122.655 ms
+                (4 行)</div>
+            <p>
+                <strong>解説：</strong><br>
+            <ul>
+                <li>rows=10 (予測): 精霊は統計情報を信じて「10冊くらいでしょ」と油断しています。</li>
+                <li>rows=1000000 (現実): 実際には100万冊ありました。</li>
+                <li>actual time: 予測コストに見合わない「本当の苦労」がここに刻まれます。</li>
+            </ul>
+            </p>
+            <h4>2. 知識の定着確認</h4>
+            <p>
+                　EXPLAIN だけではわからず、EXPLAIN ANALYZE を使わないと判明しない情報はどれですか？
+            <ol>
+                <li>オプティマイザが Index Scan を選ぼうとしているかどうか。</li>
+                <li>そのクエリを実行したとき、実際に何ミリ秒かかったか。</li>
+                <li>インデックスを作成するための SQL 文。</li>
+            </ol>
+            </p>
+            <details>
+                <summary>解答</summary>
+                <div class="answer">
+                    <p><strong>A. 正解は2です。</strong></p>
+                    <p>　1はEXPLAINだけでも表示されますが、ANALYZEで「実際の実行結果」を見ることで、その判断が正しかったかどうかが確定します。</p>
+                </div>
+            </details>
+        </div>
         </div>
     </section>
-
+    </div>
     <footer>
         <p>YOU ARE NOW A MASTER LIBRARIAN.</p>
         <p>© 2026 魔導データ探索ギルド</p>
     </footer>
 
-    </div>
-
     <script src="index_design_and_execution_plan.js"></script>
-
-</body>
-
 </body>
 
 </html>
