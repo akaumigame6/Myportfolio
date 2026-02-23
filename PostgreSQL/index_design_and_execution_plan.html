@@ -611,49 +611,48 @@
                     </div>
                 </details>
             </div>
-    </div>
-    </section>
+        </section>
 
-    <!-- 第6章 -->
-    <section class="pixel-box" id="chapter6">
-        <span class="tag tag-danger">重要</span>
-        <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
+        <!-- 第6章 -->
+        <section class="pixel-box" id="chapter6">
+            <span class="tag tag-danger">重要</span>
+            <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
 
-        <div class="story-box">
-            <p>
-                　精霊オプティマイザの「預言書（EXPLAIN）」は、時として嘘をつくことがあります。<br>
-                「おかしい……精霊は1秒で見つかると言ったのに、もう3分も経っているぞ！」<br>
-                　そんな時、大司書があなたに一枚の鏡を差し出します。それは<strong>「真実の鏡（ANALYZE）」</strong>。
-                この鏡を預言書にかざすと、精霊の予測だけでなく、実際に探索にかかった「本当の時間」と「実際にめくったページ数」が映し出されます。<br>
-                　<strong>「予測」と「現実」のズレ</strong>を見つけること。これこそが、書庫を支配する上級司書への道なのです。
-            </p>
-        </div>
+            <div class="story-box">
+                <p>
+                    　精霊オプティマイザの「預言書（EXPLAIN）」は、時として嘘をつくことがあります。<br>
+                    「おかしい……精霊は1秒で見つかると言ったのに、もう3分も経っているぞ！」<br>
+                    　そんな時、大司書があなたに一枚の鏡を差し出します。それは<strong>「真実の鏡（ANALYZE）」</strong>。
+                    この鏡を預言書にかざすと、精霊の予測だけでなく、実際に探索にかかった「本当の時間」と「実際にめくったページ数」が映し出されます。<br>
+                    　<strong>「予測」と「現実」のズレ</strong>を見つけること。これこそが、書庫を支配する上級司書への道なのです。
+                </p>
+            </div>
 
-        <div class="learning-box">
-            <h3>学習：EXPLAIN ANALYZE が明かす真実</h3>
-            <p>
-                　EXPLAIN に ANALYZE という言葉を付け加えると、DBは実際にクエリを実行し、詳細なレポートを作成します。
-            <ul>
-                <li><strong>Actual Time（実測時間）:</strong> <br>最初の1件を得るまでの時間と、全ての作業が終わるまでの実測値（ミリ秒）。</li>
-                <li><strong>Actual Rows（実測行数）:</strong> <br>精霊の「予想（Rows）」に対し、実際に何件の本が見つかったかの真実。</li>
-                <li><strong>Loops（ループ回数）:</strong> <br>同じ作業を何回繰り返したか。</li>
-            </ul>
-            　注意： <strong>EXPLAIN ANALYZE は「実際に実行する」</strong>ため、データの更新（UPDATE や
-            DELETE）に使うと、本当にデータが書き換わってしまいます。<strong>検証する際は、トランザクション（やり直しができる魔法）の中で使う</strong>のが司書のたしなみです。
-            </p>
-        </div>
+            <div class="learning-box">
+                <h3>学習：EXPLAIN ANALYZE が明かす真実</h3>
+                <p>
+                    　EXPLAIN に ANALYZE という言葉を付け加えると、DBは実際にクエリを実行し、詳細なレポートを作成します。
+                <ul>
+                    <li><strong>Actual Time（実測時間）:</strong> <br>最初の1件を得るまでの時間と、全ての作業が終わるまでの実測値（ミリ秒）。</li>
+                    <li><strong>Actual Rows（実測行数）:</strong> <br>精霊の「予想（Rows）」に対し、実際に何件の本が見つかったかの真実。</li>
+                    <li><strong>Loops（ループ回数）:</strong> <br>同じ作業を何回繰り返したか。</li>
+                </ul>
+                　注意： <strong>EXPLAIN ANALYZE は「実際に実行する」</strong>ため、データの更新（UPDATE や
+                DELETE）に使うと、本当にデータが書き換わってしまいます。<strong>検証する際は、トランザクション（やり直しができる魔法）の中で使う</strong>のが司書のたしなみです。
+                </p>
+            </div>
 
-        <div class="exercise-box">
-            <h3>演習：真実を暴く儀式</h3>
-            <p>　実際に、予測が大きく外れる「呪われたクエリ」を元にして検証してみましょう。</p>
-            <h4>1. 統計情報を狂わせ、影響を確認する</h4>
-            <p>　精霊（オプティマイザ）をわざと騙すために、100万件の本があるのに「10冊しかないよ」と嘘の報告（統計情報の操作）をしてみます（※実務では推奨されませんが、学習のために！）。</p>
-            <div class="terminal-window">
-                <div class="terminal-header">
-                    <span>> Terminal (Mirror of Truth)</span>
-                    <span>[STATUS: ANALYZE]</span>
-                </div>
-                <pre><code><span class="sql-comment">-- 実際に実行して、真実の鏡で見る</span>
+            <div class="exercise-box">
+                <h3>演習：真実を暴く儀式</h3>
+                <p>　実際に、予測が大きく外れる「呪われたクエリ」を元にして検証してみましょう。</p>
+                <h4>1. 統計情報を狂わせ、影響を確認する</h4>
+                <p>　精霊（オプティマイザ）をわざと騙すために、100万件の本があるのに「10冊しかないよ」と嘘の報告（統計情報の操作）をしてみます（※実務では推奨されませんが、学習のために！）。</p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Mirror of Truth)</span>
+                        <span>[STATUS: ANALYZE]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 実際に実行して、真実の鏡で見る</span>
 <span class="sql-comment">-- 実際は100万件あるのに、統計情報を無理やり「10件」に書き換える（PostgreSQLの例）</span>
 <span class="sql-cmd">UPDATE</span> pg_class SET reltuples = 10 <span class="sql-cmd">WHERE</span> relname = 'legendary_books';
 
@@ -661,88 +660,87 @@
 <span class="sql-cmd">EXPLAIN ANALYZE </span>
 <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> legendary_books <span class="sql-keyword">WHERE</span> published_year > 0;</span>
                 </code></pre>
+                </div>
+                <div class="execution-result">
+                    UPDATE 1
+                    QUERY PLAN
+                    ---------------------------------------------------------------------------------------------------------------------
+                    Seq Scan on legendary_books (cost=0.00..7255.12 rows=10 width=60) (actual time=0.036..91.689
+                    rows=1000000 loops=1)
+                    Filter: (published_year > 0)
+                    Planning Time: 0.889 ms
+                    Execution Time: 122.655 ms
+                    (4 行)</div>
+                <p>
+                    <strong>解説：</strong><br>
+                <ul>
+                    <li>rows=10 (予測): 精霊は統計情報を信じて「10冊くらいでしょ」と油断しています。</li>
+                    <li>rows=1000000 (現実): 実際には100万冊ありました。</li>
+                    <li>actual time: 予測コストに見合わない「本当の苦労」がここに刻まれます。</li>
+                </ul>
+                </p>
+                <h4>2. 知識の定着確認</h4>
+                <p>
+                    　EXPLAIN だけではわからず、EXPLAIN ANALYZE を使わないと判明しない情報はどれですか？
+                <ol>
+                    <li>オプティマイザが Index Scan を選ぼうとしているかどうか。</li>
+                    <li>そのクエリを実行したとき、実際に何ミリ秒かかったか。</li>
+                    <li>インデックスを作成するための SQL 文。</li>
+                </ol>
+                </p>
+                <details>
+                    <summary>解答</summary>
+                    <div class="answer">
+                        <p><strong>A. 正解は2です。</strong></p>
+                        <p>　1はEXPLAINだけでも表示されますが、ANALYZEで「実際の実行結果」を見ることで、その判断が正しかったかどうかが確定します。</p>
+                    </div>
+                </details>
             </div>
-            <div class="execution-result">
-                UPDATE 1
-                QUERY PLAN
-                ---------------------------------------------------------------------------------------------------------------------
-                Seq Scan on legendary_books (cost=0.00..7255.12 rows=10 width=60) (actual time=0.036..91.689
-                rows=1000000 loops=1)
-                Filter: (published_year > 0)
-                Planning Time: 0.889 ms
-                Execution Time: 122.655 ms
-                (4 行)</div>
+        </section>
+        <section class="pixel-box" id="chapter7">
+            <span class="tag tag-danger">さいごに</span>
+            <h2>第7章：上級司書になったあなたへ</h2>
             <p>
-                <strong>解説：</strong><br>
+                　無限の書庫での修行、大変お疲れ様でした！最初は目の前が真っ暗になるような「全件スキャン」の絶望から始まりましたが、今やあなたは精霊オプティマイザの預言を読み解き、真実の鏡でボルトネックを突き止める術を身につけています。<br>
+                　最後に、今回学んだ魔法を振り返り、これからの冒険での活かし方を整理しましょう。
+            </p>
+            <h3>1. 学習内容の振り返り</h3>
+            <p>
             <ul>
-                <li>rows=10 (予測): 精霊は統計情報を信じて「10冊くらいでしょ」と油断しています。</li>
-                <li>rows=1000000 (現実): 実際には100万冊ありました。</li>
-                <li>actual time: 予測コストに見合わない「本当の苦労」がここに刻まれます。</li>
+                <li><strong>第1章 & 2章：探索の原理</strong><br>
+                    データの並びがバラバラな状態（O(n)）の恐ろしさと、B-tree構造による「ショートカット」の魔法（O(log n)）を学びました。</li>
+                <li><strong>第3章：索引（INDEX）の付与</strong><br>
+                    検索を爆速にする代わりに、書き込み時に「メンテナンスという代償」が発生するトレードオフを理解しました。</li>
+                <li><strong>第4章：軍師（オプティマイザ）の判断</strong><br>
+                    データの量や偏り（選択率）によって、あえて索引を使わないほうが早いケースがあることを知りました。</li>
+                <li><strong>第5章 & 6章：預言と真実（EXPLAIN
+                        /ANALYZE）</strong><br>
+                    実行前に「作戦」を読み解き、実行後に「実測値」と比較してズレを修正する、プロのデバッグ手法をマスターしました。</li>
             </ul>
             </p>
-            <h4>2. 知識の定着確認</h4>
+            <h3>2. この知識をどう活用するか</h3>
             <p>
-                　EXPLAIN だけではわからず、EXPLAIN ANALYZE を使わないと判明しない情報はどれですか？
+                これからあなたが直面する「重いクエリ」という魔物に対し、以下の手順で挑んでください。
             <ol>
-                <li>オプティマイザが Index Scan を選ぼうとしているかどうか。</li>
-                <li>そのクエリを実行したとき、実際に何ミリ秒かかったか。</li>
-                <li>インデックスを作成するための SQL 文。</li>
+                <li><strong>魔物の特定（ボトルネックの発見）</strong><br>
+                    　まずは、EXPLAIN ANALYZE を使って、どこで時間がかかっているのか（Seq Scanなのか、Index Scanなのか）を特定します。</li>
+                <li><strong>索引の付与（魔法の杖）</strong><br>
+                    　もし、全件スキャン（Seq Scan）が遅い原因なら、適切な場所に索引（INDEX）を付与します。</li>
+                <li><strong>軍師との対話（統計情報の更新）</strong><br>
+                    　索引を作った直後は、軍師（オプティマイザ）に「新しい地図だよ」と教えるために、統計情報を更新（ANALYZE）します。</li>
+                <li><strong>再検証（真実の確認）</strong><br>
+                    　もう一度 EXPLAIN ANALYZE を実行し、コストが下がったか、実行時間が短縮されたかを確認します。</li>
             </ol>
             </p>
-            <details>
-                <summary>解答</summary>
-                <div class="answer">
-                    <p><strong>A. 正解は2です。</strong></p>
-                    <p>　1はEXPLAINだけでも表示されますが、ANALYZEで「実際の実行結果」を見ることで、その判断が正しかったかどうかが確定します。</p>
-                </div>
-            </details>
-        </div>
-        </div>
-    </section>
-    <section class="pixel-box" id="chapter7">
-        <span class="tag tag-danger">さいごに</span>
-        <h2>第7章：上級司書になったあなたへ</h2>
-        <p>
-            　無限の書庫での修行、大変お疲れ様でした！最初は目の前が真っ暗になるような「全件スキャン」の絶望から始まりましたが、今やあなたは精霊オプティマイザの預言を読み解き、真実の鏡でボルトネックを突き止める術を身につけています。<br>
-            　最後に、今回学んだ魔法を振り返り、これからの冒険での活かし方を整理しましょう。
-        </p>
-        <h3>1. 学習内容の振り返り</h3>
-        <p>
-        <ul>
-            <li><strong>第1章 & 2章：探索の原理</strong><br>
-                データの並びがバラバラな状態（O(n)）の恐ろしさと、B-tree構造による「ショートカット」の魔法（O(log n)）を学びました。</li>
-            <li><strong>第3章：索引（INDEX）の付与</strong><br>
-                検索を爆速にする代わりに、書き込み時に「メンテナンスという代償」が発生するトレードオフを理解しました。</li>
-            <li><strong>第4章：軍師（オプティマイザ）の判断</strong><br>
-                データの量や偏り（選択率）によって、あえて索引を使わないほうが早いケースがあることを知りました。</li>
-            <li><strong>第5章 & 6章：預言と真実（EXPLAIN
-                    /ANALYZE）</strong><br>
-                実行前に「作戦」を読み解き、実行後に「実測値」と比較してズレを修正する、プロのデバッグ手法をマスターしました。</li>
-        </ul>
-        </p>
-        <h3>2. この知識をどう活用するか</h3>
-        <p>
-            これからあなたが直面する「重いクエリ」という魔物に対し、以下の手順で挑んでください。
-        <ol>
-            <li><strong>魔物の特定（ボトルネックの発見）</strong><br>
-                　まずは、EXPLAIN ANALYZE を使って、どこで時間がかかっているのか（Seq Scanなのか、Index Scanなのか）を特定します。</li>
-            <li><strong>索引の付与（魔法の杖）</strong><br>
-                　もし、全件スキャン（Seq Scan）が遅い原因なら、適切な場所に索引（INDEX）を付与します。</li>
-            <li><strong>軍師との対話（統計情報の更新）</strong><br>
-                　索引を作った直後は、軍師（オプティマイザ）に「新しい地図だよ」と教えるために、統計情報を更新（ANALYZE）します。</li>
-            <li><strong>再検証（真実の確認）</strong><br>
-                　もう一度 EXPLAIN ANALYZE を実行し、コストが下がったか、実行時間が短縮されたかを確認します。</li>
-        </ol>
-        </p>
-        <h3>3. インデックスと実行計画について学んだあなたへ</h3>
-        <p>
-            　データベースの世界は広大ですが、今回学んだ「インデックス設計」と「実行計画」は、どんな複雑なシステムにも通じる<strong>最強の剣と盾</strong>になります。<br>
-            　<strong>「100万件」</strong>という数字に怯える必要はもうありません。データが増えるほど、あなたが学んだ技術の輝きは増していきます。これからも、目の前のパフォーマンス低下という謎を、論理的な思考と計測の魔法で解き明かしていってください。<br>
-            　<strong>あなたの管理するデータベースが、今日も明日も、世界中のユーザーへ「爆速」の体験を届けられることを願っています！</strong>
-            <br>
-            <br>製作時間：17時間
-        </p>
-    </section>
+            <h3>3. インデックスと実行計画について学んだあなたへ</h3>
+            <p>
+                　データベースの世界は広大ですが、今回学んだ「インデックス設計」と「実行計画」は、どんな複雑なシステムにも通じる<strong>最強の剣と盾</strong>になります。<br>
+                　<strong>「100万件」</strong>という数字に怯える必要はもうありません。データが増えるほど、あなたが学んだ技術の輝きは増していきます。これからも、目の前のパフォーマンス低下という謎を、論理的な思考と計測の魔法で解き明かしていってください。<br>
+                　<strong>あなたの管理するデータベースが、今日も明日も、世界中のユーザーへ「爆速」の体験を届けられることを願っています！</strong>
+                <br>
+                <br>製作時間：17時間
+            </p>
+        </section>
     </div>
     <footer>
         <p>YOU ARE NOW A MASTER LIBRARIAN.</p>
