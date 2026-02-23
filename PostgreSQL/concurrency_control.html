@@ -374,8 +374,8 @@ COMMIT</span>
             </div>
             <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 既に テーブル が存在する場合は削除</span>
-<span class="sql-cmd">DROP TABLE IF</span> EXISTS seats;
 <span class="sql-cmd">DROP TABLE IF</span> EXISTS reservations;
+<span class="sql-cmd">DROP TABLE IF</span> EXISTS seats;
 <span class="sql-comment">-- 座席(seats)テーブルの作成</span>
 <span class="sql-cmd">CREATE TABLE </span>seats (
     seat_id <span class="sql-cmd">SERIAL PRIMARY KEY</span>,
@@ -669,7 +669,7 @@ COMMIT</span>
             <li>Aさん: 予約処理を完了し、COMMITします。</li>
             <li>Bさん: Aさんが去った後、ようやくロックが解除され、Bさんのクエリが動きます。しかし、見えたデータは「RESERVED（予約済み）」です。「残念、売り切れか……」と諦めることができます。</li>
         </ol>
-        <p>　最初に、先ほどのチケット予約システムを第二章のFile0のsqlを実行して初期化しておきましょう。その後以下のようなSQLを実行してください。</p>
+        <p>　最初に、先ほどのチケット予約システムを<strong>第二章のFile0のsql</strong>を実行して初期化しておきましょう。その後以下のようなSQLを実行してください。</p>
         <div class="dual-terminal">
             <div class="terminal-window term-a">
                 <div class="terminal-header">
@@ -690,7 +690,33 @@ COMMIT</span>
 <span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
 
 <span class="sql-cmd">COMMIT</span>;
-                </div>
+</div>
+                <div class="terminal-output output-a">
+<strong>Terminal A Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>OPEN</td>
+  </tr>
+</table>
+(1 行)
+
+ pg_sleep
+----------
+
+(1 行)
+<div class="output-success">
+UPDATE 1
+INSERT 0 1
+COMMIT
+</div>
+</div>
             </div>
 
             <div class="terminal-window term-b">
@@ -698,20 +724,47 @@ COMMIT</span>
                     <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: CONNECTED]</span>
                 </div>
-                <div class="terminal-body">
+                <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 1. 空席確認</span>
 <span class="sql-cmd">START TRANSACTION;</span>
 <span class="sql-comment">-- AさんがCOMMITするまで、このクエリは返ってこない！</span>
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 <span class="sql-cmd">FOR UPDATE</span>;
 <span class="sql-comment">-- Aさんの処理が終わるとここが動き出す。</span>
 <span class="sql-comment">-- status='RESERVED' になっているので、プログラム側で「売り切れです」と表示できる。</span>
-<span class="sql-cmd">ROLLBACK</span>; <span class="sql-comment"></span>-- 何もせずに帰る</span>
-                </div>
+<span class="sql-cmd">ROLLBACK</span>;
+<span class="sql-comment">-- 何もせずに帰る</span>
+
+
+
+
+
+</div>
+                <div class="terminal-output output-b">
+<strong>Terminal B Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>RESERVED</td>
+  </tr>
+</table>
+(1 行)
+
+<span class="output-success">
+ROLLBACK
+</span>
+</div>
             </div>
         </div>
-        <p>これにより「ダブルブッキング」は防げました。しかし、BobはAliceが終わるまで「待ちぼうけ」を食らいます。アクセスが集中するとサイト全体が重くなる原因にもなります。</p>
+        <p>　これにより「ダブルブッキング」は防げました。しかし、BobはAliceが終わるまで「待ちぼうけ」を食らいます。アクセスが集中するとサイト全体が重くなる原因にもなります。</p>
+        
         <h3>file2: パラレルポートでの拒絶</h3>
-        <p>ロックで待たせるのは確実ですが、行列ができるので遅くなります。そこで、第1章で使った「タイムパラドックス（Repeatable Read）」を利用した解決策を試します。PostgreSQLの Repeatable Read は、「計算の辻褄が合わなくなったらエラーにする」 という機能を持っています。</p>
+        <p>　ロックで待たせるのは確実ですが、行列ができるので遅くなります。そこで、第1章で使った「タイムパラドックス（Repeatable Read）」を利用した解決策を試します。PostgreSQLの Repeatable Read は、「計算の辻褄が合わなくなったらエラーにする」 という機能を持っています。</p>
         <ol>
             <li>初期化: 座席を「OPEN」に戻し、予約台帳を空にします。</li>
             <li>AさんとBさん: ほぼ同時に REPEATABLE READ でトランザクションを開始。</li>
@@ -719,6 +772,7 @@ COMMIT</span>
             <li>Aさん: 予約処理（UPDATE）をして COMMIT。
             <li>Bさん: 予約処理（UPDATE）をしようとすると……？
         </ol>
+        <p>　File1と同じく、<strong>第二章のFile0のsql</strong>を実行して初期化しておきましょう。</p>
 <div class="dual-terminal">
             <div class="terminal-window term-a">
                 <div class="terminal-header">
@@ -727,8 +781,8 @@ COMMIT</span>
                 </div>
                 <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 1. 空席確認</span>
-<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
 <span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 ;
 <span class="sql-comment">-- 結果: "OPEN"</span>
 
@@ -740,6 +794,33 @@ COMMIT</span>
 <span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
 
 <span class="sql-cmd">COMMIT</span>;
+</div>
+                <div class="terminal-output output-a">
+<strong>Terminal A Output:</strong>
+<span class="output-success">
+START TRANSACTION
+SET</span>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>OPEN</td>
+  </tr>
+</table>
+(1 行)
+
+ pg_sleep
+----------
+
+(1 行)
+<span class="output-success">
+UPDATE 1
+INSERT 0 1
+COMMIT
+</span>
                 </div>
             </div>
             
@@ -748,10 +829,10 @@ COMMIT</span>
                     <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: CONNECTED]</span>
                 </div>
-                <div class="terminal-body">
+                <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 1. 空席確認</span>
-<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
 <span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1 ;
 <span class="sql-comment">-- 結果: "OPEN"</span>
 
@@ -763,48 +844,138 @@ COMMIT</span>
 <span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_B');
 
 <span class="sql-cmd">COMMIT</span>;
-                </div>
+</div>
 
 
                 <div class="terminal-output output-b">
 <strong>Terminal B (Bob) Output:</strong>
-<span class="output-keyword">UPDATE</span> evidence <span class="output-keyword">SET</span> message = '犯人はアリス' <span class="output-keyword">WHERE</span> id = 1;
-
-<span class="output-success">UPDATE 1</span>
-<table>
-  <tr>
-    <th>id</th>
-    <th>message</th>
-    <th>timestamp</th>
-  </tr>
-  <tr>
-    <td><span class="output-value">1</span></td>
-    <td>犯人はアリス</td>
-    <td>2026-02-22 10:00:00</td>
-  </tr>
-  <tr>
-    <td><span class="output-value">2</span></td>
-    <td>犯人はアリス</td>
-    <td>2026-02-22 10:01:00</td>
-  </tr>
-</table>
-<span class="output-error">ERROR:  could not serialize access due to concurrent update</span>
+<span class="output-error">
+psql:&lt;stdin&gt;:23: ERROR:  更新が同時に行われたためアクセスの直列化ができませんでした</span>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="challenge-section">
-        <div class="challenge-title">⚠️ WARNING: 読者への挑戦状 ⚠️</div>
-        <p style="text-align: center;">ここまでインストールした知識を駆使し、以下の高難度ミッションをクリアせよ。</p>
-
-        <h3>問題1：【解決編】「排他ロック」で時を止めろ</h3>
-        <p><strong>MISSION:</strong> 第2章のチケット予約システムを修正し、Aがアクセスしている間、Bが検索すらできず「待機（フリーズ）」するようにコードを改変せよ。</p>
-        <p style="background:rgba(0,255,255,0.1); padding:1rem; border:1px solid var(--neon-blue); font-family:var(--font-mono); color:var(--neon-blue);">
-            > HINT_SYSTEM: SELECT ... FOR UPDATE; コマンドの使用を推奨する。
+        <p>　このように、Bさんのトランザクションはエラーになりました。これが、Repeatable Readの「計算の辻褄が合わなくなったらエラーにする」機能です。また、この制御を<strong>楽観的ロック(Optimistic Locking)</strong>と呼びます。</br>
+        　楽観的ロックは、ロックで待たせる代わりに、「滅多に被らないだろうけど、もし被ったらごめん（エラー）」というアプローチです。アプリ側で「もう一度やり直してください」と表示する処理が必要になります。
         </p>
     </section>
-<p>製作時間: </p>
+    <section>
+        <h2>第4章：同時実行制御の最終試練 — デッドロックの迷宮</h2>
+        <p>　ここまで、同時実行制御の基本的な問題と解決策を見てきました。しかし、複数のトランザクションが複雑に絡み合うと、思わぬ落とし穴が待ち受けています。それが<strong>デッドロック（Deadlock）</strong>です。</br>
+        　この章では、デッドロックがどのように発生するのか、そしてそれを回避するための戦略を学びます。デッドロックは、複数のトランザクションがお互いに相手のロックを待ち続ける状態で、システム全体が停止してしまう問題です。これを理解し、対策を講じることは、安定したシステム運用のために非常に重要です。
+        </p>
+        <div class="story-box">
+            <p><strong>>> SCENARIO:</strong><br>
+            あなたは、マルチプレイRPGの開発者です。ダンジョンボスの討伐後、プレイヤーであるアリスとボブが同時に戦利品ウィンドウを開きました。</p>
+        </div>
+        <p>　このシナリオでは、アリスとボブが同時に戦利品ウィンドウを開くことで発生するデッドロックの状況を体験します。どのようにしてデッドロックが発生するのか、そしてそれを回避するためにはどのような戦略が有効なのかを見ていきましょう。</p>
+        <h3>File0: システムの準備</h3>
+        <p>　まずは、シナリオを再現するための簡単なデータベース構造を作成します。</p>
+        <div class="terminal-window term-a">
+            <div class="terminal-header">
+                <span>> Terminal A (Database Setup)</span>
+                <span>[STATUS: PREPARING]</span>
+            </div>
+            <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 既に テーブル が存在する場合は削除</span>
+<span class="sql-cmd">DROP TABLE IF EXISTS</span> inventory;
+<span class="sql-cmd">CREATE TABLE</span> inventory </span>(
+    item_id <span class="sql-cmd">INT PRIMARY KEY</span>,</span>
+    item_name <span class="sql-cmd">TEXT</span>,</span>
+    owner <span class="sql-cmd">TEXT</span>
+);
+
+<span class="sql-cmd">INSERT INTO</span> inventory <span class="sql-cmd">VALUES</span> 
+    (1, '聖剣', 'None'), 
+    (2, 'イージスの盾', 'None');
+</div>
+            <div class="terminal-output output-a">
+            </div>
+        </div>
+        <p>これで、アリスとボブが同時にレアアイテムを奪い合う状況が整いました。次のステップでは、アリスとボブが同時にアイテムを奪い合うシナリオを再現してみましょう。</p>
+        <h3>File1: デッドロックの発生</h3>
+        <p>　アリスとボブが同時にアイテムを奪い合うシナリオを再現するために、以下のようなSQLを実行してください。</p>
+<div class="dual-terminal">
+            <div class="terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-comment">-- まず「聖剣」をロックして自分のものにする</span>
+<span class="sql-cmd">UPDATE</span> inventory <span class="sql-cmd">SET</span> owner = 'Player_A' <span class="sql-cmd">WHERE</span> item_id = 1;
+
+<span class="sql-comment">-- (ここでBが盾を取る時間を意図的に作る)</span>
+<span class="sql-cmd">SELECT PG_SLEEP</span>(5);
+
+<span class="sql-comment">-- 次に盾も取ろうとする（しかしBが持っているのでブロックされる）</span>
+<span class="sql-cmd">UPDATE</span> inventory <span class="sql-cmd">SET</span> owner = 'Player_A' <span class="sql-cmd">WHERE</span> item_id = 2;
+
+<span class="sql-cmd">COMMIT</span>;
+</div>
+            </div>
+            <div class="terminal-window term-b">
+                <div class="terminal-header">
+                    <span>> Terminal B　　(Bob)</span>
+                    <span>[STATUS: CONNECTED]</span>
+                </div>
+                <div class="terminal-body cursor-blink">
+<span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-comment">-- まず「盾」をロックして自分のものにする</span>
+<span class="sql-cmd">UPDATE</span> inventory <span class="sql-cmd">SET</span> owner = 'Player_B' <span class="sql-cmd">WHERE</span> item_id = 2;
+
+<span class="sql-comment">-- (ここでAが政権を取る時間を意図的に作る)</span>
+<span class="sql-cmd">SELECT PG_SLEEP</span>(5);
+
+<span class="sql-comment">-- 次に聖剣も取ろうとする（しかしAが持っているのでブロックされる）</span>
+<span class="sql-cmd">UPDATE</span> inventory <span class="sql-cmd">SET</span> owner = 'Player_B' <span class="sql-cmd">WHERE</span> item_id = 1;
+
+<span class="sql-cmd">COMMIT</span>;
+</div>
+            </div>
+        </div>
+        <p>　SQLの実行後、片方のターミナルには以下のようなエラーが表示されます。</p>
+        <div class = "terminal-window term-a">
+                <div class="terminal-header">
+                    <span>> Terminal A (Alice)</span>
+                    <span>[STATUS: ERROR]</span>
+                </div>
+            <div class="terminal-output output-a">
+<span class="output-error">
+psql:&lt;stdin&gt;:19: ERROR:  デッドロックを検出しました
+DETAIL:  プロセス 352 は ShareLock を トランザク ション 957 で待機していましたが、プロセス 345 で ブロックされました
+プロセス 345 は ShareLock を トランザクション 958 で待機していましたが、プロセス 352 でブロックさ れました
+HINT:  問い合わせの詳細はサーバーログを参照してください
+CONTEXT:  リレーション"inventory"のタプル(0,1)の 更新中
+</span>
+            </div>
+        </div>
+        <p>　このように、アリスとボブが同時にアイテムを奪い合うことで、デッドロックの状況が発生します。</p>
+        <div class="explanation">
+            <ti>解説:なぜこうなったのか？</ti>
+            <ol>
+                <li>Aは聖剣を握りしめ、「盾を渡せ！」とBを睨んでいます。</li>
+                <li>Bは盾を握りしめ、「聖剣を渡せ！」とAを睨んでいます。</li>
+            </ol>
+            <p>　これが<strong>デッドロック（Dead lock）</strong>です。お互いがお互いの持っている鍵を要求し合っているため、外部から介入しない限り、100年経ってもこの状態は解消されません。</p>
+            <ti>【PostgreSQLの守護神：デッドロック検知器】</ti>
+            <p>　システムが永遠にフリーズするのを防ぐため、PostgreSQLには「デッドロック検知（Deadlock Detector）」という機能が備わっています。
+                PostgreSQLは、ロック待ちが一定時間（デフォルトでは1秒）続くと、「あれ？これデッドロックになってないか？」と依存関係のグラフをチェックしに行きます。そして、循環待ちを発見すると、<strong>「共倒れになるくらいなら、片方を犠牲にしてもう片方を助けよう」</strong>と判断し、一方のトランザクションを強制的にエラー（アボート）にしてロールバックさせます。</p>
+        </div>
+        <h3>File2: デッドロックの回避戦略</h3>
+        <p>　それは<strong>「複数のリソースをロックする時は、常に同じ順番でロックする」</strong>ことです。
+        もし、プレイヤーAもBも「必ずIDの小さい順（聖剣 → 盾の順）にアイテムを取る」というプログラムに直していれば、デッドロックは絶対に起きません。</p>
+        <ol>
+            <li>Aが聖剣を取る。</li>
+            <li>Bが聖剣を取ろうとするが、Aが持っているので待つ。</li>
+            <li>Aが盾を取る。（Bは待っているので衝突しない）</li>
+            <li>Aが完了して鍵を手放す。</li>
+            <li>Bが聖剣を取り、次に盾を取る。</li>
+        </ol>
+        <p>このように、データベースの設計やSQLの書き方だけでなく、「アプリケーション側のロジックの書き順」一つで、システムの運命は大きく変わるのです。</p>
+    </section>
+
+<p>製作時間: 20時間</p>
 </div>
 
 </body>
