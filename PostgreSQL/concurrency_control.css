@@ -552,3 +552,215 @@ details[open] > summary::before {
     margin: 0.5rem 0;
     line-height: 1.6;
 }
+
+/* ===== ハンバーガーメニュー ===== */
+
+/* メニューボタンのチェックボックス（非表示） */
+.menu-toggle {
+    display: none;
+}
+
+/* ハンバーガーボタン */
+.menu-button {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--neon-cyan, #00ffff);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), inset 0 0 15px rgba(0, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.95);
+}
+
+/* ハンバーガーボタンの線 */
+.menu-button span {
+    width: 25px;
+    height: 2px;
+    background: var(--neon-cyan, #00ffff);
+    display: block;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px var(--neon-cyan, #00ffff);
+}
+
+/* チェックボックスがONの時の線のアニメーション */
+.menu-toggle:checked ~ .menu-button span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+    box-shadow: 0 0 8px var(--neon-pink, #ff00ff);
+}
+
+.menu-toggle:checked ~ .menu-button span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle:checked ~ .menu-button span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+    box-shadow: 0 0 8px var(--neon-pink, #ff00ff);
+}
+
+/* ナビゲーションメニュー */
+.menu-nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(5, 5, 5, 0.98) 0%, rgba(20, 0, 40, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    border-right: 3px solid var(--neon-cyan, #00ffff);
+    box-shadow: inset -10px 0 30px rgba(0, 255, 255, 0.2);
+    transition: left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.menu-toggle:checked ~ .menu-nav {
+    left: 0;
+}
+
+/* メニューコンテンツ */
+.menu-content {
+    padding: 6rem 2rem 2rem;
+    color: var(--text-main);
+}
+
+.menu-content h3 {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    color: var(--neon-cyan, #00ffff);
+    text-shadow: 0 0 10px var(--neon-cyan, #00ffff);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--neon-pink, #ff00ff);
+    padding-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* メニューセクション */
+.menu-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.menu-section h4 {
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: var(--neon-yellow, #ffff00);
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.menu-section > a {
+    display: block;
+    padding: 0.8rem 1rem;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 1.1rem;
+    border-left: 3px solid var(--neon-pink, #ff00ff);
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    font-family: var(--font-mono);
+}
+
+.menu-section > a:hover {
+    background: rgba(255, 0, 255, 0.1);
+    padding-left: 1.5rem;
+    color: var(--neon-pink, #ff00ff);
+    text-shadow: 0 0 8px var(--neon-pink, #ff00ff);
+}
+
+/* サブメニュー */
+.submenu {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid rgba(0, 255, 255, 0.3);
+}
+
+.submenu a {
+    display: block;
+    padding: 0.6rem 1rem;
+    color: rgba(224, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+    border-left: 2px solid var(--neon-cyan, #00ffff);
+    transition: all 0.3s ease;
+    font-family: var(--font-mono);
+}
+
+.submenu a:hover {
+    background: rgba(0, 255, 255, 0.1);
+    padding-left: 1.5rem;
+    color: var(--neon-cyan, #00ffff);
+    text-shadow: 0 0 6px var(--neon-cyan, #00ffff);
+    border-left: 3px solid var(--neon-cyan, #00ffff);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    .menu-button {
+        top: 1rem;
+        left: 1rem;
+        width: 45px;
+        height: 45px;
+    }
+
+    .menu-content {
+        padding: 5rem 1.5rem 2rem;
+    }
+
+    .menu-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .menu-section h4 {
+        font-size: 1.1rem;
+    }
+
+    .menu-section > a {
+        font-size: 0.95rem;
+        padding: 0.6rem 0.8rem;
+    }
+
+    .submenu a {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-button {
+        top: 0.8rem;
+        left: 0.8rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .menu-content {
+        padding: 4rem 1rem 2rem;
+    }
+
+    .menu-button span {
+        width: 20px;
+    }
+
+    .menu-nav {
+        width: 100%;
+    }
+}
