@@ -2,7 +2,7 @@
 
 :root {
     --sky-blue: #87CEEB;
-    --grass-green: #7ED321;
+    --grass-green: #6fbb1d;
     --mana-blue: #4A90E2;
     --hp-red: #ff4444;
     --exp-gold: #FFD700;
@@ -153,7 +153,7 @@ h1 {
 h2 {
     background: var(--border-dark);
     color: white;
-    padding: 8px 20px;
+    padding: 8px 15px;
     display: table;
     margin-bottom: 25px;
     border: 2px solid white;
@@ -190,6 +190,23 @@ h2 {
     border-radius: 8px;
 }
 
+.learning-box h3 {
+    font-size: 1.5rem;
+    color: var(--grass-green);
+    border-bottom: 3px solid #97e1a1;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.learning-box h3::before {
+    content: "📖";
+}
+
 .term-box {
     background-color: #e3f2fd;
     border: 3px double var(--mana-blue);
@@ -224,35 +241,87 @@ h2 {
     position: relative;
 }
 
-.exercise-title {
-    display: block;
-    font-size: 1.3rem;
-    font-weight: bold;
+.exercise-box h3 {
+    font-size: 1.5rem;
     color: #e67e22;
-    margin-bottom: 15px;
+    border-bottom: 3px solid #fad7a0;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.exercise-box h3::before {
+    content: "⚔️";
+}
+
+.exercise-box h4 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-top: 30px;
+    padding-left: 10px;
+    border-left: 5px solid var(--mana-blue);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.exercise-box h4::before {
+    content: "🛡️";
+    font-size: 0.9rem;
 }
 
 /* 🖥️ Terminal & Code */
-pre {
+.terminal-window {
     background-color: #1e272e;
-    color: #d2dae2;
-    padding: 20px;
     border: 4px solid #485460;
     border-radius: 4px;
+    margin: 25px 0;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.terminal-header {
+    background-color: #485460;
+    color: #fff;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--pixel-font);
+}
+
+pre {
+    background-color: transparent;
+    color: #d2dae2;
+    padding: 20px;
+    margin: 0;
+    border: none;
     overflow-x: auto;
     font-family: 'Courier New', monospace;
     font-size: 0.95rem;
+}
+
+/* SQL Syntax Highlighting */
+.sql-cmd {
+    color: #ff9f43;
+    font-weight: bold;
+}
+
+.sql-comment {
+    color: #8395a7;
+    font-style: italic;
 }
 
 .execution-result {
     background-color: #000;
     color: #00ff00;
     padding: 15px;
-    border: 2px solid #555;
-    margin-top: 15px;
+    border-top: 2px solid #485460;
     font-family: 'Consolas', monospace;
     font-size: 0.9rem;
-    white-space: pre;
+    white-space: pre-line;
     overflow-x: auto;
     box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.1);
 }

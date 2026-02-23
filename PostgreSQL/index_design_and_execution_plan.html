@@ -51,46 +51,131 @@
             <h2>第1章：暗闇の書庫と「探索コスト」</h2>
 
             <div class="story-box">
-                <p>あなたは「無限の書庫」に配属されたばかりの新人司書。ある日、伝説の勇者から「10万年前の古文書」を探してほしいと依頼されます。しかし、書庫の棚は魔法の混乱によりバラバラ。端から1冊ずつ確認していくしかない状態です。これでは日が暮れるどころか、一生が終わってしまうことに気づきます。
+                <p>　あなたは「無限の書庫」に配属されたばかりの新人司書。ある日、伝説の勇者から「10万年前の古文書」を探してほしいと依頼されます。
+                    しかし、書庫の棚には本が届いた順番に突っ込まれているだけで、中身はバラバラ。目録（インデックス）もありません。端から1冊ずつ確認していくしかない状態です。
+                    これでは日が暮れるどころか、一生が終わってしまうことに気づきます。
+                    <br>　ちなみに、このような状況のことを、データベースの世界では<strong>全件スキャン</strong>と呼びます。
                 </p>
             </div>
 
             <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・データが未整理な状態での検索コスト（全件スキャン）<br>
-                    ・計算量 $O(n)$ の概念<br>
-                    ・ディスクI/O（ページ読み込み）の重み
+                <h3>学習:探索コストと O(n) の恐怖</h3>
+                <p>　なぜ一冊ずつ確認する方法では間に合わないのでしょうか？そこには<strong>探索コスト</strong>という概念が立ちはだかっています。<br>
+                <ul>
+                    <li><strong>ディスクI/O（ページ読み込み）の重み：</strong>
+                        <br>　データベースのデータは、HDDやSSDといった「ストレージ」に保管されています。
+                        CPUが計算する速度に比べ、ストレージからデータを1ページ（本の1ページではなく、DBがデータを管理するブロック単位）読み出す作業は、非常に時間がかかる<strong>重い</strong>作業です。
+                    </li>
+                    <li><strong>計算量 O(n)（オー・エヌ）：</strong>
+                        <br>　本が n 冊あるとき、最悪の場合 n 回の確認作業が必要になります。
+                        データ量が2倍になれば、かかる時間も2倍になります。100万件、1000万件と増えていくにつれ、この<strong>線形の増加</strong>は致命的な遅れを招きます。
+                    </li>
+                </ul>
                 </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ 演習：10万件のデータと戦え</span>
-                <p>10万件の「魔法書データ」を用意し、インデックスなしで特定の1冊を検索して、その「重さ」を体感しましょう。</p>
-
-                <pre><code>-- 10万件の魔法書データを召喚
-CREATE TABLE grimoires (
-    id SERIAL PRIMARY KEY,
-    title TEXT,
-    mana_cost INTEGER
+                <h3>演習：魔法書データの作成と検索</h3>
+                <p>　10万件の「魔法書データ」を用意し、インデックスなしで特定の1冊を検索して、その「重さ」を体感してみましょう。</p>
+                <h4>1. 書庫の作成と魔導書の納入(テーブル作成・データ挿入)</h4>
+                <p>　まずは、魔法書を収めるテーブルとその中身を作成していきましょう。</p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal</span>
+                        <span>[STATUS: SUCCESS]</span>
+                    </div>
+                    <pre><code>
+<span class="sql-comment">-- すでにテーブルがある場合は削除</span>
+<span class="sql-cmd">DROP TABLE IF EXISTS</span> magic_books;
+<span class="sql-comment">-- 魔法書テーブルの作成</span>
+<span class="sql-cmd">CREATE TABLE</span> magic_books (
+    id SERIAL <span class="sql-cmd">PRIMARY KEY</span>,
+    title <span class="sql-cmd">TEXT</span>,
+    published_year <span class="sql-cmd">INTEGER</span>,
+    content <span class="sql-cmd">TEXT</span>
 );
+<span class="sql-comment">-- 10万件のダミーデータ(魔導書)を挿入する</span>
+<span class="sql-comment">-- 1. まずは99,999冊のランダムな本を納品</span>
+<span class="sql-cmd">INSERT INTO</span> magic_books (title, published_year, content)
+<span class="sql-cmd">SELECT</span> 
+    'General Magic Book No.' || i,
+    (RANDOM() * 99999)::INT, -- 10万年前"以外"の本
+    'Common spell info'
+<span class="sql-cmd">FROM</span>
+    GENERATE_SERIES(1, 99999) s (i);
 
-INSERT INTO grimoires (title, mana_cost)
-SELECT '魔法書_' || i, (random() * 1000)::INTEGER
-FROM generate_series(1, 100000) AS i;
+<span class="sql-comment">-- 2. 勇者が探している「真実の1冊」を最後に挿入</span>
+<span class="sql-comment">-- これで、全件スキャン（Seq Scan）を最後まで行わないと見つからない状態になります</span>
+<span class="sql-cmd">INSERT INTO</span> magic_books (title, published_year, content)
+<span class="sql-cmd">VALUES</span>
+    ('10万年前の失われた魔法 - 究極の書', 100000, 'この呪文は、究極のデータベース最適化魔法である…');
+</code></pre>
+                    <div class="execution-result">
+                        CREATE TABLE
+                        INSERT 0 100000
+                    </div>
+                </div>
+                <h4>2. 本を探す(全件検索・計測)</h4>
+                <p>
+                    　さて、書庫・魔導書が用意できたので、実際に勇者が探している「10万年前（published_year = 100000）」の古文書を探してみましょう。
+                    実行時間をミリ秒単位で確認する為に、計測モードをオンにして実行してください。
+                </p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Search Mode)</span>
+                        <span>[STATUS: TIMING ON]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 実行計画を表示</span>
+<span class="sql-cmd">EXPLAIN ANALYZE</span>
+<span class="sql-comment">-- 勇者が探している「10万年前」の古文書を検索</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books 
+<span class="sql-cmd">WHERE</span> published_year = 100000;
 
--- インデックスなしでの検索（全件走査）
-\timing on
-SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
+<span class="sql-comment">-- 実行計画なしで、勇者が探している「10万年前」の古文書を検索</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books 
+<span class="sql-cmd">WHERE</span> published_year = 100000;
+</code></pre>
+                    <div class="execution-result">
+                        QUERY PLAN
+                        ---------------------------------------------------------------------------------------------------------
+                        Seq Scan on magic_books (cost=0.00..2281.00 rows=2 width=53) (actual time=6.073..6.074 rows=1
+                        loops=1)
+                        Filter: (published_year = 100000)
+                        Rows Removed by Filter: 99999
+                        Planning Time: 0.203 ms
+                        Execution Time: 6.093 ms
+                        (5 行)
 
-                <div class="execution-result">
-                    id | title | mana_cost
-                    ----+--------------+-----------
-                    99999 | 魔法書_99999 | 452
-                    (1 row)
-
-                    時間: 45.123 ms (ミリ秒)
-                    -- 解説: 全件を順番に調べたため、データの量（n）に比例して時間がかかります。</div>
+                        id | title | published_year | content
+                        --------+-----------------------------------+----------------+-------------------------------------------------
+                        100000 | 10万年前の失われた魔法 - 究極の書 | 100000 | この呪文は、究極のデータベース最適化魔法である…
+                        (1 行)
+                    </div>
+                </div>
+                <div class="quiz-container">
+                    <h4>3. 知識の定着確認</h4>
+                    <p>
+                        　演習で SELECT を実行した際、結果が出るまでに数ミリ秒〜数十ミリ秒かかったはずです。
+                        もしデータが10万件から1億件に増えた場合、今の「インデックスがない状態（一冊ずつ確認）」では、
+                        計算上どれくらいの時間がかかるようになると予想されますか？<br>
+                    <ol>
+                        <li>データが増えてもDBが頑張るので、時間は変わらない。</li>
+                        <li>データ量が1000倍になるので、時間もおよそ1000倍かかる。</li>
+                        <li>データが増えるほど、DBの効率が上がるので時間は半分になる。</li>
+                    </ol>
+                    </p>
+                    <details>
+                        <summary>答えを見る</summary>
+                        <div class="answer">
+                            <p><strong>A. 2. データ量が1000倍になるので、時間もおよそ1000倍かかる。</strong></p>
+                            <p>
+                                　正解は 2 です。これが O(n)の恐ろしさです。10msで終わっていた検索が10秒になり、さらにデータが増えれば数分、数時間……と、必要な時間はどんどん多くなっていきます。
+                            </p>
+                        </div>
+                    </details>
+                </div>
             </div>
+
         </section>
 
         <!-- 第2章 -->
@@ -99,35 +184,90 @@ SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
             <h2>第2章：賢者の系譜「B-tree」の魔導構造</h2>
 
             <div class="story-box">
-                <p>絶望するあなたに、大司書が「B-tree（賢者の系譜）」を授けます。それは、巨大な樹のように枝分かれした魔法の系譜図。根元（ルート）から順に「あちらの枝へ」「こちらの枝へ」とわずかな回数進むだけで、100万冊の中から目的の本が置かれた棚へ導かれます。
+                <p>
+                    　絶望するあなたの元に、大司書が現れました。<br>
+                    「若き司書よ、力任せに走るのではない。この<strong>B-treeの系譜図</strong>を使うのじゃ」<br>
+                    　大司書が広げた少し古びた本には、不思議な「樹（ツリー）」の図面が描かれていました。それは、ただの木ではありません。
+                    根元（ルート）から始まり、いくつもの枝（ノード）に分かれ、その先には本が置かれた場所を示す「葉（リーフ）」が並んでいます。<br>
+                    「この樹のルールは単純じゃ。根元から始まり、<strong>あちらの枝</strong>へ<strong>こちらの枝</strong>とたどっていく。そうすれば、100万冊の中から目的の本が置かれた棚へ、あっという間にたどり着ける」
+                <div class="term-box">
+                    <span class="term-title">用語：B-treeとは？</span>
+                    <p>データを常に整列した状態で保持する「木構造」の一つ。検索、挿入、削除が常に効率的に行えるように「平衡（バランス）」を保つよう設計されています。</p>
+                </div>
                 </p>
             </div>
 
             <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・B-tree（Balanced Tree）の階層構造<br>
-                    ・ノード（枝）、リーフ（葉）、ポインタの役割<br>
-                    ・探索計算量 $O(\log n)$ の驚異的な速さ
+                <h3>学習: B-treeの構造と「ショートカット」の原理</h3>
+                <p>
+                    　データベースの多くが採用している<strong>B-tree（Balanced Tree）</strong>は、データを効率よく探すための「多分岐の木構造」です。
+                <ul>
+                    <li><strong>ルート（根）：</strong><br>探索の開始地点。ここには<strong>どの範囲のデータがどの枝にあるか</strong>のヒントが書かれています。</li>
+                    <li><strong>ノード（節）：</strong><br>中継地点。ルートから受け取った情報をさらに細かく振り分けます。</li>
+                    <li><strong>リーフ（葉）：</strong><br>最終地点。ここには実際のデータ（またはデータが置かれている場所を示すポインタ）が保存されています。</li>
+                    <li><strong>ポインタ：</strong><br>次のノードやリーフがどこにあるかを示す<strong>魔法の指差し</strong>です。</li>
+                </ul>
+                　なぜこのB-treeは早いといわれているのでしょう?それは、1回枝を選ぶごとに、<strong>探すべき範囲が劇的に絞り込まれるから</strong>です。<br>
+                　先ほどの処理だと、100万件のデータがあるとき、1冊ずつ確認する O(n) では最大100万回の作業が必要でした。
+                一方、B-treeのような構造での探索は <strong>O(logn)（オー・ログ・エヌ）</strong>と呼ばれます。<br>
+                例えば、1つのノードが100個の枝に分かれている場合（これを次数といいます）：
+                <ol>
+                    <li>1層目（ルート）：100個の範囲に分かれる</li>
+                    <li>2層目（ノード）：10,000個の範囲に分かれる</li>
+                    <li>3層目（リーフ）：1,000,000個のデータに到達！</li>
+                </ol>
+                　つまり、100万冊の中から1冊を探し出すのに、<strong>たった3回ページをめくる（ノードを辿る）だけで済む</strong>のです。
                 </p>
             </div>
 
-            <div class="term-box">
-                <span class="term-title">用語：B-treeとは？</span>
-                <p>データを常に整列した状態で保持する「木構造」の一つ。検索、挿入、削除が常に効率的に行えるように「平衡（バランス）」を保つよう設計されています。</p>
-            </div>
-
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ 計算演習：対数の魔法</span>
-                <p>100万件をB-treeで探す際、めくる「魔法のページ数」を計算しましょう。</p>
+                <h3>演習：魔法のページめくり回数を計算せよ</h3>
+                <p>　大司書はあなたに試練を与えました。「計算の魔法を使って、探索の効率を証明してみせよ」と。</p>
+                <h4>1. 理論演習：対数の魔法</h4>
                 <div class="quiz-container">
-                    <h4>Q. 100万件のデータをB-treeで探すと、最大何回の比較で済む？</h4>
-                    <p>全件スキャンなら最大1,000,000回ですが...？</p>
+                    <p>
+                        　1つのノードが10個に分かれる「10分岐の木」があるとします。このとき、1,000,000冊（10の6乗）の本から1冊を見つけ出すには、最大で何回のノード移動が必要でしょうか？<br>
+                        　　<strong>log₁₀(1,000,000) = ?</strong><br>
+                        　HINT:10を何乗すれば1,000,000になるかを考えます。
+                    </p>
+                    <details>
+                        <summary>答えを見る</summary>
+                        <div class="answer">
+                            <p><strong>A. 6回</strong></p>
+                            <p>計算式：log₁₀(1,000,000) = 6<br>
+                                10の6乗は1,000,000なので、最大6回のノード移動で済みます！</p>
+                        </div>
+                    </details>
+                </div>
+                <h4>2. 理論演習:対数の魔法2</h4>
+                <div class="quiz-container">
+                    <p>　100万件のデータをB-treeで探すと、最大何回の比較で済む？<br>
+                        　HINT:全件スキャンなら最大1,000,000回ですが...？</p>
                     <details>
                         <summary>答えを見る</summary>
                         <div class="answer">
                             <p><strong>A. 約20回</strong></p>
-                            <p>計算式：$\log_2(1,000,000) \approx 20$<br>
+                            <p>計算式：log₂(1,000,000) ≒ 20<br>
                                 たった20回のチェック。これが「賢者の系譜」が爆速である理由です！</p>
+                        </div>
+                    </details>
+                </div>
+                <h4>3. 知識の定着確認</h4>
+                <div class="quiz-container">
+                    <p>　B-treeにおいて、データがどれだけ増えても探索速度が急激に落ちないのはなぜですか？
+                    <ol>
+                        <li>データの数に合わせて、CPUが魔法のように加速するから。</li>
+                        <li>枝分かれ（ノード）を辿るたびに、探索候補が「引き算」で減っていくから。</li>
+                        <li>枝分かれ（ノード）を辿るたびに、探索候補が「割り算（分数）」で一気に減っていくから。</li>
+                    </ol>
+                    </p>
+                    <details>
+                        <summary>答えを見る</summary>
+                        <div class="answer">
+                            <p><strong>A. 正解は 3 です。</strong></p>
+                            <p>
+                                1回の移動で候補を $1/100$ や $1/1000$ に絞り込めるため、データが100万件から1億件に増えても、辿る階層（木の高さ）は1〜2層増えるだけで済みます。
+                            </p>
                         </div>
                     </details>
                 </div>
@@ -140,38 +280,125 @@ SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
             <h2>第3章：禁忌の索引「INDEX」の付与</h2>
 
             <div class="story-box">
-                <p>あなたはついに、書庫の棚に「魔法の索引（INDEX）」を刻み込みます。検索は一瞬になりましたが、新しい本が納品（INSERT）されるたびに、索引も魔力で書き換えなければなりません。納品作業に少し時間がかかるという「代償」の存在を学びます。
+                <p>
+                    　大司書から授かった「B-treeの系譜図」を手に、あなたはいよいよ書庫の棚に直接手を加えることにしました。
+                    使うのは、古の言語で綴られた<strong>「索引付与（CREATE INDEX）」</strong>の呪文です。
+                    この呪文を唱えると、棚の柱に黄金の文字が浮かび上がり、どの年代の古文書がどの区画にあるかを示す「魔法の道標」が実体化します。<br>
+                    しかし、大司書は忠告します。<br>
+                    「索引は便利だが、作りすぎには注意せよ。<strong>本を新しく棚に並べる（INSERTする）とき、精霊たちは索引も同時に書き換えねばならぬ。</strong>あまりに多くの索引を刻むと、納品作業が遅れ、無駄な魔力を費やすことになるぞ……」
                 </p>
             </div>
 
             <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・CREATE INDEX コマンドの使い方<br>
-                    ・インデックスによる劇的な検索高速化<br>
-                    ・書き込みコスト（オーバーヘッド）の理解
+                <h3>学習：CREATE INDEX とその代償</h3>
+                <p>
+                <ul>
+                    <li><strong>CREATE INDEX の役割：</strong><br>
+                        指定したカラム（今回は published_year）の値を、B-tree構造で並べ替えた「別表」をメモリやディスク上に作成します。</li>
+                    <li><strong>書き込みコスト（オーバーヘッド）：</strong><br>
+                        データの追加（INSERT）、更新（UPDATE）、削除（DELETE）が行われるたびに、DBは「本体のデータ」と「インデックスの木」の両方をメンテナンスしなければなりません。
+                    </li>
+                    <li><strong>ディスク容量：</strong><br>
+                        インデックスも物理的なデータなので、作成すればするほどストレージ（書庫のスペース）を消費します。
+                    </li>
+                </ul>
                 </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ 実技：索引の魔法を付与せよ</span>
-                <pre><code>-- 魔法の索引を作成（インデックス装備！）
-CREATE INDEX idx_grimoire_title ON grimoires(title);
+                <h3>演習：索引の具現化と代償の計測</h3>
+                <p>
+                    　それでは、実際にインデックスを作成して、その効果と影響をその目で確かめてみましょう。
+                </p>
+                <h4>1. 呪文の詠唱（インデックス作成）</h4>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Index Magic)</span>
+                        <span>[STATUS: CREATING INDEX]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 魔法の索引を作成（インデックス作成）</span>
+<span class="sql-cmd">CREATE INDEX</span> idx_published_year <span class="sql-cmd">ON</span> magic_books (published_year);
+</code></pre>
+                    <div class="execution-result">CREATE INDEX</div>
+                </div>
+                <p>※ インデックス作成自体にも、既存の10万件を整理するための時間がかかります。</p>
+                <h4>2. 変化を計測</h4>
+                <p>
+                    　インデックス作成後、第一章で使った「検索の呪文」をもう一度唱えてみましょう。
+                </p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Search Mode)</span>
+                        <span>[STATUS: TIMING ON]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 実行計画を表示</span>
+<span class="sql-cmd">EXPLAIN ANALYZE</span>
+<span class="sql-comment">-- 勇者が探している「10万年前」の古文書を検索</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books 
+<span class="sql-cmd">WHERE</span> published_year = 100000;
 
--- 再度、検索を実行
-SELECT * FROM grimoires WHERE title = '魔法書_99999';
+<span class="sql-comment">-- 実行計画なしで、勇者が探している「10万年前」の古文書を検索</span>
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books 
+<span class="sql-cmd">WHERE</span> published_year = 100000;
+</code></pre>
+                    <div class="execution-result">
+                        QUERY PLAN
+                        ---------------------------------------------------------------------------------------------------------------------------
+                        Bitmap Heap Scan on magic_books (cost=4.31..12.07 rows=2 width=53) (actual time=0.787..0.789
+                        rows=1 loops=1)
+                        Recheck Cond: (published_year = 100000)
+                        Heap Blocks: exact=1
+                        -> Bitmap Index Scan on idx_published_year (cost=0.00..4.31 rows=2 width=0) (actual
+                        time=0.753..0.754 rows=1 loops=1)
+                        Index Cond: (published_year = 100000)
+                        Planning Time: 1.410 ms
+                        Execution Time: 1.713 ms
+                        (7 行)
 
--- [代償の計測] 大量に新刊を納品
-INSERT INTO grimoires (title, mana_cost)
-SELECT '新刊_' || i, (random() * 1000)::INTEGER
-FROM generate_series(1, 10000) AS i;</code></pre>
-
-                <div class="execution-result">
-                    -- 検索結果:
-                    時間: 0.234 ms (インデックス無しに比べて約200倍速！)
-
-                    -- 納品（INSERT）の代償:
-                    時間: 245 ms (インデックスが無い時は100ms程度だった作業が重くなった)
-                    -- 解説: 検索は速くなりますが、データの書き換え時は索引もメンテナンスするため追加魔力が必要です。</div>
+                        id | title | published_year | content
+                        --------+-----------------------------------+----------------+-------------------------------------------------
+                        100000 | 10万年前の失われた魔法 - 究極の書 | 100000 | この呪文は、究極のデータベース最適化魔法である…
+                        (1 行)
+                    </div>
+                </div>
+                <p>
+                    　結果はどうでしたか?おそらく、実感できるほど早くなっていたはずです。これが、<strong>インデックスの力</strong>であり、<strong>O(n)</strong>から<strong>O(log
+                        n)</strong>への劇的な改善です。
+                </p>
+                <h4>3. 代償の確認</h4>
+                <p>
+                    　次に、大司書が言っていた代償である、<strong>納品作業（INSERT）の遅れ</strong>を確認します。
+                </p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (Index Maintenance)</span>
+                        <span>[STATUS: INSERTING]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- 索引がある状態での新規登録（INSERT）</span>
+<span class="sql-cmd">INSERT</span> <span class="sql-cmd">INTO</span> magic_books (title, published_year, content)
+<span class="sql-cmd">VALUES</span> ('新しい呪文', 2024, 'これは最新の魔法です');
+</code></pre>
+                    <div class="execution-result">INSERT 0 1</div>
+                </div>
+                <p>
+                    　第1章で大量にデータを入れた時と比較して、1件あたりの挿入にわずかな「重み」を感じるかもしれません。
+                </p>
+                <h4>4. 知識の定着確認</h4>
+                <div class="quiz-container">
+                    <p>
+                        　あらゆるカラム（タイトル、著者、出版年、ページ数など）にインデックスを貼れば、最強のデータベースになるでしょうか？
+                    <ol>
+                        <li>最強になる。どんな検索も一瞬になるので、全部に貼るべき。</li>
+                        <li>ならない。検索は速くなるが、データの追加や更新がどんどん重くなり、ディスク容量も無駄に消費してしまう。</li>
+                        <li>ならない。インデックスを貼りすぎると、DBがどの索引を使えばいいか迷ってしまい、結局爆発する。</li>
+                    </ol>
+                    </p>
+                    <details>
+                        <summary>答えを見る</summary>
+                        <p>　正解は<strong>2</strong>です。インデックス設計の極意は<strong>よく使う検索条件</strong>を見極め、最小限のインデックスで最大の効果を出すことにあります。
+                        </p>
+                    </details>
+                </div>
             </div>
         </section>
 
@@ -181,56 +408,144 @@ FROM generate_series(1, 10000) AS i;</code></pre>
             <h2>第4章：精霊「オプティマイザ」と二つの探索法</h2>
 
             <div class="story-box">
-                <p>魔法書庫には、最短ルートを導く精霊「オプティマイザ」が住んでいます。精霊は言います。「本が3冊しかないなら、索引を見るより全部見たほうが早いですよ」と。状況に応じて「全件走査（Seq
-                    Scan）」か「索引走査（Index Scan）」かを選ぶ精霊の知恵を学びます。
+                <p>
+                    　索引（INDEX）を刻み終えたあなたの前に、ふわりと光る小さな精霊が現れました。<br>
+                    「私はオプティマイザ。この書庫のあらゆる探索ルートを計算し、最短の道を示す賢者です」<br>
+
+                    　あなたは自慢げに「魔法の索引」を見せましたが、精霊はクスクスと笑います。<br>
+                    「司書さん、索引は万能ではありませんよ。例えば、<strong>本が3冊しかない棚で索引を引くのは、逆に手間</strong>だと思いませんか？
+                    <strong>目次を見るより、3冊ババっと見たほうが早いでしょ？</strong>」<br>
+
+                    　精霊は、<strong>その時々の状況（データの量や偏り）</strong>を見て、あえて索引を無視して「全件走査」を選ぶこともあるというのです。
+                <div class="term-box">
+                    <span class="term-title">用語：オプティマイザとは？</span>
+                    <p>　SQL文が実行される際に、最も効率的な実行計画（どの索引を使い、どの順番で処理するか）を立てるデータベースシステム内部のプログラム。</p>
+                </div>
                 </p>
             </div>
 
             <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・オプティマイザ（Optimizer）の役割<br>
-                    ・Seq Scan vs Index Scan の違い<br>
-                    ・選択率（Selectivity）による判断基準
+                <h3>学習：賢者の判断基準「選択率」</h3>
+                <p>
+                    オプティマイザは、SQLという命令を受け取ると、主に2つのルートを天秤にかけます。
+                <ul>
+                    <li><strong>Seq Scan（全件走査）：</strong><br>
+                        　テーブルの端から端まで全データを読み込む。「データ量が少ない時」や「ほとんどのデータが条件に一致する時」に選ばれます。</li>
+                    <li><strong>Index Scan（索引走査）：</strong><br>
+                        　B-treeの索引を辿ってから、本体のデータへ飛び移る。「特定の数件だけを狙い撃つ時」に非常に強力です。</li>
+                </ul>
+                <strong>なぜインデックスを使わないことがあるのか？</strong><br>
+                　インデックスを使うには「索引を読む」→「本体を読みに行く」という2ステップが必要です。
+                もし、探したい本が「書庫全体の80%」を占めていたら、索引を80万回引くよりも、最初から100万冊全部めくったほうが、行ったり来たりする手間（オーバーヘッド）がない分、早いのです。この<strong>どれくらい絞り込めるかの割合</strong>を<strong>選択率</strong>と呼びます。
                 </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ 思考：精霊の計画を予想せよ</span>
+                <h3>演習：精霊のルート予想</h3>
+                <p>　精霊オプティマイザがどちらのルートを選ぶか、データの「分布」を見て予想してみましょう。</p>
+                <h4>1. 準備：データの偏りを作る</h4>
+                <p>以下のSQLで、2つの異なる状況を作ります。</p>
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span>> Terminal (SQL)</span>
+                        <span>[STATUS: CREATING TABLE]</span>
+                    </div>
+                    <pre><code><span class="sql-comment">-- ケースA：超レアな「伝説の書」テーブル</span>
+<span class="sql-cmd">CREATE TABLE</span> legendary_books AS 
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books <span class="sql-cmd">WHERE</span> 1=0; -- 構造だけコピー
+
+<span class="sql-cmd">INSERT INTO</span> legendary_books (title, published_year)
+<span class="sql-cmd">SELECT</span> 'Legendary Vol.' || i, i <span class="sql-cmd">FROM</span> generate_series(1, 1000000) <span class="sql-cmd">AS</span> s (i); 
+<span class="sql-comment">-- 100万冊すべてバラバラの年（選択率が非常に高い）</span>
+<span class="sql-cmd">CREATE INDEX</span> idx_year_legend <span class="sql-cmd">ON</span> legendary_books (published_year);
+
+<span class="sql-comment">-- ケースB：ほぼ全部「ポーションの作り方」テーブル</span>
+<span class="sql-cmd">CREATE TABLE</span> potion_books AS 
+<span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> magic_books <span class="sql-cmd">WHERE</span> 1=0;
+
+<span class="sql-cmd">INSERT INTO</span> potion_books (title, published_year)
+<span class="sql-cmd">SELECT</span> 'Potion Guide', 2024 <span class="sql-cmd">FROM</span> generate_series(1, 100000); 
+<span class="sql-comment">-- 10万冊すべて「2024年」の本（選択率が非常に低い）</span>
+<span class="sql-cmd">CREATE INDEX</span> idx_year_potion <span class="sql-cmd">ON</span> potion_books (published_year);
+
+<span class="sql-comment">-- 統計情報を最新にする（精霊に現状を教える儀式）</span>
+<span class="sql-cmd">ANALYZE</span> legendary_books;
+<span class="sql-cmd">ANALYZE</span> potion_books;
+</code></pre>
+                    <div class="execution-result">DROP TABLE
+                        DROP TABLE
+                        SELECT 0
+                        INSERT 0 1000000
+                        CREATE INDEX
+                        SELECT 0
+                        INSERT 0 100000
+                        CREATE INDEX
+                        ANALYZE
+                        ANALYZE
+                    </div>
+                </div>
+                <h4>2. 予想クイズ</h4>
+                <p>　以下の2つの探索命令、精霊はどちらに「索引」を使うでしょうか？
+                <ol>
+                    <li>SELECT * FROM legendary_books WHERE published_year = 500;（100万冊中、500年の本はたった1冊）</li>
+                    <li>SELECT * FROM potion_books WHERE published_year = 2024;（10万冊中、2024年の本は10万冊すべて）</li>
+                </ol>
+                </p>
+                <details>
+                    <summary>答えを見る</summary>
+                    <div class="answer">
+                        <p><strong>A. 1は索引を使う</strong></p>
+                        <p>　1はまさに、索引が活躍する場面です。100万冊の中から「500年」という本を探すには、索引を引けばすぐにたどり着けます。</p>
+                    </div>
+                </details>
                 <div class="quiz-container">
-                    <h4>Q. 100万件中「90万件」を取得する場合、精霊はどちらを選ぶ？</h4>
+                    <h4>3. 知識の定着確認</h4>
+                    <p>　精霊オプティマイザが「Index Scan」をあきらめて「Seq Scan」を選ぶのは、主にどんな時ですか？
+                    <ol>
+                        <li>精霊が疲れていて、索引を引くのが面倒になった時。</li>
+                        <li>検索条件に一致するデータが多すぎて、索引を使うとかえって効率が悪いと判断した時。</li>
+                        <li>インデックスの魔法が古くなり、文字がかすれて読めなくなった時。</li>
+                    </ol>
+                    </p>
                     <details>
                         <summary>答えを見る</summary>
                         <div class="answer">
-                            <p><strong>A. 全件走査（Seq Scan）</strong></p>
-                            <p>ほぼ全てのデータを読み込む場合、索引を行き来するよりも、端から一気に読んだほうが速いため、精霊はあえて索引を使わない判断をします。これを「選択率が高い」と言います。</p>
+                            <p><strong>A. 正解は2です。</strong></p>
+                            <p>オプティマイザは「コスト（作業量）」を計算します。データが大量にヒットする場合、索引と本体を往復するよりも、一気に読み飛ばす方が早いのです。</p>
                         </div>
                     </details>
                 </div>
             </div>
-        </section>
+    </div>
+    </section>
 
-        <!-- 第5章 -->
-        <section class="pixel-box" id="chapter5">
-            <span class="tag tag-sql">分析</span>
-            <h2>第5章：精霊の預言書「EXPLAIN」を読み解く</h2>
+    <!-- 第5章 -->
+    <section class="pixel-box" id="chapter5">
+        <span class="tag tag-sql">分析</span>
+        <h2>第5章：精霊の預言書「EXPLAIN」を読み解く</h2>
 
-            <div class="story-box">
-                <p>精霊オプティマイザは、探索を始める前に「預言書（EXPLAIN）」を提示します。そこには「この探索にはこれだけの魔力（Cost）が必要だ」と書かれています。預言書に書かれた暗号を読み解く力こそ、一流司書の証です。
-                </p>
-            </div>
+        <div class="story-box">
+            <p>精霊オプティマイザは、探索を始める前に「預言書（EXPLAIN）」を提示します。そこには「この探索にはこれだけの魔力（Cost）が必要だ」と書かれています。預言書に書かれた暗号を読み解く力こそ、一流司書の証です。
+            </p>
+        </div>
 
-            <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・EXPLAIN コマンドの基本<br>
-                    ・Cost（魔力コスト）、Rows（予想行数）、Width（データの幅）の読み方<br>
-                    ・実行計画の木構造の理解
-                </p>
-            </div>
+        <div class="learning-box">
+            <p><strong>📖 学習内容:</strong><br>
+                ・EXPLAIN コマンドの基本<br>
+                ・Cost（魔力コスト）、Rows（予想行数）、Width（データの幅）の読み方<br>
+                ・実行計画の木構造の理解
+            </p>
+        </div>
 
-            <div class="exercise-box">
-                <span class="exercise-title">⚔️ 予言：暗号を解読せよ</span>
-                <pre><code>-- 預言書（実行計画）を表示
-EXPLAIN SELECT * FROM grimoires WHERE title = '魔法書_500';</code></pre>
+        <div class="exercise-box">
+            <span class="exercise-title">⚔️ 予言：暗号を解読せよ</span>
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span>> Terminal (Prophecy)</span>
+                    <span>[STATUS: EXPLAIN]</span>
+                </div>
+                <pre><code><span class="sql-comment">-- 預言書（実行計画）を表示</span>
+<span class="sql-cmd">EXPLAIN SELECT</span> * <span class="sql-cmd">FROM</span> grimoires <span class="sql-cmd">WHERE</span> title = '魔法書_500';</code></pre>
 
                 <div class="execution-result">
                     QUERY PLAN
@@ -241,34 +556,40 @@ EXPLAIN SELECT * FROM grimoires WHERE title = '魔法書_500';</code></pre>
                     -- cost=0.29..8.30 : 最小0.29、最大8.30の魔力コストが必要と予想。
                     -- rows=1 : 1枚の魔法書が見つかると精霊が予想している。</div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 第6章 -->
-        <section class="pixel-box" id="chapter6">
-            <span class="tag tag-danger">重要</span>
-            <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
+    <!-- 第6章 -->
+    <section class="pixel-box" id="chapter6">
+        <span class="tag tag-danger">重要</span>
+        <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
 
-            <div class="story-box">
-                <p>預言書はあくまで精霊の予測。時には精霊の勘違い（古い統計情報）で、予測以上の魔力を消費することもあります。あなたは「真実の鏡（ANALYZE）」を使い、実際に探索を行って「本当にかかった時間」を突き合わせる禁術を学びます。
-                </p>
-            </div>
+        <div class="story-box">
+            <p>預言書はあくまで精霊の予測。時には精霊の勘違い（古い統計情報）で、予測以上の魔力を消費することもあります。あなたは「真実の鏡（ANALYZE）」を使い、実際に探索を行って「本当にかかった時間」を突き合わせる禁術を学びます。
+            </p>
+        </div>
 
-            <div class="learning-box">
-                <p><strong>📖 学習内容:</strong><br>
-                    ・EXPLAIN ANALYZE による実測値の取得<br>
-                    ・予測（Estimated）と実測（Actual）の乖離の分析<br>
-                    ・ANALYZE コマンドによる統計情報の更新
-                </p>
-            </div>
+        <div class="learning-box">
+            <p><strong>📖 学習内容:</strong><br>
+                ・EXPLAIN ANALYZE による実測値の取得<br>
+                ・予測（Estimated）と実測（Actual）の乖離の分析<br>
+                ・ANALYZE コマンドによる統計情報の更新
+            </p>
+        </div>
 
-            <div class="exercise-box">
-                <span class="exercise-title">⚔️ 真実：精霊の目を覚まさせろ</span>
-                <pre><code>-- 実際に実行して、真実の鏡で見る
-EXPLAIN ANALYZE SELECT * FROM grimoires WHERE mana_cost > 950;
+        <div class="exercise-box">
+            <span class="exercise-title">⚔️ 真実：精霊の目を覚まさせろ</span>
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span>> Terminal (Mirror of Truth)</span>
+                    <span>[STATUS: ANALYZE]</span>
+                </div>
+                <pre><code><span class="sql-comment">-- 実際に実行して、真実の鏡で見る</span>
+<span class="sql-cmd">EXPLAIN ANALYZE SELECT</span> * <span class="sql-cmd">FROM</span> grimoires <span class="sql-cmd">WHERE</span> mana_cost > 950;
 
--- 統計情報が古いと、精霊が間違ったルートを選ぶことがある。
--- 精霊に最新の書架情報を与えて目覚めさせる。
-ANALYZE grimoires;</code></pre>
+<span class="sql-comment">-- 統計情報が古いと、精霊が間違ったルートを選ぶことがある。</span>
+<span class="sql-comment">-- 精霊に最新の書架情報を与えて目覚めさせる。</span>
+<span class="sql-cmd">ANALYZE</span> grimoires;</code></pre>
 
                 <div class="execution-result">
                     QUERY PLAN
@@ -280,43 +601,19 @@ ANALYZE grimoires;</code></pre>
                     -- (actual rows=5120) は真実。
                     -- ズレが大きい場合は ANALYZE で精霊の知識をアップデートする必要があります！</div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <footer>
-            <p>YOU ARE NOW A MASTER LIBRARIAN.</p>
-            <p>© 2026 魔導データ探索ギルド</p>
-        </footer>
+    <footer>
+        <p>YOU ARE NOW A MASTER LIBRARIAN.</p>
+        <p>© 2026 魔導データ探索ギルド</p>
+    </footer>
 
     </div>
 
-    <script>
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const commandMenu = document.getElementById('command-menu');
-        const menuLinks = document.querySelectorAll('.command-menu a');
+    <script src="index_design_and_execution_plan.js"></script>
 
-        const toggleMenu = () => {
-            commandMenu.classList.toggle('active');
-            hamburgerBtn.classList.toggle('active');
-        };
-
-        hamburgerBtn.addEventListener('click', toggleMenu);
-        closeBtn.addEventListener('click', toggleMenu);
-
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                commandMenu.classList.remove('active');
-                hamburgerBtn.classList.remove('active');
-            });
-        });
-
-        // Close on ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && commandMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-    </script>
+</body>
 
 </body>
 
