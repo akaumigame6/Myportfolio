@@ -1,21 +1,25 @@
 :root {
-    --bg-color: #050505; /* より深い黒 */
-    --text-main: #e0ffff; /* 青みがかった発光する白 */
+    --bg-color: #050505;
+    /* より深い黒 */
+    --text-main: #e0ffff;
+    /* 青みがかった発光する白 */
     --text-muted: #8a9ba8;
-    
+
     /* ネオンカラー定義 */
     --neon-blue: #00ffff;
     --neon-pink: #ff00ff;
     --neon-yellow: #ffff00;
-    
+
     /* 発光エフェクト定義 */
     --glow-blue: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
     --glow-pink: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
     --text-glow: 0 0 2px rgba(224, 255, 255, 0.5);
 
     /* フォント */
-    --font-title: 'Orbitron', sans-serif; /* SFチックな見出し */
-    --font-mono: 'Share Tech Mono', monospace; /* ターミナル文字 */
+    --font-title: 'Orbitron', sans-serif;
+    /* SFチックな見出し */
+    --font-mono: 'Share Tech Mono', monospace;
+    /* ターミナル文字 */
 }
 
 body {
@@ -26,7 +30,7 @@ body {
     margin: 0;
     padding: 0;
     /* 背景にサイバーなグリッドを描画 */
-    background-image: 
+    background-image:
         linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 30px 30px;
@@ -37,15 +41,17 @@ body {
 body::after {
     content: "";
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-    );
-    pointer-events: none; /* クリックを邪魔しないように */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    /* クリックを邪魔しないように */
     z-index: 10;
 }
 
@@ -54,7 +60,8 @@ body::after {
     margin: 0 auto;
     padding: 2rem 1.5rem;
     position: relative;
-    z-index: 1; /* 走査線より下に配置 */
+    z-index: 1;
+    /* 走査線より下に配置 */
 }
 
 /* --- タイトルエリア --- */
@@ -139,7 +146,8 @@ h3 {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    margin: 0rem -1rem; /* 少し横に広げる */
+    margin: 0rem -1rem;
+    /* 少し横に広げる */
     padding: 15px;
     background: #000;
     /* 外枠をサイバーピンクで発光させる */
@@ -168,7 +176,10 @@ h3 {
 }
 
 /* 探偵（A）：青ネオン */
-.term-a { border-color: var(--neon-blue); }
+.term-a {
+    border-color: var(--neon-blue);
+}
+
 .term-a .terminal-header {
     background: rgba(0, 255, 255, 0.2);
     color: var(--neon-blue);
@@ -177,7 +188,10 @@ h3 {
 }
 
 /* 怪盗（B）：ピンクネオン */
-.term-b { border-color: var(--neon-pink); }
+.term-b {
+    border-color: var(--neon-pink);
+}
+
 .term-b .terminal-header {
     background: rgba(255, 0, 255, 0.2);
     color: var(--neon-pink);
@@ -191,7 +205,8 @@ h3 {
     font-size: 0.95rem;
     white-space: pre-wrap;
     color: var(--text-main);
-    text-shadow: var(--text-glow); /* 文字自体も少し発光 */
+    text-shadow: var(--text-glow);
+    /* 文字自体も少し発光 */
 }
 
 /* --- ターミナル出力結果表示 --- */
@@ -283,8 +298,15 @@ h3 {
 }
 
 /* SQLコマンドのハイライト */
-.sql-cmd { color: var(--neon-yellow); font-weight: bold; }
-.sql-comment { color: #c2c2c2; font-style: italic; }
+.sql-cmd {
+    color: var(--neon-yellow);
+    font-weight: bold;
+}
+
+.sql-comment {
+    color: #c2c2c2;
+    font-style: italic;
+}
 
 /* カーソル点滅アニメーション（おまけ） */
 .cursor-blink::after {
@@ -292,19 +314,22 @@ h3 {
     animation: blink 1s step-end infinite;
     color: var(--neon-blue);
 }
-@keyframes blink { 50% { opacity: 0; } }
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
 
 /* --- 挑戦状セクション（危険な雰囲気） --- */
 .challenge-section {
     /* 危険を示す斜めストライプの背景 */
-    background: 
-        repeating-linear-gradient(
-            45deg,
+    background:
+        repeating-linear-gradient(45deg,
             rgba(255, 0, 255, 0.05),
             rgba(255, 0, 255, 0.05) 10px,
             transparent 10px,
-            transparent 20px
-        );
+            transparent 20px);
     border: 2px solid var(--neon-pink);
     box-shadow: var(--glow-pink);
     padding: 3rem;
@@ -469,7 +494,7 @@ details {
 }
 
 /* summary（展開ボタン）のスタイル */
-details > summary {
+details>summary {
     background: linear-gradient(90deg, rgba(255, 0, 255, 0.15), rgba(0, 255, 255, 0.05));
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--neon-pink);
@@ -486,14 +511,14 @@ details > summary {
 }
 
 /* 展開時のsummaryスタイル */
-details[open] > summary {
+details[open]>summary {
     background: linear-gradient(90deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.1));
     text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
     color: var(--neon-yellow);
 }
 
 /* summaryの矢印カスタマイズ */
-details > summary::before {
+details>summary::before {
     content: "▶ ";
     display: inline-block;
     transition: transform 0.3s ease;
@@ -501,7 +526,7 @@ details > summary::before {
     margin-right: 8px;
 }
 
-details[open] > summary::before {
+details[open]>summary::before {
     transform: rotate(90deg);
 }
 
@@ -587,26 +612,26 @@ details[open] > summary::before {
 
 /* ハンバーガーボタンの線 */
 .menu-button span {
-    width: 25px;
-    height: 2px;
-    background: var(--neon-cyan, #00ffff);
     display: block;
-    transition: all 0.3s ease;
+    width: 30px;
+    height: 6px;
+    transition: 0.2s;
+    background: var(--neon-cyan, #00ffff);
     box-shadow: 0 0 5px var(--neon-cyan, #00ffff);
 }
 
 /* チェックボックスがONの時の線のアニメーション */
-.menu-toggle:checked ~ .menu-button span:nth-child(1) {
-    transform: rotate(45deg) translate(9px, 13px);
+.menu-toggle:checked~.menu-button span:nth-child(1) {
+    transform: translateY(16px) rotate(45deg);
     box-shadow: 0 0 8px var(--neon-pink, #ff00ff);
 }
 
-.menu-toggle:checked ~ .menu-button span:nth-child(2) {
+.menu-toggle:checked~.menu-button span:nth-child(2) {
     opacity: 0;
 }
 
-.menu-toggle:checked ~ .menu-button span:nth-child(3) {
-    transform: rotate(-45deg) translate(9px, -13px);
+.menu-toggle:checked~.menu-button span:nth-child(3) {
+    transform: translateY(-16px) rotate(-45deg);
     box-shadow: 0 0 8px var(--neon-pink, #ff00ff);
 }
 
@@ -626,7 +651,7 @@ details[open] > summary::before {
     overflow-y: auto;
 }
 
-.menu-toggle:checked ~ .menu-nav {
+.menu-toggle:checked~.menu-nav {
     left: 0;
 }
 
@@ -665,7 +690,7 @@ details[open] > summary::before {
     letter-spacing: 0.05em;
 }
 
-.menu-section > a {
+.menu-section>a {
     display: block;
     padding: 0.8rem 1rem;
     color: var(--text-main);
@@ -677,7 +702,7 @@ details[open] > summary::before {
     font-family: var(--font-mono);
 }
 
-.menu-section > a:hover {
+.menu-section>a:hover {
     background: rgba(255, 0, 255, 0.1);
     padding-left: 1.5rem;
     color: var(--neon-pink, #ff00ff);
@@ -733,7 +758,7 @@ details[open] > summary::before {
         font-size: 1.1rem;
     }
 
-    .menu-section > a {
+    .menu-section>a {
         font-size: 0.95rem;
         padding: 0.6rem 0.8rem;
     }
