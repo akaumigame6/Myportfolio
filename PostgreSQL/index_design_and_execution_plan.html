@@ -1,12 +1,262 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>100万件超えでも怖くない！インデックスと実行計画で実現する『爆速』データベース設計術</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="index_design_and_execution_plan.css">
 </head>
+
 <body>
+
+    <div class="container">
+
+        <header class="pixel-box">
+            <div class="subtitle">LEVEL 1: 新人司書の冒険</div>
+            <h1>100万件超えでも怖くない！<br>『爆速』データベース設計術</h1>
+            <div class="status-bar">
+                <span class="hp">HP: 100/100</span>
+                <span class="mp">MP: 50/50</span>
+                <span>JOB: LIBRARIAN</span>
+            </div>
+        </header>
+
+        <!-- 第1章 -->
+        <section class="pixel-box">
+            <h2>QUEST 1: 暗闇の書庫と「探索コスト」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>データが未整理な状態での検索コスト、$O(n)$ の概念、ディスクI/O（ページ読み込み）。</p>
+            </div>
+
+            <div class="story-box">
+                <p>あなたは「無限の書庫」に配属された新人司書。ある日、勇者から「10万年前の古文書」を探すよう頼まれます。しかし、書庫の棚はバラバラ。端から1冊ずつ確認していく（全件スキャン）と、日が暮れるどころか一生が終わってしまうことに気づきます。
+                </p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ BATTLE: 10万件のデータと戦え</span>
+                <p>10万件の「魔法書データ」を用意し、インデックスなしで検索せよ。遅さを体感し、実行計画の重要性を知るのだ。</p>
+
+                <h3>SQLコマンド</h3>
+                <pre><code>-- 10万件の魔法書データを召喚
+CREATE TABLE grimoires (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    mana_cost INTEGER
+);
+
+INSERT INTO grimoires (title, mana_cost)
+SELECT '魔法書_' || i, (random() * 1000)::INTEGER
+FROM generate_series(1, 100000) AS i;
+
+-- 素手で検索（インデックスなし）
+\timing on
+SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
+
+                <div class="execution-result">
+                    id | title | mana_cost
+                    --------+----------------+-----------
+                    99999 | 魔法書_99999 | 452
+                    (1 row)
+
+                    Time: 45.123 ms
+                </div>
+            </div>
+        </section>
+
+        <!-- 第2章 -->
+        <section class="pixel-box">
+            <h2>QUEST 2: 賢者の系譜「B-tree」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>B-tree（Balanced Tree）の構造。根、枝、葉を辿ることで、$O(\log n)$ の高速探索が可能になる。</p>
+            </div>
+
+            <div class="term-box">
+                <span class="term-title">用語解説：B-tree（ビーツリー）</span>
+                <p>データベースで最も一般的に使われるインデックスの構造。木が逆さまになったような形をしており、根（Root）から枝（Branch）、葉（Leaf）へと辿ることで、大量のデータの中から目的の行を高速に見つけることができる。
+                </p>
+            </div>
+
+            <div class="story-box">
+                <p>絶望するあなたに、大司書が「B-treeの地図」を授けます。それは、巨大な樹のように枝分かれした魔法の地図。数回分岐を進むだけで、100万冊の中から目的の棚へたどり着けます。</p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ MINI GAME: 計算量の謎</span>
+                <div class="quiz-container">
+                    <h4>Q. 100万件をB-treeで探すと、何回ページをめくる？</h4>
+                    <p>全件探索（$O(n)$）だと最大100万回だが、B-tree（$O(\log n)$）ならどうなる？</p>
+                    <details>
+                        <summary>▶ 答えを見る</summary>
+                        <div class="answer">
+                            <p><strong>A. 約20回</strong> ($2^{20} \approx 1,000,000$)</p>
+                            <p>たった20回のチェックで済む。これがツリー構造の威力だ！</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第3章 -->
+        <section class="pixel-box">
+            <h2>QUEST 3: 禁忌の索引「INDEX」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>CREATE INDEX、インデックスの効果と副作用（書き込みコストの増加）。</p>
+            </div>
+
+            <div class="story-box">
+                <p>あなたはついに、書庫の棚に「魔法の索引（INDEX）」を作成します。検索は一瞬になりましたが、新しい本が納品（INSERT）されるたびに、索引も書き換えなければならず、納品作業が少し重くなる「代償」を学びます。
+                </p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ ACTION: インデックス装備！</span>
+                <p>特定のカラムに INDEX を作成し、検索速度の変化を確認せよ。</p>
+
+                <h3>SQLコマンド</h3>
+                <pre><code>-- 装備：インデックスを作成
+CREATE INDEX idx_grimoire_title ON grimoires(title);
+
+-- 再戦：検索を実行
+SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
+
+                <div class="execution-result">
+                    CREATE INDEX
+                    Time: 154.302 ms
+
+                    id | title | mana_cost
+                    --------+----------------+-----------
+                    99999 | 魔法書_99999 | 452
+                    (1 row)
+
+                    Time: 0.234 ms
+                </div>
+            </div>
+        </section>
+
+        <!-- 第4章 -->
+        <section class="pixel-box">
+            <h2>QUEST 4: 精霊「オプティマイザ」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>オプティマイザの役割。Seq Scan（全件）か Index Scan（索引）か、コストに基づいて自動判断する。</p>
+            </div>
+
+            <div class="term-box">
+                <span class="term-title">用語解説：オプティマイザ (Optimizer)</span>
+                <p>SQLを実行する際、「どのインデックスを使うか」「どの順番でテーブルを結合するか」などの**最適な実行計画（Execution Plan）**を決定するデータベースの頭脳。</p>
+                <p>統計情報（データの件数や分布）を基に計算コストを見積もり、最もコストが低い方法を選択する。</p>
+            </div>
+
+            <div class="story-box">
+                <p>図書館には「オプティマイザ」という妖精がいます。「本が3冊しかないなら、索引を見るより全部見たほうが早いよ！」と教えてくれます。状況に応じて最適な手段を選ぶ頭脳です。</p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ QUIZ: 妖精の選択</span>
+                <div class="quiz-container">
+                    <h4>Q. 「全体の90%のデータを取得する」時、どっちを選ぶ？</h4>
+                    <details>
+                        <summary>▶ 答えを見る</summary>
+                        <div class="answer">
+                            <p><strong>A. Seq Scan（全件走査）</strong></p>
+                            <p>大量のデータを読むなら、インデックスを行き来するより、端から順に読んだ方が速いと妖精は判断するぞ。</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第5章 -->
+        <section class="pixel-box">
+            <h2>QUEST 5: 預言書「EXPLAIN」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>EXPLAINコマンド。Cost（コスト値）、Rows（推定行数）の読み方。</p>
+            </div>
+
+            <div class="term-box">
+                <span class="term-title">用語解説：EXPLAIN</span>
+                <p>SQL文の前に付けることで、データベースがそのSQLを**どのように実行するつもりか（実行計画）**を表示するコマンド。</p>
+                <p>実際にSQLは実行されず、あくまで「予定（予測）」が表示される。</p>
+            </div>
+
+            <div class="story-box">
+                <p>妖精オプティマイザは、探索前に「預言書（EXPLAIN）」を見せてくれます。「このクエリには、これくらいのコスト（魔力）がかかるよ」と教えてくれるのです。</p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ ANALYZE: 予言を解読せよ</span>
+                <h3>SQLコマンド</h3>
+                <pre><code>-- 預言書（実行計画）を見る
+EXPLAIN SELECT * FROM grimoires WHERE title = '魔法書_500';</code></pre>
+
+                <div class="execution-result">
+                    QUERY PLAN
+                    -------------------------------------------------------------------------------
+                    Index Scan using idx_grimoire_title on grimoires (cost=0.29..8.30 rows=1 width=15)
+                    Index Cond: (title = '魔法書_500'::text)
+                    (2 rows)
+                </div>
+            </div>
+        </section>
+
+        <!-- 第6章 -->
+        <section class="pixel-box">
+            <h2>QUEST 6: 真実の鏡「EXPLAIN ANALYZE」</h2>
+
+            <div class="learning-box">
+                <p><strong>📖 TUTORIAL:</strong><br>EXPLAIN ANALYZE（実行実測）。予測と実測のズレを確認する。</p>
+            </div>
+
+            <div class="term-box">
+                <span class="term-title">用語解説：EXPLAIN ANALYZE</span>
+                <p>SQLを**実際に実行**し、その実行時間（Actural Time）と計画（Plan）を合わせて表示するコマンド。</p>
+                <p>「予測では速いはずだったのに、実際は遅い」といったトラブルの原因究明に使われる。</p>
+            </div>
+
+            <div class="story-box">
+                <p>預言書はあくまで予測。時には妖精も間違えます。あなたは「真実の鏡（ANALYZE）」を使い、実際にクエリを実行して、本当にかかった時間を確認します。</p>
+            </div>
+
+            <div class="exercise-box">
+                <span class="exercise-title">⚔️ FINAL BOSS: 実測計測</span>
+                <p>予測と実測の乖離を確認し、統計情報を更新して妖精を目覚めさせろ！</p>
+
+                <h3>SQLコマンド</h3>
+                <pre><code>-- 実際に実行して計測（時間がかかるので注意）
+EXPLAIN ANALYZE SELECT * FROM grimoires WHERE mana_cost > 900;
+
+-- 統計情報の更新（妖精のレベルアップ）
+ANALYZE grimoires;</code></pre>
+
+                <div class="execution-result">
+QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+Seq Scan on grimoires (cost=0.00..1791.00 rows=9964 width=15) (actual time=0.012..8.450 rows=9982
+loops=1)
+Filter: (mana_cost > 900)
+Rows Removed by Filter: 90018
+Planning Time: 0.082 ms
+Execution Time: 8.823 ms
+(5 rows)
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>GAME OVER? NO, YOUR JOURNEY CONTINUES...</p>
+            <p>© 2026 DB QUEST</p>
+        </footer>
+
+    </div>
+
 </body>
+
 </html>
