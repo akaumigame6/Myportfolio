@@ -21,13 +21,13 @@
         <h2>【第0章】はじめに</h2>
         <p>　このwebページは、PostgreSQLの同時実行制御（Concurrency Control）をテーマにしたストーリー形式の解説コンテンツです。データベースの世界で起こりうる不思議な現象を、SFミステリーや現実のシナリオを通じて体験しながら学んでいきましょう。</p>
         <p>　演習環境は<a href="https://takeshiwada1980.github.io/DB-2025" target="_blank">講義資料</a>を参考に、PostgreSQLがインストールされた環境を用意してください。ターミナルを複数開いて、同時に操作することで、同時実行制御の問題をリアルに体験できます。</p>
-        <p>　また、二つのターミナルで同時に操作を行う都合上<code>npm run Test.sql</code>とnpm runでSQLファイルを実行してください。</p>
+        <p>　また、二つのターミナルで同時に操作を行う都合上<code>npm run sql Test.sql</code>のように、npm run sql形式でSQLファイルを実行してください。</p>
     </section>
     <section>
         <h2>【第1章】SFミステリー編：名探偵と「書き換わる密室」</h2>
         <p>　データベースの世界には、SFのような現実世界ではあり得ない不思議な現象が存在します。それは、同時に複数のユーザーがデータにアクセスする際の「同時実行制御」の問題です。</br>
             　PostgreSQLは、複数のユーザー（トランザクション）が同時にアクセスしてもデータが壊れないように制御していますが、その制御の強さ（隔離レベル）によっては、まるで「さっき見たはずの証拠が、目を離した隙に書き換わっている」というミステリー小説のような現象が発生します。
-ここでは、探偵 アリスと怪盗 ボブのやり取りからこの奇妙な世界を体験してみましょう。</p>
+            ここでは、探偵 アリスと怪盗 ボブのやり取りからこの奇妙な世界を体験してみましょう。</p>
         <div class="story-box">
             <p><strong>>> SCENARIO:</strong><br>
             電脳屋敷のデータセクタ（evidenceテーブル）に、被害者 チャーリーが書いた「犯人はボブ」というデジタル・ダイイングメッセージが残されていた。<br>
@@ -42,6 +42,8 @@
                 <span>[STATUS: PREPARING]</span>
             </div>
             <div class="terminal-body cursor-blink">
+<span class="sql-comment">-- 既に evidence(証拠)テーブル が存在する場合は削除</span>
+<span class="sql-cmd">DROP TABLE IF EXISTS</span> evidence;
 <span class="sql-comment">-- evidence(証拠)テーブルの作成</span>
 <span class="sql-cmd">CREATE TABLE </span>evidence (
     id <span class="sql-cmd">SERIAL PRIMARY KEY</span>,
@@ -49,7 +51,14 @@
 );
 <span class="sql-comment">-- 最初の証拠(データ)を登録</span>
 <span class="sql-cmd">INSERT INTO</span> evidence (message) <span class="sql-cmd">VALUES</span> ('犯人はボブ');
-            </div>
+</div>
+                            <div class="terminal-output output-a">
+<strong>Terminal A (Database Setup) Output:</strong>
+<span class="output-success">
+DROP TABLE
+CREATE TABLE
+INSERT 0 1</span>
+                </div>
         </div>
         <p>これで、事件の舞台が整いました。次にターミナルを二つ開いてください。</p>
         <ul>
@@ -78,11 +87,49 @@
 
 <span class="sql-comment">-- 結果: "犯人はボブ"</span>
 <span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
-<span class="sql-cmd">SELECT</span> pg_sleep(5); pg_sleep(5);
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
 
 
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
-<span class="sql-comment">-- WARNING: データ不整合を検知! "犯人はイヴ" に変化!</span>
+<span class="sql-comment">-- 再度、証拠を確認してみると？</span>
+<span class="sql-cmd">COMMIT</span>;
+<span class="sql-comment">-- 調査完了</span>
+</div>
+
+
+                <div class="terminal-output output-a">
+<strong>Terminal A (Alice) Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>id</th>
+    <th>message</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>犯人はボブ</td>
+  </tr>
+</table>
+(1 行)
+
+ pg_sleep
+----------
+
+(1 行)
+<table>
+  <tr>
+    <th>id</th>
+    <th>message</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>犯人はイヴ</td>
+  </tr>
+</table>
+(1 行)
+
+<span class="output-success">COMMIT</span>
                 </div>
             </div>
 
@@ -91,7 +138,7 @@
                     <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: INTRUDING]</span>
                 </div>
-                <div class="terminal-body">
+                <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- データセクタに侵入</span>
 <span class="sql-cmd">START TRANSACTION;</span>
 
@@ -100,8 +147,18 @@
 <span class="sql-cmd">SET</span> message = '犯人はイヴ' 
 <span class="sql-cmd">WHERE</span> id = 1;
 
-<span class="sql-cmd">COMMIT;</span>
-<span class="sql-comment">-- 書き換え完了。ログアウト。</span>
+<span class="sql-cmd">COMMIT</span>;
+<span class="sql-comment">-- 書き換え完了。ログアウト</span>
+                
+
+
+</div>
+                <div class="terminal-output output-b">
+<strong>Terminal B (Bob) Output:</strong>
+<span class="output-success">
+START TRANSACTION
+UPDATE 1
+COMMIT</span>
                 </div>
             </div>
         </div>
@@ -131,6 +188,13 @@
 <span class="sql-cmd">WHERE</span> id = 1;  
 <span class="sql-cmd">COMMIT;</span>
 <span class="sql-comment">-- 元に戻した。ログアウト。</span>
+</div>
+            <div class="terminal-output output-a">
+<strong>Terminal A (Database Setup) Output:</strong>
+<span class="output-success">
+START TRANSACTION
+UPDATE 1
+COMMIT</span>
             </div>
         </div>
         <p>　データを元に戻せました。では、再び同じ手順で実験を行いましょう。</p>
@@ -147,19 +211,58 @@
                     <span>[STATUS: CONNECTED]</span>
                 </div>
                 <div class="terminal-body cursor-blink">
-<span class="sql-comment">-- 隔離レベルを指定して調査開始</span>
-<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
+<span class="sql-comment">-- 調査開始</span>
 <span class="sql-cmd">START TRANSACTION;</span>
+<span class="sql-comment">-- 隔離レベルを設定</span>
+<span class="sql-cmd">SET TRANSACTION ISOLATION LEVEL REPEATABLE READ</span>;
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
 
 <span class="sql-comment">-- 結果: "犯人はボブ"</span>
 <span class="sql-comment">-- ここで5秒待機(その間にBが動く)</span>
-<span class="sql-cmd">SELECT</span> pg_sleep(5); pg_sleep(5);
+<span class="sql-cmd">SELECT</span> pg_sleep(5);
 
 
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> evidence;
-<span class="sql-comment">-- 結果: "犯人はボブ" (Repeatable Readでは変化しない)</span>
-                </div>
+<span class="sql-comment">-- 再度、証拠を確認してみると？</span>
+<span class="sql-cmd">COMMIT</span>;
+<span class="sql-comment">-- 調査完了</span>
+</div>
+                
+
+                <div class="terminal-output output-a">
+<strong>Terminal A (Alice) Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>id</th>
+    <th>message</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>犯人はボブ</td>
+  </tr>
+</table>
+(1 行)
+
+ pg_sleep
+----------
+
+(1 行)
+<table>
+  <tr>
+    <th>id</th>
+    <th>message</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>犯人はボブ</td>
+  </tr>
+</table>
+(1 行)
+
+<span class="output-success">COMMIT</span>
+            </div>
             </div>
 
             <div class="terminal-window term-b">
@@ -167,7 +270,7 @@
                     <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: INTRUDING]</span>
                 </div>
-                <div class="terminal-body">
+                <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- データセクタに侵入</span>
 <span class="sql-cmd">START TRANSACTION;</span>
 
@@ -178,9 +281,20 @@
 <span class="sql-cmd">SET</span> message = '犯人はイヴ' 
 <span class="sql-cmd">WHERE</span> id = 1;
 
-<span class="sql-cmd">COMMIT;</span>
+<span class="sql-cmd">COMMIT</span>;
 <span class="sql-comment">-- 書き換え完了。ログアウト。</span>
-                </div>
+
+
+
+
+</div>
+                <div class="terminal-output output-b">
+<strong>Terminal B (Bob) Output:</strong>
+<span class="output-success">
+START TRANSACTION
+UPDATE 1
+COMMIT</span>
+            </div>
             </div>
         </div>
         <p>今度は、探偵 アリスの目には、怪盗 ボブがどんなに書き換えを行っても、最初に見た「犯人はボブ」のままですね?これが<strong>Repeatable Read</strong>の世界です。</p>
@@ -260,23 +374,31 @@
             </div>
             <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 既に テーブル が存在する場合は削除</span>
-<span class="sql-comment">DROP TABLE IF</span> EXISTS seats;
-<span class="sql-comment">DROP TABLE IF</span> EXISTS reservations;
+<span class="sql-cmd">DROP TABLE IF</span> EXISTS seats;
+<span class="sql-cmd">DROP TABLE IF</span> EXISTS reservations;
 <span class="sql-comment">-- 座席(seats)テーブルの作成</span>
 <span class="sql-cmd">CREATE TABLE </span>seats (
     seat_id <span class="sql-cmd">SERIAL PRIMARY KEY</span>,
-    status <span class="sql-cmd">TEXT</span>,<span class="sql-comment"> -- 'OPEN' か 'RESERVED'</span>
+    status <span class="sql-cmd">TEXT</span><span class="sql-comment"> -- 'OPEN' か 'RESERVED'</span>
 );
 <span class="sql-comment">-- 予約台帳(reservations)テーブルの作成</span>
 <span class="sql-cmd">CREATE TABLE </span>reservations (
-    seat_id <span class="sql-cmd">INTEGER REFERENCES seats(seat_id)</span>,
+    seat_id <span class="sql-cmd">INTEGER REFERENCES </span>seats(seat_id),
     user_name <span class="sql-cmd">TEXT</span>,
     reserved_at <span class="sql-cmd">TIMESTAMP DEFAULT</span> NOW()
 ); 
 <span class="sql-comment">-- 残り1席を用意</span>
 <span class="sql-cmd">INSERT INTO</span> seats <span class="sql-cmd">VALUES</span> (1,'OPEN');
-            </div>
-
+</div>
+        <div class ="terminal-output output-a">
+<strong>Terminal (Database Setup) Output:</strong>
+<span class="output-success">
+DROP TABLE
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+INSERT 0 1</span>
+        </div>
         </div>
         <p>これで、最後の1席を巡る争奪戦の舞台が整いました。第一章の時と同様に、ターミナルを二つ開いてください。</p>
         <ul>
@@ -313,15 +435,41 @@
 <span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
 
 <span class="sql-cmd">COMMIT</span>;
+</div>
+                <div class="terminal-output output-a">
+<strong>Terminal A Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>OPEN</td>
+  </tr>
+</table>
+(1 行)
+
+ pg_sleep 
+----------
+
+(1 行)
+
+<span class="output-success">UPDATE 1
+INSERT 0 1
+COMMIT</span>
+
+                    </div>
                 </div>
-            </div>
 
             <div class="terminal-window term-b">
                 <div class="terminal-header">
                     <span>> Terminal B　　(Bob)</span>
                     <span>[STATUS: CONNECTED]</span>
                 </div>
-                <div class="terminal-body">
+                <div class="terminal-body cursor-blink">
 <span class="sql-comment">-- 1. 空席確認</span>
 <span class="sql-cmd">START TRANSACTION;</span>
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> seats <span class="sql-cmd">WHERE</span> seat_id = 1;
@@ -329,16 +477,40 @@
 
 <span class="sql-comment">-- 2. 予約実行</span>
 <span class="sql-cmd">UPDATE</span> seats <span class="sql-cmd">SET</span> status = 'RESERVED' <span class="sql-cmd">WHERE</span> seat_id = 1;
-<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_A');
+<span class="sql-cmd">INSERT INTO</span> reservations <span class="sql-cmd">VALUES</span> (1, 'Fan_B');
 
 <span class="sql-cmd">COMMIT</span>;
-                </div>
+
+
+
+</div>
+                <div class="terminal-output output-b">
+<strong>Terminal B Output:</strong>
+<span class="output-success">
+START TRANSACTION</span>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>OPEN</td>
+  </tr>
+</table>
+(1 行)
+
+<span class="output-success">UPDATE 1
+INSERT 0 1
+COMMIT</span>
+
+                    </div>
             </div>
         </div>
         <p>ここで、それぞれの実行結果を確認してみましょう。どちらも、OPENであることを確認したのちに予約しています。では、予約結果はどうなったのでしょうか?確認してみましょう。</p>
         <div class="terminal-window term-a">
             <div class="terminal-header">
-                <span>> Terminal A (Alice)</span>
+                <span>> Terminal A (Check Database)</span>
                 <span>[STATUS: CHECKING]</span>
             </div>
             <div class="terminal-body cursor-blink">
@@ -349,6 +521,40 @@
 <span class="sql-comment">-- 予約台帳を確認</span>
 <span class="sql-cmd">SELECT</span> * <span class="sql-cmd">FROM</span> reservations;
 <span class="sql-comment">-- 結果: ダブルブッキング発生! "Fan_A" "Fan_B" 両方とも予約されている!</span>
+</div>
+            <div class="terminal-output output-a">
+<strong>Terminal A Output:</strong>
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>RESERVED</td>
+  </tr>
+</table>
+(1 行)
+
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>user_name</th>
+    <th>reserved_at</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>Fan_B</td>
+    <td>2026-02-10 20:00:20</td>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>Fan_A</td>
+    <td>2026-02-10 21:05:18</td>
+  </tr>
+</table>
+(2 行)
+
             </div>
         </div>
         <p>　このように、同時に複数のユーザーがアクセスすることで、最後の1席がダブルブッキングしてしまいました。これも、同時実行制御の問題の一つです。</p>
@@ -414,6 +620,36 @@
                 　</br>しかし、ロック制御が適切に行われていなければ、両方の処理が同じ初期値（1000円）を基準として更新してしまうため、最終的な残高は900円になります。これは「ロストアップデート」と呼ばれる問題です。</p>
             </div>
         </details>
+        <div class="quiz-question">
+            <h4>Q3. 予約順序の謎 (発想問題)</h4>
+            <p>　先ほどのreservationsテーブルを見てみましょう。先に追加されているのは「fan_B」の予約ですが、reserved_atの値を見ると、「fan_A」の予約の方が早かったことがわかります。これはなぜでしょうか？</p>
+<div class="terminal-output output-a">
+<table>
+  <tr>
+    <th>seat_id</th>
+    <th>user_name</th>
+    <th>reserved_at</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>Fan_B</td>
+    <td>2026-02-10 20:00:20</td>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>Fan_A</td>
+    <td>2026-02-10 21:05:18</td>
+  </tr>
+</table>
+(2 行)
+</div>
+        </div>
+        <details>
+            <summary>正解と解説を表示</summary>
+            <div class="quiz-answer">
+                <h5>正解</h5>
+                <p>　PostgreSQLでは<strong>NOW()を指定した際、各トランザクションが実行された時間を記録します。</strong>つまり、Aさんのトランザクションが先に実行されたが、Bさんのトランザクションが先にコミットされたため、Bさんの予約が先に追加されたのです。</p>
+            </div>
     </div>
     </section>
 
@@ -430,10 +666,10 @@
             <li>Aさん: SELECT ... FOR UPDATE で座席を確認。…この瞬間、Aさんは座席データに「鍵」をかけます。</li>
             <li>Bさん: 同じく SELECT ... FOR UPDATE で座席を確認しようとします。</li>
             <li>結果: Bさんの画面はフリーズします（待たされます）。Aさんが鍵を返してくれるまで、見ることも許されません。</li>
-            <li>Aさん: ：</li>
+            <li>Aさん: 予約処理を完了し、COMMITします。</li>
             <li>Bさん: Aさんが去った後、ようやくロックが解除され、Bさんのクエリが動きます。しかし、見えたデータは「RESERVED（予約済み）」です。「残念、売り切れか……」と諦めることができます。</li>
         </ol>
-        <p>　最初に、先ほどのチケット予約システムを初期化しておきましょう。その後以下のようなSQLを実行してください。</p>
+        <p>　最初に、先ほどのチケット予約システムを第二章のFile0のsqlを実行して初期化しておきましょう。その後以下のようなSQLを実行してください。</p>
         <div class="dual-terminal">
             <div class="terminal-window term-a">
                 <div class="terminal-header">
@@ -506,6 +742,7 @@
 <span class="sql-cmd">COMMIT</span>;
                 </div>
             </div>
+            
             <div class="terminal-window term-b">
                 <div class="terminal-header">
                     <span>> Terminal B　　(Bob)</span>
@@ -527,20 +764,34 @@
 
 <span class="sql-cmd">COMMIT</span>;
                 </div>
+
+
+                <div class="terminal-output output-b">
+<strong>Terminal B (Bob) Output:</strong>
+<span class="output-keyword">UPDATE</span> evidence <span class="output-keyword">SET</span> message = '犯人はアリス' <span class="output-keyword">WHERE</span> id = 1;
+
+<span class="output-success">UPDATE 1</span>
+<table>
+  <tr>
+    <th>id</th>
+    <th>message</th>
+    <th>timestamp</th>
+  </tr>
+  <tr>
+    <td><span class="output-value">1</span></td>
+    <td>犯人はアリス</td>
+    <td>2026-02-22 10:00:00</td>
+  </tr>
+  <tr>
+    <td><span class="output-value">2</span></td>
+    <td>犯人はアリス</td>
+    <td>2026-02-22 10:01:00</td>
+  </tr>
+</table>
+<span class="output-error">ERROR:  could not serialize access due to concurrent update</span>
+                </div>
             </div>
         </div>
-<div class="error">
-    <p><strong>エラー：</strong> Dirty Read が発生しました。隔離レベルを上げてください。</p>
-    <p>詳細: <code>SERIALIZABLE</code> 以上を推奨します。</p>
-</div>
-
-<div class="warning">
-    <p><strong>注意：</strong> 複数のトランザクションが同時にアクセスしています。</p>
-</div>
-
-<div class="success">
-    <p><strong>成功：</strong> トランザクションが正常にコミットされました。</p>
-</div>
     </section>
 
     <section class="challenge-section">
