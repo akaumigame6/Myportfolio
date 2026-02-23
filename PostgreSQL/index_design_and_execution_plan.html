@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>100万件超えでも怖くない！インデックスと実行計画で実現する『爆速』データベース設計術</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap"
-        rel="stylesheet">
+    <title>魔導書庫の探求：インデックスと実行計画の奥義</title>
     <link rel="stylesheet" href="index_design_and_execution_plan.css">
 </head>
 
@@ -14,34 +12,61 @@
 
     <div class="container">
 
+        <!-- 🍔 Hamburger Menu Button -->
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- 🛡️ Command Menu Overlay -->
+        <nav class="command-menu" id="command-menu">
+            <div class="menu-window pixel-box">
+                <div class="menu-header">COMMAND MENU</div>
+                <ul>
+                    <li><a href="#chapter1"><span class="cursor">👉</span>第1章: 暗闇の書庫</a></li>
+                    <li><a href="#chapter2"><span class="cursor">👉</span>第2章: 賢者の系譜</a></li>
+                    <li><a href="#chapter3"><span class="cursor">👉</span>第3章: 禁忌の索引</a></li>
+                    <li><a href="#chapter4"><span class="cursor">👉</span>第4章: 精霊の知恵</a></li>
+                    <li><a href="#chapter5"><span class="cursor">👉</span>第5章: 預言書の解読</a></li>
+                    <li><a href="#chapter6"><span class="cursor">👉</span>第6章: 真実の鏡</a></li>
+                </ul>
+                <button class="close-btn" id="close-btn">CLOSE [ESC]</button>
+            </div>
+        </nav>
+
         <header class="pixel-box">
-            <div class="subtitle">LEVEL 1: 新人司書の冒険</div>
-            <h1>100万件超えでも怖くない！<br>『爆速』データベース設計術</h1>
+            <div class="subtitle">CHAPTER 0: 新人司書の覚醒</div>
+            <h1>魔導書庫の探求<br>〜インデックスと実行計画の奥義〜</h1>
             <div class="status-bar">
                 <span class="hp">HP: 100/100</span>
                 <span class="mp">MP: 50/50</span>
-                <span>JOB: LIBRARIAN</span>
+                <span>JOB: 魔導司書</span>
             </div>
         </header>
 
         <!-- 第1章 -->
-        <section class="pixel-box">
-            <h2>QUEST 1: 暗闇の書庫と「探索コスト」</h2>
-
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>データが未整理な状態での検索コスト、$O(n)$ の概念、ディスクI/O（ページ読み込み）。</p>
-            </div>
+        <section class="pixel-box" id="chapter1">
+            <span class="tag tag-concept">基礎</span>
+            <h2>第1章：暗闇の書庫と「探索コスト」</h2>
 
             <div class="story-box">
-                <p>あなたは「無限の書庫」に配属された新人司書。ある日、勇者から「10万年前の古文書」を探すよう頼まれます。しかし、書庫の棚はバラバラ。端から1冊ずつ確認していく（全件スキャン）と、日が暮れるどころか一生が終わってしまうことに気づきます。
+                <p>あなたは「無限の書庫」に配属されたばかりの新人司書。ある日、伝説の勇者から「10万年前の古文書」を探してほしいと依頼されます。しかし、書庫の棚は魔法の混乱によりバラバラ。端から1冊ずつ確認していくしかない状態です。これでは日が暮れるどころか、一生が終わってしまうことに気づきます。
+                </p>
+            </div>
+
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・データが未整理な状態での検索コスト（全件スキャン）<br>
+                    ・計算量 $O(n)$ の概念<br>
+                    ・ディスクI/O（ページ読み込み）の重み
                 </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ BATTLE: 10万件のデータと戦え</span>
-                <p>10万件の「魔法書データ」を用意し、インデックスなしで検索せよ。遅さを体感し、実行計画の重要性を知るのだ。</p>
+                <span class="exercise-title">⚔️ 演習：10万件のデータと戦え</span>
+                <p>10万件の「魔法書データ」を用意し、インデックスなしで特定の1冊を検索して、その「重さ」を体感しましょう。</p>
 
-                <h3>SQLコマンド</h3>
                 <pre><code>-- 10万件の魔法書データを召喚
 CREATE TABLE grimoires (
     id SERIAL PRIMARY KEY,
@@ -53,49 +78,56 @@ INSERT INTO grimoires (title, mana_cost)
 SELECT '魔法書_' || i, (random() * 1000)::INTEGER
 FROM generate_series(1, 100000) AS i;
 
--- 素手で検索（インデックスなし）
+-- インデックスなしでの検索（全件走査）
 \timing on
 SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
 
                 <div class="execution-result">
                     id | title | mana_cost
-                    --------+----------------+-----------
+                    ----+--------------+-----------
                     99999 | 魔法書_99999 | 452
                     (1 row)
 
-                    Time: 45.123 ms
-                </div>
+                    時間: 45.123 ms (ミリ秒)
+                    -- 解説: 全件を順番に調べたため、データの量（n）に比例して時間がかかります。</div>
             </div>
         </section>
 
         <!-- 第2章 -->
-        <section class="pixel-box">
-            <h2>QUEST 2: 賢者の系譜「B-tree」</h2>
+        <section class="pixel-box" id="chapter2">
+            <span class="tag tag-concept">アルゴリズム</span>
+            <h2>第2章：賢者の系譜「B-tree」の魔導構造</h2>
 
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>B-tree（Balanced Tree）の構造。根、枝、葉を辿ることで、$O(\log n)$ の高速探索が可能になる。</p>
-            </div>
-
-            <div class="term-box">
-                <span class="term-title">用語解説：B-tree（ビーツリー）</span>
-                <p>データベースで最も一般的に使われるインデックスの構造。木が逆さまになったような形をしており、根（Root）から枝（Branch）、葉（Leaf）へと辿ることで、大量のデータの中から目的の行を高速に見つけることができる。
+            <div class="story-box">
+                <p>絶望するあなたに、大司書が「B-tree（賢者の系譜）」を授けます。それは、巨大な樹のように枝分かれした魔法の系譜図。根元（ルート）から順に「あちらの枝へ」「こちらの枝へ」とわずかな回数進むだけで、100万冊の中から目的の本が置かれた棚へ導かれます。
                 </p>
             </div>
 
-            <div class="story-box">
-                <p>絶望するあなたに、大司書が「B-treeの地図」を授けます。それは、巨大な樹のように枝分かれした魔法の地図。数回分岐を進むだけで、100万冊の中から目的の棚へたどり着けます。</p>
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・B-tree（Balanced Tree）の階層構造<br>
+                    ・ノード（枝）、リーフ（葉）、ポインタの役割<br>
+                    ・探索計算量 $O(\log n)$ の驚異的な速さ
+                </p>
+            </div>
+
+            <div class="term-box">
+                <span class="term-title">用語：B-treeとは？</span>
+                <p>データを常に整列した状態で保持する「木構造」の一つ。検索、挿入、削除が常に効率的に行えるように「平衡（バランス）」を保つよう設計されています。</p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ MINI GAME: 計算量の謎</span>
+                <span class="exercise-title">⚔️ 計算演習：対数の魔法</span>
+                <p>100万件をB-treeで探す際、めくる「魔法のページ数」を計算しましょう。</p>
                 <div class="quiz-container">
-                    <h4>Q. 100万件をB-treeで探すと、何回ページをめくる？</h4>
-                    <p>全件探索（$O(n)$）だと最大100万回だが、B-tree（$O(\log n)$）ならどうなる？</p>
+                    <h4>Q. 100万件のデータをB-treeで探すと、最大何回の比較で済む？</h4>
+                    <p>全件スキャンなら最大1,000,000回ですが...？</p>
                     <details>
-                        <summary>▶ 答えを見る</summary>
+                        <summary>答えを見る</summary>
                         <div class="answer">
-                            <p><strong>A. 約20回</strong> ($2^{20} \approx 1,000,000$)</p>
-                            <p>たった20回のチェックで済む。これがツリー構造の威力だ！</p>
+                            <p><strong>A. 約20回</strong></p>
+                            <p>計算式：$\log_2(1,000,000) \approx 20$<br>
+                                たった20回のチェック。これが「賢者の系譜」が爆速である理由です！</p>
                         </div>
                     </details>
                 </div>
@@ -103,70 +135,74 @@ SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
         </section>
 
         <!-- 第3章 -->
-        <section class="pixel-box">
-            <h2>QUEST 3: 禁忌の索引「INDEX」</h2>
-
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>CREATE INDEX、インデックスの効果と副作用（書き込みコストの増加）。</p>
-            </div>
+        <section class="pixel-box" id="chapter3">
+            <span class="tag tag-sql">SQL</span>
+            <h2>第3章：禁忌の索引「INDEX」の付与</h2>
 
             <div class="story-box">
-                <p>あなたはついに、書庫の棚に「魔法の索引（INDEX）」を作成します。検索は一瞬になりましたが、新しい本が納品（INSERT）されるたびに、索引も書き換えなければならず、納品作業が少し重くなる「代償」を学びます。
+                <p>あなたはついに、書庫の棚に「魔法の索引（INDEX）」を刻み込みます。検索は一瞬になりましたが、新しい本が納品（INSERT）されるたびに、索引も魔力で書き換えなければなりません。納品作業に少し時間がかかるという「代償」の存在を学びます。
+                </p>
+            </div>
+
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・CREATE INDEX コマンドの使い方<br>
+                    ・インデックスによる劇的な検索高速化<br>
+                    ・書き込みコスト（オーバーヘッド）の理解
                 </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ ACTION: インデックス装備！</span>
-                <p>特定のカラムに INDEX を作成し、検索速度の変化を確認せよ。</p>
-
-                <h3>SQLコマンド</h3>
-                <pre><code>-- 装備：インデックスを作成
+                <span class="exercise-title">⚔️ 実技：索引の魔法を付与せよ</span>
+                <pre><code>-- 魔法の索引を作成（インデックス装備！）
 CREATE INDEX idx_grimoire_title ON grimoires(title);
 
--- 再戦：検索を実行
-SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
+-- 再度、検索を実行
+SELECT * FROM grimoires WHERE title = '魔法書_99999';
+
+-- [代償の計測] 大量に新刊を納品
+INSERT INTO grimoires (title, mana_cost)
+SELECT '新刊_' || i, (random() * 1000)::INTEGER
+FROM generate_series(1, 10000) AS i;</code></pre>
 
                 <div class="execution-result">
-                    CREATE INDEX
-                    Time: 154.302 ms
+                    -- 検索結果:
+                    時間: 0.234 ms (インデックス無しに比べて約200倍速！)
 
-                    id | title | mana_cost
-                    --------+----------------+-----------
-                    99999 | 魔法書_99999 | 452
-                    (1 row)
-
-                    Time: 0.234 ms
-                </div>
+                    -- 納品（INSERT）の代償:
+                    時間: 245 ms (インデックスが無い時は100ms程度だった作業が重くなった)
+                    -- 解説: 検索は速くなりますが、データの書き換え時は索引もメンテナンスするため追加魔力が必要です。</div>
             </div>
         </section>
 
         <!-- 第4章 -->
-        <section class="pixel-box">
-            <h2>QUEST 4: 精霊「オプティマイザ」</h2>
-
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>オプティマイザの役割。Seq Scan（全件）か Index Scan（索引）か、コストに基づいて自動判断する。</p>
-            </div>
-
-            <div class="term-box">
-                <span class="term-title">用語解説：オプティマイザ (Optimizer)</span>
-                <p>SQLを実行する際、「どのインデックスを使うか」「どの順番でテーブルを結合するか」などの**最適な実行計画（Execution Plan）**を決定するデータベースの頭脳。</p>
-                <p>統計情報（データの件数や分布）を基に計算コストを見積もり、最もコストが低い方法を選択する。</p>
-            </div>
+        <section class="pixel-box" id="chapter4">
+            <span class="tag tag-concept">最適化</span>
+            <h2>第4章：精霊「オプティマイザ」と二つの探索法</h2>
 
             <div class="story-box">
-                <p>図書館には「オプティマイザ」という妖精がいます。「本が3冊しかないなら、索引を見るより全部見たほうが早いよ！」と教えてくれます。状況に応じて最適な手段を選ぶ頭脳です。</p>
+                <p>魔法書庫には、最短ルートを導く精霊「オプティマイザ」が住んでいます。精霊は言います。「本が3冊しかないなら、索引を見るより全部見たほうが早いですよ」と。状況に応じて「全件走査（Seq
+                    Scan）」か「索引走査（Index Scan）」かを選ぶ精霊の知恵を学びます。
+                </p>
+            </div>
+
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・オプティマイザ（Optimizer）の役割<br>
+                    ・Seq Scan vs Index Scan の違い<br>
+                    ・選択率（Selectivity）による判断基準
+                </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ QUIZ: 妖精の選択</span>
+                <span class="exercise-title">⚔️ 思考：精霊の計画を予想せよ</span>
                 <div class="quiz-container">
-                    <h4>Q. 「全体の90%のデータを取得する」時、どっちを選ぶ？</h4>
+                    <h4>Q. 100万件中「90万件」を取得する場合、精霊はどちらを選ぶ？</h4>
                     <details>
-                        <summary>▶ 答えを見る</summary>
+                        <summary>答えを見る</summary>
                         <div class="answer">
-                            <p><strong>A. Seq Scan（全件走査）</strong></p>
-                            <p>大量のデータを読むなら、インデックスを行き来するより、端から順に読んだ方が速いと妖精は判断するぞ。</p>
+                            <p><strong>A. 全件走査（Seq Scan）</strong></p>
+                            <p>ほぼ全てのデータを読み込む場合、索引を行き来するよりも、端から一気に読んだほうが速いため、精霊はあえて索引を使わない判断をします。これを「選択率が高い」と言います。</p>
                         </div>
                     </details>
                 </div>
@@ -174,88 +210,113 @@ SELECT * FROM grimoires WHERE title = '魔法書_99999';</code></pre>
         </section>
 
         <!-- 第5章 -->
-        <section class="pixel-box">
-            <h2>QUEST 5: 預言書「EXPLAIN」</h2>
-
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>EXPLAINコマンド。Cost（コスト値）、Rows（推定行数）の読み方。</p>
-            </div>
-
-            <div class="term-box">
-                <span class="term-title">用語解説：EXPLAIN</span>
-                <p>SQL文の前に付けることで、データベースがそのSQLを**どのように実行するつもりか（実行計画）**を表示するコマンド。</p>
-                <p>実際にSQLは実行されず、あくまで「予定（予測）」が表示される。</p>
-            </div>
+        <section class="pixel-box" id="chapter5">
+            <span class="tag tag-sql">分析</span>
+            <h2>第5章：精霊の預言書「EXPLAIN」を読み解く</h2>
 
             <div class="story-box">
-                <p>妖精オプティマイザは、探索前に「預言書（EXPLAIN）」を見せてくれます。「このクエリには、これくらいのコスト（魔力）がかかるよ」と教えてくれるのです。</p>
+                <p>精霊オプティマイザは、探索を始める前に「預言書（EXPLAIN）」を提示します。そこには「この探索にはこれだけの魔力（Cost）が必要だ」と書かれています。預言書に書かれた暗号を読み解く力こそ、一流司書の証です。
+                </p>
+            </div>
+
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・EXPLAIN コマンドの基本<br>
+                    ・Cost（魔力コスト）、Rows（予想行数）、Width（データの幅）の読み方<br>
+                    ・実行計画の木構造の理解
+                </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ ANALYZE: 予言を解読せよ</span>
-                <h3>SQLコマンド</h3>
-                <pre><code>-- 預言書（実行計画）を見る
+                <span class="exercise-title">⚔️ 予言：暗号を解読せよ</span>
+                <pre><code>-- 預言書（実行計画）を表示
 EXPLAIN SELECT * FROM grimoires WHERE title = '魔法書_500';</code></pre>
 
                 <div class="execution-result">
                     QUERY PLAN
-                    -------------------------------------------------------------------------------
+                    ------------------------------------------------------------------------------------
                     Index Scan using idx_grimoire_title on grimoires (cost=0.29..8.30 rows=1 width=15)
                     Index Cond: (title = '魔法書_500'::text)
-                    (2 rows)
-                </div>
+                    -- 解読：
+                    -- cost=0.29..8.30 : 最小0.29、最大8.30の魔力コストが必要と予想。
+                    -- rows=1 : 1枚の魔法書が見つかると精霊が予想している。</div>
             </div>
         </section>
 
         <!-- 第6章 -->
-        <section class="pixel-box">
-            <h2>QUEST 6: 真実の鏡「EXPLAIN ANALYZE」</h2>
-
-            <div class="learning-box">
-                <p><strong>📖 TUTORIAL:</strong><br>EXPLAIN ANALYZE（実行実測）。予測と実測のズレを確認する。</p>
-            </div>
-
-            <div class="term-box">
-                <span class="term-title">用語解説：EXPLAIN ANALYZE</span>
-                <p>SQLを**実際に実行**し、その実行時間（Actural Time）と計画（Plan）を合わせて表示するコマンド。</p>
-                <p>「予測では速いはずだったのに、実際は遅い」といったトラブルの原因究明に使われる。</p>
-            </div>
+        <section class="pixel-box" id="chapter6">
+            <span class="tag tag-danger">重要</span>
+            <h2>第6章：真実の鏡「EXPLAIN ANALYZE」</h2>
 
             <div class="story-box">
-                <p>預言書はあくまで予測。時には妖精も間違えます。あなたは「真実の鏡（ANALYZE）」を使い、実際にクエリを実行して、本当にかかった時間を確認します。</p>
+                <p>預言書はあくまで精霊の予測。時には精霊の勘違い（古い統計情報）で、予測以上の魔力を消費することもあります。あなたは「真実の鏡（ANALYZE）」を使い、実際に探索を行って「本当にかかった時間」を突き合わせる禁術を学びます。
+                </p>
+            </div>
+
+            <div class="learning-box">
+                <p><strong>📖 学習内容:</strong><br>
+                    ・EXPLAIN ANALYZE による実測値の取得<br>
+                    ・予測（Estimated）と実測（Actual）の乖離の分析<br>
+                    ・ANALYZE コマンドによる統計情報の更新
+                </p>
             </div>
 
             <div class="exercise-box">
-                <span class="exercise-title">⚔️ FINAL BOSS: 実測計測</span>
-                <p>予測と実測の乖離を確認し、統計情報を更新して妖精を目覚めさせろ！</p>
+                <span class="exercise-title">⚔️ 真実：精霊の目を覚まさせろ</span>
+                <pre><code>-- 実際に実行して、真実の鏡で見る
+EXPLAIN ANALYZE SELECT * FROM grimoires WHERE mana_cost > 950;
 
-                <h3>SQLコマンド</h3>
-                <pre><code>-- 実際に実行して計測（時間がかかるので注意）
-EXPLAIN ANALYZE SELECT * FROM grimoires WHERE mana_cost > 900;
-
--- 統計情報の更新（妖精のレベルアップ）
+-- 統計情報が古いと、精霊が間違ったルートを選ぶことがある。
+-- 精霊に最新の書架情報を与えて目覚めさせる。
 ANALYZE grimoires;</code></pre>
 
                 <div class="execution-result">
-QUERY PLAN
-------------------------------------------------------------------------------------------------------------------------
-Seq Scan on grimoires (cost=0.00..1791.00 rows=9964 width=15) (actual time=0.012..8.450 rows=9982
-loops=1)
-Filter: (mana_cost > 900)
-Rows Removed by Filter: 90018
-Planning Time: 0.082 ms
-Execution Time: 8.823 ms
-(5 rows)
-                </div>
+                    QUERY PLAN
+                    ------------------------------------------------------------------------------
+                    Seq Scan on grimoires (cost=0.00..1876.00 rows=10000 width=14)
+                    (actual time=0.015..9.52ms rows=5120 loops=1)
+                    -- 解説:
+                    -- (rows=10000) は精霊の予測。
+                    -- (actual rows=5120) は真実。
+                    -- ズレが大きい場合は ANALYZE で精霊の知識をアップデートする必要があります！</div>
             </div>
         </section>
 
         <footer>
-            <p>GAME OVER? NO, YOUR JOURNEY CONTINUES...</p>
-            <p>© 2026 DB QUEST</p>
+            <p>YOU ARE NOW A MASTER LIBRARIAN.</p>
+            <p>© 2026 魔導データ探索ギルド</p>
         </footer>
 
     </div>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const commandMenu = document.getElementById('command-menu');
+        const menuLinks = document.querySelectorAll('.command-menu a');
+
+        const toggleMenu = () => {
+            commandMenu.classList.toggle('active');
+            hamburgerBtn.classList.toggle('active');
+        };
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                commandMenu.classList.remove('active');
+                hamburgerBtn.classList.remove('active');
+            });
+        });
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && commandMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+    </script>
 
 </body>
 
