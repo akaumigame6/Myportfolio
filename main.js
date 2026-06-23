@@ -54,10 +54,15 @@ class Slideshow {
   }
 
   startAutoSlide() {
+    clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % this.slides.length;
       this.updateSlides();
-    }, 4000);
+    }, 6000);
+  }
+
+  pauseTimer() {
+    clearInterval(this.timer);
   }
 
   resetTimer() {
@@ -118,7 +123,8 @@ parrot.addEventListener('click', () => {
 // ページ内のすべてのスライドショーを初期化
 document.addEventListener('DOMContentLoaded', () => {
   const slideshows = document.querySelectorAll('.slideshow');
-  slideshows.forEach(slideshow => new Slideshow(slideshow));
+  const allSlideshowInstances = [];
+  slideshows.forEach(slideshow => allSlideshowInstances.push(new Slideshow(slideshow)));
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -153,5 +159,48 @@ document.addEventListener('DOMContentLoaded', () => {
       icon.classList.remove('animate-hue');
     }, 3000);
   });
+
+  // 動画モーダルの処理
+  const modal = document.getElementById('video-modal');
+  const modalVideo = document.getElementById('modal-video');
+  const closeBtn = document.querySelector('.close-btn');
+
+  if (modal && modalVideo && closeBtn) {
+    document.querySelectorAll('.slideshow.video-badge').forEach(slideshowEl => {
+      // スライドショー全体にポインターカーソルを設定
+      slideshowEl.style.cursor = 'pointer';
+      
+      slideshowEl.addEventListener('click', (e) => {
+        // コントローラー（矢印・ドット）がクリックされた場合は無視する
+        if (e.target.closest('.prev') || e.target.closest('.next') || e.target.closest('.dots')) {
+          return;
+        }
+
+        const videoEl = slideshowEl.querySelector('.slide-video-thumbnail');
+        if (videoEl) {
+          modal.style.display = 'block';
+          modalVideo.src = videoEl.src;
+          modalVideo.play();
+          // すべてのスライドショーを一時停止
+          allSlideshowInstances.forEach(s => s.pauseTimer());
+        }
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = 'none';
+      modalVideo.pause();
+      modalVideo.src = '';
+      // すべてのスライドショーを再開
+      allSlideshowInstances.forEach(s => s.startAutoSlide());
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  }
 
 });

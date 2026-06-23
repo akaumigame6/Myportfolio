@@ -238,6 +238,22 @@ nav a {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* 動画あり バッジ（画像用） */
+.slideshow.video-badge::before {
+  content: "▶ 動画あり";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(9, 132, 227, 0.9);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
 .card h4 {
   margin-top: 0;
 }
@@ -560,7 +576,86 @@ testここまで
 /* 📱 タブレット用サイズ調整 */
 @media (min-width: 768px) and (max-width: 1024px) {
   #parrot {
-    width: 175px;
     transform: translateY(30px);
+  }
+}
+
+/* 動画スライド用再生アイコン */
+.video-slide {
+  position: relative;
+  cursor: pointer;
+}
+
+.play-icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 64px;
+  pointer-events: none; /* 下の動画のクリックを邪魔しない */
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  transition: transform 0.2s;
+  z-index: 10;
+}
+
+.video-slide:hover .play-icon-overlay {
+  transform: translate(-50%, -50%) scale(1.1);
+  color: #fff;
+}
+
+/* 動画モーダル用CSS */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.modal-content {
+  position: relative;
+  margin: 5% auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1000px;
+  top: 50%;
+  transform: translateY(-55%);
+}
+
+#modal-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.close-btn {
+  color: #fff;
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  transition: color 0.2s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: #ccc;
+  text-decoration: none;
+}
+
+/* モバイル時のクローズボタン位置調整 */
+@media (max-width: 767px) {
+  .close-btn {
+    right: 5px;
+    top: -45px;
   }
 }
